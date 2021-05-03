@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:uberclone/Assistant/request_assistant.dart';
 import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/allWidget/divider.dart';
+import 'package:uberclone/allWidget/progress_dialog.dart';
 import 'package:uberclone/configMaps.dart';
+import 'package:uberclone/models/address.dart';
 import 'package:uberclone/models/place_predictions.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -115,9 +117,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
                           child: TextField(
-                            onChanged: (val) {
 
+                            onChanged: (val) {
+                                filedPlace(val);
                             },
+
                             controller: dropOffTextEditingController,
                             decoration: InputDecoration(
                               hintText: " Where to? ",
@@ -202,35 +206,73 @@ class PredictionTile extends StatelessWidget {
   PredictionTile({Key key, this.placePredictions, }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
+    return FlatButton(
+      padding: EdgeInsets.all(8.0),
+      onPressed: () {
+        getPlaceAddressDetails(placePredictions.place_id, context);
+      },
+      child: Container(
+        child: Column(
+          children: [
 
-          SizedBox(width: 10),
-          
-          Row(
-            children: [
-              Icon(Icons.add_location),
-              SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 2.0),
-                    Text(placePredictions.main_text , overflow: TextOverflow.ellipsis ,style: TextStyle(fontSize: 16.0),),
-                    SizedBox(height: 8.0),
-                    Text(placePredictions.secondary_text , overflow: TextOverflow.ellipsis ,style: TextStyle(fontSize: 16.0, color: Colors.grey ),),
-                  ],
-                ),
-              )
-            ],
-          ),
+            SizedBox(width: 10),
+            
+            Row(
+              children: [
+                Icon(Icons.add_location),
+                SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 2.0),
+                      Text(placePredictions.main_text , overflow: TextOverflow.ellipsis ,style: TextStyle(fontSize: 16.0),),
+                      SizedBox(height: 8.0),
+                      Text(placePredictions.secondary_text , overflow: TextOverflow.ellipsis ,style: TextStyle(fontSize: 16.0, color: Colors.grey ),),
+                    ],
+                  ),
+                )
+              ],
+            ),
 
-          SizedBox(width: 10),
+            SizedBox(width: 10),
 
-        ],
+          ],
+        ),
+        
       ),
-      
     );
+  }
+
+  void getPlaceAddressDetails(String placeId, context ) async{
+    
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ProgressDialog(message: "Setting DroppOff, Please Wait...",);
+      },
+      );
+      
+    String placeDetailsUrl = "URL HERE";
+
+    var res = await RequestAssistant.getRequest(placeDetailsUrl);
+
+    Navigator.pop(context);
+
+    if (res == "failed"){
+      return;
+      
+    }
+    if(res["status"] == "OK" ){
+      Address address = Address();
+      address.placeName = res["result"]["name"];
+      address.placeName = placeId;
+      address.latitude = res["result"]["geometry"]["location"]["lat"];
+      address.longitude = res["result"]["geometry"]["location"]["lng"];
+
+      Provider.of<AppData>(context, listen: false ).updateDropOffLcationAddress(address);
+      print("This is Drop Off Locatio :: ");
+      print(address.placeName);
+    }
   }
 }

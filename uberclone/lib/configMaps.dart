@@ -1,1 +1,1 @@
-String mapKey = "key";
+String mapKey = "API KEY";
