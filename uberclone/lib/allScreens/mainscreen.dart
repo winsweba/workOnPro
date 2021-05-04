@@ -8,6 +8,7 @@ import 'package:uberclone/Assistant/assistant_methodos.dart';
 import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/allScreens/search_screen.dart';
 import 'package:uberclone/allWidget/divider.dart';
+import 'package:uberclone/allWidget/progress_dialog.dart';
 
 class MainScreen extends StatefulWidget {
   
@@ -191,9 +192,13 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(height: 20.0,),
 
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
 
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen() ));
+                        var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen() ));
+
+                        if(res == "obtainDirection"){
+                          await getPlaceDrection();
+                        }
 
                       },
                       child: Container(
@@ -273,5 +278,28 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> getPlaceDrection() async{
+    var initialPos = Provider.of<AppData>(context, listen:  false).pickUpLcation;
+    var finalPos = Provider.of<AppData>(context, listen:  false).pickUpLcation;
+
+    var pickUpLatLng = LatLng(initialPos.latitude, initialPos.longitude);
+    var dropOffLatLng = LatLng(finalPos.latitude, finalPos.longitude);
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ProgressDialog(message: "Please Wait...",);
+      },
+      );
+
+      var details = await AssistantMethods.obtainPlaceDirectionDetails(pickUpLatLng, dropOffLatLng);
+
+      Navigator.pop(context);
+
+      print("This is Encoded Point :: ");
+      print(details.encodePoints);
   }
 }

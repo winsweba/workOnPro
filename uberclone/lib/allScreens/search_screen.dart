@@ -207,7 +207,7 @@ class PredictionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(0.0),
       onPressed: () {
         getPlaceAddressDetails(placePredictions.place_id, context);
       },
@@ -248,12 +248,13 @@ class PredictionTile extends StatelessWidget {
     
     showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return ProgressDialog(message: "Setting DroppOff, Please Wait...",);
       },
       );
       
-    String placeDetailsUrl = "URL HERE";
+    String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=name,rating,formatted_phone_number&key=$mapKey";
 
     var res = await RequestAssistant.getRequest(placeDetailsUrl);
 
@@ -273,6 +274,8 @@ class PredictionTile extends StatelessWidget {
       Provider.of<AppData>(context, listen: false ).updateDropOffLcationAddress(address);
       print("This is Drop Off Locatio :: ");
       print(address.placeName);
+
+      Navigator.pop(context, "obtainDirection");
     }
   }
 }

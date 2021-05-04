@@ -1,9 +1,11 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uberclone/Assistant/request_assistant.dart';
 import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/configMaps.dart';
 import 'package:uberclone/models/address.dart';
+import 'package:uberclone/models/directionDetails.dart';
 
 class AssistantMethods{
   static Future<String> searchCoordinateAddress( Position position, context ) async{
@@ -34,4 +36,28 @@ class AssistantMethods{
 
     return placeAddress;
   }
+
+  static Future<DirectionDetails> obtainPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition ) async {
+    String directionUrl = "Url Here";
+
+    var res = await RequestAssistant.getRequest(directionUrl);
+
+    if(res == "failed"){
+
+      return null;
+    }
+
+    DirectionDetails directionDetails = DirectionDetails();
+
+    directionDetails.encodePoints = res["routes"][0]["overview_polyline"]["points"];
+
+    directionDetails.distanceText = res["routes"][0]["legs"][0]["distance"]["text"];
+    directionDetails.distanceValue = res["routes"][0]["legs"][0]["distance"]["value"];
+
+    directionDetails.durationText = res["routes"][0]["legs"][0]["duration"]["text"];
+    directionDetails.durationValue = res["routes"][0]["legs"][0]["duration"]["value"];
+
+    return directionDetails;
+  }
+
 }
