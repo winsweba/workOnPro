@@ -144,12 +144,12 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
 
 
-          SizedBox(width: 10),
+          SizedBox(width: 8),
 
           // Tile for predictions
           (placePredictionsList.length > 0 )
           ? Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0 ),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8.0 ),
             child: ListView.separated( 
               itemBuilder: (context, index) {
                 return PredictionTile(placePredictions: placePredictionsList[index],);
@@ -215,12 +215,12 @@ class PredictionTile extends StatelessWidget {
         child: Column(
           children: [
 
-            SizedBox(width: 10),
+            SizedBox(width: 8),
             
             Row(
               children: [
                 Icon(Icons.add_location),
-                SizedBox(width: 14),
+                SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +235,7 @@ class PredictionTile extends StatelessWidget {
               ],
             ),
 
-            SizedBox(width: 10),
+            SizedBox(width: 8),
 
           ],
         ),
@@ -254,7 +254,7 @@ class PredictionTile extends StatelessWidget {
       },
       );
       
-    String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=name,rating,formatted_phone_number&key=$mapKey";
+    String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$mapKey";
 
     var res = await RequestAssistant.getRequest(placeDetailsUrl);
 

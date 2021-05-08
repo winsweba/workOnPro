@@ -21,8 +21,8 @@ class AssistantMethods{
       //placeAddress = response["results"][0]["formatted_address"];
       st1 = response["results"][0]["address_components"][3]["long_name"];
       st2 = response["results"][0]["address_components"][4]["long_name"];
-      // st3 = response["results"][0]["address_components"][5]["long_name"];
-      // st4 = response["results"][0]["address_components"][6]["long_name"];
+      // st3 = response["results"][0]["address_components"][6]["long_name"];
+      // st4 = response["results"][0]["address_components"][9]["long_name"];
       // placeAddress = st1 + ", " + st2 + ", " + st3 + ", " + st4 ;
       placeAddress = st1 + ", " + st2;
 
@@ -38,7 +38,7 @@ class AssistantMethods{
   }
 
   static Future<DirectionDetails> obtainPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition ) async {
-    String directionUrl = "Url Here";
+    String directionUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=${initialPosition.latitude},${initialPosition.longitude}&destination=${finalPosition.latitude},${finalPosition.longitude}&key=$mapKey";
 
     var res = await RequestAssistant.getRequest(directionUrl);
 
