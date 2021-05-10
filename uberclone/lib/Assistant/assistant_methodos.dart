@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:uberclone/Assistant/request_assistant.dart';
 import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/configMaps.dart';
 import 'package:uberclone/models/address.dart';
+import 'package:uberclone/models/all_users.dart';
 import 'package:uberclone/models/directionDetails.dart';
 
 class AssistantMethods{
@@ -58,6 +61,33 @@ class AssistantMethods{
     directionDetails.durationValue = res["routes"][0]["legs"][0]["duration"]["value"];
 
     return directionDetails;
+  }
+
+  static int colculateFares(DirectionDetails directionDetails ) {
+
+    // in terms USD
+    double timeTraveledFare = (directionDetails.durationValue / 60 ) * 0.20;
+    double directionTraveledFare = (directionDetails.distanceValue / 1000 ) * 0.20;
+    double totalFareAmount = timeTraveledFare + directionTraveledFare;
+
+    //Local Currency
+    // $1 = 160 RS
+    // double totalLocalAmount = totalFareAmount * 160;
+
+    return totalFareAmount.truncate();
+  }
+
+  static void getCurrentOnlineUserInf() async {
+
+    firebaseUser = await FirebaseAuth.instance.currentUser;
+    String userId = firebaseUser.uid;
+    DatabaseReference reference = FirebaseDatabase.instance.reference().child("users").child(userId);
+
+    reference.once().then((DataSnapshot dataSnapshot) {
+      if(dataSnapshot.value != null ){
+        usersCurrentInfo = Users.fromSnapshot(dataSnapshot);
+      }
+    });
   }
 
 }

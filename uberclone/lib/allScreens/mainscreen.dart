@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +13,8 @@ import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/allScreens/search_screen.dart';
 import 'package:uberclone/allWidget/divider.dart';
 import 'package:uberclone/allWidget/progress_dialog.dart';
+import 'package:uberclone/configMaps.dart';
+import 'package:uberclone/models/directionDetails.dart';
 
 class MainScreen extends StatefulWidget {
   
@@ -26,6 +31,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  DirectionDetails tripDirectionDetails;
 
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -34,7 +40,84 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
   Set<Circle> circlesSet = {};
 
   double rideDatailsContainerHeight = 0;
+  double requestRideContainerHeight = 0;
   double seachContainerHeight = 300.0;
+
+  bool drawerOpen = true;
+
+  DatabaseReference rideRequestRef;
+
+  @override
+ void initState(){
+
+   super.initState();
+
+   AssistantMethods.getCurrentOnlineUserInf();
+  }
+
+  void saveRideRequest(){
+    rideRequestRef = FirebaseDatabase.instance.reference().child("Ride Requests").push();
+
+    var pickUp = Provider.of<AppData>(context, listen: false).pickUpLcation;
+    var dropOff = Provider.of<AppData>(context, listen: false).dropOffLocation;
+
+    Map pickUpLocMap = {
+      "latitude": pickUp.latitude.toString(),
+      "longitude": pickUp.longitude.toString(),
+    };
+
+    Map dropOffLocMap = {
+      "latitude": dropOff.latitude.toString(),
+      "longitude": dropOff.longitude.toString(),
+    };
+
+    Map rideInfoMap = {
+      "driver_id": "waiting",
+      "payment_method": "cash",
+      "pickup": pickUpLocMap,
+      "dropoff": dropOffLocMap,
+      "created_at": DateTime.now().toString(),
+      "rider_name": usersCurrentInfo.name,
+      "ride_phone": usersCurrentInfo.phone,
+      "pickup_address": pickUp.placeName,
+      "dropoff_addresss": dropOff.placeName,
+    };
+    rideRequestRef.set(rideInfoMap);
+  }
+
+  void canceliRideRequest() {
+    rideRequestRef.remove();
+  }
+
+  void displayRequestRideContainer(){
+    setState(() {
+    requestRideContainerHeight = 250.0;
+    rideDatailsContainerHeight = 0;
+    bottomPaddingOfMap = 230.0;
+    drawerOpen = true;
+    });
+
+    saveRideRequest();
+
+  }
+
+  resetApp(){
+    setState((){
+      drawerOpen = true;
+
+      seachContainerHeight = 300.0;
+      rideDatailsContainerHeight = 0.0;
+      requestRideContainerHeight = 0.0;
+      bottomPaddingOfMap = 230.0;
+      
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      pLineCoordinates.clear();
+    });
+
+    locatePosition();
+  }
 
   void displayRideDetailsContainer() async {
     await getPlaceDrection();
@@ -44,6 +127,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
       seachContainerHeight = 0.0;
       rideDatailsContainerHeight = 240.0;
       bottomPaddingOfMap = 230.0;
+      drawerOpen = false;
     });
 
   }
@@ -156,12 +240,17 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
           //HanburgerButton for Drawer
           
           Positioned(
-            top: 45.0,
+            top: 38.0,
             left: 22.0,
             child: GestureDetector(
               onTap: (){
                 
-                scaffoldKey.currentState.openDrawer();
+                if(drawerOpen) {
+                  scaffoldKey.currentState.openDrawer();
+                }
+                else{
+                  resetApp();
+                } 
 
               },
               child: Container(
@@ -182,7 +271,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
                 ),
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: Icon(Icons.menu, color: Colors.black , ),
+                  child: Icon((drawerOpen) ? Icons.menu : Icons.close , color: Colors.black , ),
+                  // child: Icon( Icons.menu , color: Colors.black , ),
                 ),
               ),
             ),
@@ -356,18 +446,27 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
                                     "Car", style: TextStyle(fontSize: 18, fontFamily: "Brand-Bold"),
                                   ),
                                   Text(
-                                    "10km", style: TextStyle(fontSize: 16.0,color: Colors.grey ),
-                                  )
+                                   ((tripDirectionDetails != null) ? tripDirectionDetails.distanceText : '') , style: TextStyle(fontSize: 16.0,color: Colors.grey ),
+                                  ),
+                                  
                                 ],
                               ),
+                              Expanded(child: Container(),),
+                                  Text(
+                                    ((tripDirectionDetails != null ) ? '\$${AssistantMethods.colculateFares(tripDirectionDetails)}' : "" ), style: TextStyle(fontFamily: "Brand-Bold" ),
+                                  )
+                            ],
+                          )
+                          )
+                      ),
 
-                              SizedBox(height: 20.0,),
+                      SizedBox(height: 20.0,),
 
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 20.0 ),
                                 child: Row(
                                   children: [
-                                    Icon(FontAwesome.moneyCheckAlt, size: 18.0, color: Colors.black54,),
+                                    Icon(FontAwesomeIcons.moneyCheckAlt, size: 18.0, color: Colors.black54,),
                                     SizedBox(width: 16.0 ),
                                     Text("Cash"),
                                     SizedBox(width: 6.0 ),
@@ -378,32 +477,110 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
 
                               SizedBox(height: 24.0 ),
 
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 16.0 ),
-                                child: RaisedButton(
-                                  onPressed: (){
-                                    print("Clicked");
-                                  },
-                                  color: Theme.of(context).accentColor,
-                                  child: Padding(
-                                    padding: EdgeInsets.all(17.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Request", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white,),),
-                                        //Icon(FontAwesome.taxi, color: Colors.white ,size: 26.0,),
-                                      ],
-                                    ),
-                                  )
-                                ),
-                              ),
-
-                            ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0 ),
+                      child: RaisedButton(
+                        onPressed: (){
+                          displayRequestRideContainer();
+                        },
+                        color: Theme.of(context).accentColor,
+                        child: Padding(
+                          padding: EdgeInsets.all(17.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Request", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white,),),
+                              Icon(FontAwesomeIcons.taxi, color: Colors.white ,size: 26.0,),
+                              ],
+                            ),
                           )
-                          )
-                      )
+                        ),
+                      ),
                     ],
                   ),
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0), topRight: Radius.circular(16)),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    spreadRadius: 0.5,
+                    blurRadius: 16.0,
+                    color: Colors.black54,
+                    offset: Offset(0.7,0.7),
+                ) 
+                ]
+              ),
+              height: requestRideContainerHeight,
+              child: Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Column(
+                  children: [
+                    SizedBox(height: 12.0,),
+                                  SizedBox(
+                    width: double.infinity,
+                    child: ColorizeAnimatedTextKit(
+                      onTap: () {
+                          print("Tap Event");
+                        },
+                      text: [
+                        "Requesting a Ride....",
+                        "Please Wait..... ",
+                        "Finding a Driver..... ",
+                      ],
+                      textStyle: TextStyle(
+                          fontSize: 55.0,
+                          fontFamily: "Signatra"
+                      ),
+                      colors: [
+                        Colors.green,
+                        Colors.purple,
+                        Colors.pink,
+                        Colors.blue,
+                        Colors.yellow,
+                        Colors.red,
+                      ],
+                      textAlign: TextAlign.center,
+                      alignment: AlignmentDirectional.topStart // or Alignment.topLeft
+                    ),
+                  ),
+
+                  SizedBox(height: 22.0,),
+
+                  GestureDetector(
+                    onTap: (){
+                      canceliRideRequest();
+                      resetApp();
+                    },
+                    child: Container(
+                      height: 60.0,
+                      width: 60.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(26),
+                        border: Border.all(width: 2.0, color: Colors.grey[300] ),
+                      ),
+                      child: Icon(Icons.close, size: 26.0),
+                    ),
+                  ),
+
+                  SizedBox(height: 10.0,),
+
+                  Container(
+                    width: double.infinity,
+                    child: Text("Canncel Ride ", textAlign: TextAlign.center, style: TextStyle( fontSize: 12.0 ),)
+                  ),
+
+                  ]
                 ),
               ),
             ),
@@ -428,6 +605,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
       );
 
       var details = await AssistantMethods.obtainPlaceDirectionDetails(pickUpLatLng, dropOffLatLng);
+      
+      setState(() {
+        tripDirectionDetails = details;
+      });
 
       Navigator.pop(context);
 
