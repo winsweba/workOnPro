@@ -3,12 +3,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:uberclone/Assistant/request_assistant.dart';
-import 'package:uberclone/DataHandler/app_data.dart';
-import 'package:uberclone/configMaps.dart';
-import 'package:uberclone/models/address.dart';
-import 'package:uberclone/models/all_users.dart';
-import 'package:uberclone/models/directionDetails.dart';
+import 'package:uberclone_drive/Assistant/request_assistant.dart';
+import 'package:uberclone_drive/DataHandler/app_data.dart';
+import 'package:uberclone_drive/configMaps.dart';
+import 'package:uberclone_drive/models/address.dart';
+import 'package:uberclone_drive/models/all_users.dart';
+import 'package:uberclone_drive/models/directionDetails.dart';
 
 class AssistantMethods{
   static Future<String> searchCoordinateAddress( Position position, context ) async{

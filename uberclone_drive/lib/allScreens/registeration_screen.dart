@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:uberclone/allScreens/login_screen.dart';
-import 'package:uberclone/allScreens/mainscreen.dart';
-import 'package:uberclone/allWidget/progress_dialog.dart';
-import 'package:uberclone/main.dart';
+import 'package:uberclone_drive/allScreens/car_Info_screen.dart';
+import 'package:uberclone_drive/allScreens/login_screen.dart';
+import 'package:uberclone_drive/allScreens/mainscreen.dart';
+import 'package:uberclone_drive/allWidget/progress_dialog.dart';
+import 'package:uberclone_drive/configMaps.dart';
+import 'package:uberclone_drive/main.dart';
 
 class RegisterationScreen extends StatelessWidget {
   
@@ -35,7 +37,7 @@ class RegisterationScreen extends StatelessWidget {
               SizedBox(height: 1.0 ),
 
               Text(
-                "Register as a Rider",
+                "Register as a Driver",
                 style: TextStyle(fontSize: 24.0, fontFamily: "Brand Bold"),
                 textAlign: TextAlign.center,
               ),
@@ -214,11 +216,13 @@ class RegisterationScreen extends StatelessWidget {
       "phone": phoneTextEditingController.text.trim(),
     };
 
-    usersRef.child(firebaseUser.uid).set(userDataMap);
+    driversRef.child(firebaseUser.uid).set(userDataMap);
+
+    currentFirebaseUser = firebaseUser;
 
     displayToastMessage("Congratulation, your account has been created. ", context);
 
-    Navigator.pushNamedAndRemoveUntil(context, MainScreen.idScreen, (route) => false);
+    Navigator.pushNamed(context, CarInfoScreen.idScreen,);
   }
   else
   {

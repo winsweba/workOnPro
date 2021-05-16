@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:uberclone/allScreens/mainscreen.dart';
-import 'package:uberclone/allScreens/registeration_screen.dart';
-import 'package:uberclone/allWidget/progress_dialog.dart';
-import 'package:uberclone/main.dart';
+import 'package:uberclone_drive/allScreens/mainscreen.dart';
+import 'package:uberclone_drive/allScreens/registeration_screen.dart';
+import 'package:uberclone_drive/allWidget/progress_dialog.dart';
+import 'package:uberclone_drive/main.dart';
 
 class LoginScreen extends StatelessWidget {
 
@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 1.0 ),
 
               Text(
-                "Login as a Rider",
+                "Login as a Driver",
                 style: TextStyle(fontSize: 24.0, fontFamily: "Brand Bold"),
                 textAlign: TextAlign.center,
               ),

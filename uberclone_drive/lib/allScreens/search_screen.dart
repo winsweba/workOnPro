@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uberclone/Assistant/request_assistant.dart';
-import 'package:uberclone/DataHandler/app_data.dart';
-import 'package:uberclone/allWidget/divider.dart';
-import 'package:uberclone/allWidget/progress_dialog.dart';
-import 'package:uberclone/configMaps.dart';
-import 'package:uberclone/models/address.dart';
-import 'package:uberclone/models/place_predictions.dart';
+import 'package:uberclone_drive/Assistant/request_assistant.dart';
+import 'package:uberclone_drive/DataHandler/app_data.dart';
+import 'package:uberclone_drive/allWidget/divider.dart';
+import 'package:uberclone_drive/allWidget/progress_dialog.dart';
+import 'package:uberclone_drive/configMaps.dart';
+import 'package:uberclone_drive/models/address.dart';
+import 'package:uberclone_drive/models/place_predictions.dart';
 
 class SearchScreen extends StatefulWidget {
   @override

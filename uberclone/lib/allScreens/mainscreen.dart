@@ -284,7 +284,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon((drawerOpen) ? Icons.menu : Icons.close , color: Colors.black , ),
-                  // child: Icon( Icons.menu , color: Colors.black , ),
+                  radius: 20.0,
                 ),
               ),
             ),
