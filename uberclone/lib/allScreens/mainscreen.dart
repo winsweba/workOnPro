@@ -4,12 +4,14 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uberclone/Assistant/assistant_methodos.dart';
+import 'package:uberclone/Assistant/geofire_assistant.dart';
 import 'package:uberclone/DataHandler/app_data.dart';
 import 'package:uberclone/allScreens/login_screen.dart';
 import 'package:uberclone/allScreens/search_screen.dart';
@@ -17,6 +19,7 @@ import 'package:uberclone/allWidget/divider.dart';
 import 'package:uberclone/allWidget/progress_dialog.dart';
 import 'package:uberclone/configMaps.dart';
 import 'package:uberclone/models/directionDetails.dart';
+import 'package:uberclone/models/nearby_available_drivers.dart';
 
 class MainScreen extends StatefulWidget {
   
@@ -46,6 +49,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
   double seachContainerHeight = 300.0;
 
   bool drawerOpen = true;
+  bool nearbyAvailableDriverKeysLoaded = false;
 
   DatabaseReference rideRequestRef;
 
@@ -150,6 +154,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
 
     String address = await AssistantMethods.searchCoordinateAddress(position, context);
     print ("This is your Address :: " + address);
+
+    initGeofireListner();
   }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -717,5 +723,80 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
         circlesSet.add(pickUpLocCircle);
         circlesSet.add(dropOffLocCircle);
       });
+  }
+
+  void initGeofireListner(){
+
+    Geofire.initialize("availableDrivers");
+    // Comment
+    Geofire.queryAtLocation(currentPosition.latitude,currentPosition.longitude, /*destance to display dirver*/ 15).listen((map) {
+        print(map);
+        if (map != null) {
+          var callBack = map['callBack'];
+
+          //latitude will be retrieved from map['latitude']
+          //longitude will be retrieved from map['longitude']
+
+          switch (callBack) {
+            case Geofire.onKeyEntered:
+            NearbyAvailableDrivers nearbyAvailableDrivers = NearbyAvailableDrivers();
+            nearbyAvailableDrivers.key = map['key'];
+            nearbyAvailableDrivers.latitude = map['latitude'];
+            nearbyAvailableDrivers.longitude = map['longitude'];
+            GeoFireAssistant.nearbyAvailableDriversList.add(nearbyAvailableDrivers);
+            if(nearbyAvailableDriverKeysLoaded == true ) {
+              updateAvailableDriversOnMap();
+            }
+              break;
+
+            case Geofire.onKeyExited:
+            GeoFireAssistant.removeDriverFromList(map['key']);
+            updateAvailableDriversOnMap(); 
+              break;
+
+            case Geofire.onKeyMoved:
+            NearbyAvailableDrivers nearbyAvailableDrivers = NearbyAvailableDrivers();
+            nearbyAvailableDrivers.key = map['key'];
+            nearbyAvailableDrivers.latitude = map['latitude'];
+            nearbyAvailableDrivers.longitude = map['longitude'];
+            GeoFireAssistant.updateDriverNearbyLocation(nearbyAvailableDrivers);
+            updateAvailableDriversOnMap();
+              break;
+
+            case Geofire.onGeoQueryReady:
+              updateAvailableDriversOnMap();
+              break;
+          }
+        }
+
+        setState(() {});
+    });
+
+    // Comment
+
+  }
+
+  void updateAvailableDriversOnMap(){
+    setState(() {
+      markersSet.clear();
+    });
+
+    Set<Marker> tMarkers = Set<Marker>();
+    for(NearbyAvailableDrivers driver in GeoFireAssistant.nearbyAvailableDriversList ){
+      LatLng driverAvailablePosition = LatLng(driver.latitude, driver.longitude);
+
+      Marker marker = Marker (
+        markerId:  MarkerId("driver${driver.key}"),
+        position: driverAvailablePosition,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        rotation: AssistantMethods.createRandomNumber(360),
+      );
+
+      tMarkers.add(marker);
+    }
+
+    setState(() {
+      markersSet = tMarkers; 
+    });
   }
 }
