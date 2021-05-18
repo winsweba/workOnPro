@@ -53,6 +53,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
 
   DatabaseReference rideRequestRef;
 
+  BitmapDescriptor neaByIcon;
+
   @override
  void initState(){
 
@@ -165,6 +167,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
 
   @override
   Widget build(BuildContext context) {
+
+    createIconMarker();
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -788,7 +792,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
       Marker marker = Marker (
         markerId:  MarkerId("driver${driver.key}"),
         position: driverAvailablePosition,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+        icon: neaByIcon,
         rotation: AssistantMethods.createRandomNumber(360),
       );
 
@@ -798,5 +802,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin  
     setState(() {
       markersSet = tMarkers; 
     });
+  }
+
+  void createIconMarker() {
+    if(neaByIcon == null) {
+      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: Size(2, 2));
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_android.png")
+      .then((value) {
+        neaByIcon = value;
+      });
+    }
   }
 }
