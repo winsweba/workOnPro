@@ -1,23 +1,39 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uberclone_drive/Assistant/assistant_methodos.dart';
+import 'package:uberclone_drive/allScreens/registeration_screen.dart';
+import 'package:uberclone_drive/configMaps.dart';
+import 'package:uberclone_drive/main.dart';
 
-class HomeTabPage extends StatelessWidget {
-
-  Completer<GoogleMapController> _controllerGoogleMap = Completer();
-
-  GoogleMapController newGoogleMapController;
+class HomeTabPage extends StatefulWidget {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
 
+  @override
+  _HomeTabPageState createState() => _HomeTabPageState();
+}
+
+class _HomeTabPageState extends State<HomeTabPage> {
+  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+
+  GoogleMapController newGoogleMapController;
+
   Position currentPosition;
+
   var geoLocator = Geolocator();
+
+  String driverStatusText = "Offline Now - Go Online ";
+
+  Color driverStatusColor = Colors.black;
+
+  bool isDriverAvailable = false;
 
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high ); 
@@ -31,7 +47,7 @@ class HomeTabPage extends StatelessWidget {
     // String address = await AssistantMethods.searchCoordinateAddress(position, context);
     // print ("This is your Address :: " + address);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -39,7 +55,7 @@ class HomeTabPage extends StatelessWidget {
         GoogleMap(
             mapType: MapType.normal,
             myLocationButtonEnabled: true,
-            initialCameraPosition:  _kGooglePlex,
+            initialCameraPosition:  HomeTabPage._kGooglePlex,
             myLocationEnabled: true,
             // zoomControlsEnabled: true,
             // zoomGesturesEnabled: true,
@@ -73,15 +89,40 @@ class HomeTabPage extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 16.0 ),
                             child: RaisedButton(
                               onPressed: (){
-                                
+                                if (isDriverAvailable != true ){
+                                makeDriverOnlineNew();
+
+                                getLocationLiveUpdate();
+
+                                setState(() {
+                                  
+                                  driverStatusColor = Colors.green;
+                                  driverStatusText = "Online Now";
+                                  isDriverAvailable = true;
+                                });
+
+                                displayToastMessage("You are Online now", context);
+                                }
+                                else {
+                                  makeDriverOfflineNow();
+                                  
+                                  setState(() {
+                                  
+                                  driverStatusColor = Colors.black;
+                                  driverStatusText = "Offline Now - Go Online";
+                                  isDriverAvailable = false;
+                                });
+                                  
+                                  displayToastMessage("You are Onffine now", context);
+                                }
                               },
-                              color: Colors.green,
+                              color: driverStatusColor,
                               child: Padding(
                                 padding: EdgeInsets.all(17.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("Online now ", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white,),),
+                                    Text(driverStatusText, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white,),),
                                     Icon(Icons.phone_android, color: Colors.white ,size: 26.0,),
                                     ],
                                   ),
@@ -93,5 +134,42 @@ class HomeTabPage extends StatelessWidget {
            ),
       ],
     );
+  }
+
+  void makeDriverOnlineNew() async{
+
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high ); 
+    currentPosition = position;
+
+    Geofire.initialize("availableDrivers");
+    Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
+
+    rideRequestRef.onValue.listen((event) {
+      
+    });
+  }
+
+  void getLocationLiveUpdate(){
+    
+    homeTabPageStreamSubscription = Geolocator.getPositionStream().listen((Position position) { 
+
+    currentPosition = position;
+
+    if(isDriverAvailable == true ){
+      Geofire.setLocation(currentFirebaseUser.uid, position.latitude, position.longitude);
+    }
+    LatLng latLng = LatLng(position.latitude, position.longitude);
+    newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));      
+
+    });
+  }
+
+  void makeDriverOfflineNow() {
+    Geofire.removeLocation(currentFirebaseUser.uid);
+    rideRequestRef.onDisconnect();
+    rideRequestRef.remove();
+    rideRequestRef = null;
+
+    
   }
 }

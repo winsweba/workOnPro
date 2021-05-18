@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:uberclone_drive/allScreens/mainscreen.dart';
 import 'package:uberclone_drive/allScreens/registeration_screen.dart';
 import 'package:uberclone_drive/allWidget/progress_dialog.dart';
+import 'package:uberclone_drive/configMaps.dart';
 import 'package:uberclone_drive/main.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -160,9 +161,10 @@ class LoginScreen extends StatelessWidget {
   {
     //Save user info to database
     
-    usersRef.child(firebaseUser.uid).once().then( (DataSnapshot snap) {
+    driversRef.child(firebaseUser.uid).once().then( (DataSnapshot snap) {
 
       if(snap.value != null ){
+        currentFirebaseUser = firebaseUser;
          Navigator.pushNamedAndRemoveUntil(context, MainScreen.idScreen, (route) => false);
          displayToastMessage("Your are Logged in now", context);
       }

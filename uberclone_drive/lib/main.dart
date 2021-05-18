@@ -7,18 +7,22 @@ import 'package:uberclone_drive/DataHandler/app_data.dart';
 import 'package:uberclone_drive/allScreens/car_Info_screen.dart';
 import 'package:uberclone_drive/allScreens/login_screen.dart';
 import 'package:uberclone_drive/allScreens/registeration_screen.dart';
+import 'package:uberclone_drive/configMaps.dart';
 
 import 'allScreens/mainscreen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  currentFirebaseUser = FirebaseAuth.instance.currentUser;
   
   runApp(MyApp());
 }
 
 DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("users");
 DatabaseReference driversRef = FirebaseDatabase.instance.reference().child("drivers");
+DatabaseReference rideRequestRef = FirebaseDatabase.instance.reference().child("drivers").child(currentFirebaseUser.uid).child("newRide");
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -32,7 +36,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: RegisterationScreen.idScreen,
+        initialRoute: FirebaseAuth.instance.currentUser == null ? LoginScreen.idScreen : MainScreen.idScreen,
         routes: {
           RegisterationScreen.idScreen: (context) => RegisterationScreen(),
           LoginScreen.idScreen: (context) => LoginScreen(),
