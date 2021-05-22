@@ -61,7 +61,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     currentFirebaseUser = await FirebaseAuth.instance.currentUser;
     PushNotificationsService pushNotificationsService = PushNotificationsService();
 
-    pushNotificationsService.initialize();
+    pushNotificationsService.initialize(context);
     pushNotificationsService.getToken();
 
   }

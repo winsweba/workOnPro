@@ -2,25 +2,28 @@ import 'dart:io' show Platform;
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uberclone_drive/configMaps.dart';
 import 'package:uberclone_drive/main.dart';
 import 'package:uberclone_drive/models/ride_details.dart';
+import 'package:uberclone_drive/notifications/notification_dialog.dart';
 
 class PushNotificationsService{
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  Future initialize() async{
+  Future initialize(context) async{
 
     firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        retriveRideRequestInfo(getRideRequestId(message));
+        retriveRideRequestInfo(getRideRequestId(message), context);
       },
       onLaunch: (Map<String, dynamic> message) async {
-        retriveRideRequestInfo(getRideRequestId(message));
+        retriveRideRequestInfo(getRideRequestId(message),context);
       },
       onResume: (Map<String, dynamic> message) async {
-        retriveRideRequestInfo(getRideRequestId(message));
+        retriveRideRequestInfo(getRideRequestId(message),context);
       },
     );
 
@@ -54,7 +57,7 @@ class PushNotificationsService{
     return rideRequestId;
   }
 
-  void retriveRideRequestInfo(String rideRequestId){
+  void retriveRideRequestInfo(String rideRequestId, BuildContext context){
 
     newRequestRef.child(rideRequestId).once().then((DataSnapshot dataSnapshot){
 
@@ -81,6 +84,12 @@ class PushNotificationsService{
         print("information ::::::::::::::: ***************** ////////////////////////ooooooo");
         print(rideDetails.dropoff_address);
         print(rideDetails.pickup_address);
+
+        showDialog( 
+          context: context,
+          barrierDismissible: false, 
+          builder: (BuildContext context) => NotificationDialog(rideDetails: rideDetails,) 
+          )
         
       }
     });
