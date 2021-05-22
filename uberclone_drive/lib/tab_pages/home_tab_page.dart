@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,6 +9,7 @@ import 'package:uberclone_drive/Assistant/assistant_methodos.dart';
 import 'package:uberclone_drive/allScreens/registeration_screen.dart';
 import 'package:uberclone_drive/configMaps.dart';
 import 'package:uberclone_drive/main.dart';
+import 'package:uberclone_drive/notifications/push_notification_service.dart';
 
 class HomeTabPage extends StatefulWidget {
 
@@ -35,6 +37,13 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   bool isDriverAvailable = false;
 
+  @override
+  void initState() {
+
+    super.initState();
+    getCurrentDriverInfo();
+  }
+
   void locatePosition() async {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high ); 
     currentPosition = position;
@@ -46,6 +55,15 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     // String address = await AssistantMethods.searchCoordinateAddress(position, context);
     // print ("This is your Address :: " + address);
+  }
+
+  void getCurrentDriverInfo() async{
+    currentFirebaseUser = await FirebaseAuth.instance.currentUser;
+    PushNotificationsService pushNotificationsService = PushNotificationsService();
+
+    pushNotificationsService.initialize();
+    pushNotificationsService.getToken();
+
   }
 
   @override
@@ -143,7 +161,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     Geofire.initialize("availableDrivers");
     Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
-
+//ddddddddddddddddddd
     rideRequestRef.onValue.listen((event) {
       
     });
