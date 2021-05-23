@@ -89,7 +89,7 @@ class PushNotificationsService{
           context: context,
           barrierDismissible: false, 
           builder: (BuildContext context) => NotificationDialog(rideDetails: rideDetails,) 
-          )
+          );
         
       }
     });
