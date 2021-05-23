@@ -41,6 +41,7 @@ dependencies:
   flutter_polyline_points: ^0.2.4
   flutter_geofire: ^1.0.3
   firebase_messaging: ^7.0.3
+  assets_audio_player: ^2.0.13+1
 
 dev_dependencies:
   flutter_test:
