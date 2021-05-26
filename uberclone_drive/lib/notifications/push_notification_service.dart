@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,6 +63,9 @@ class PushNotificationsService{
     newRequestRef.child(rideRequestId).once().then((DataSnapshot dataSnapshot){
 
       if(dataSnapshot.value != null){
+        
+        assetsAudioPlayer.open(Audio("sounds/alert.mp3"));
+        assetsAudioPlayer.play();
 
         double dropOffLocationLat = double.parse(dataSnapshot.value['dropoff']['latitude'].toString() );
         double dropOffLocationLng = double.parse(dataSnapshot.value['dropoff']['logitude'].toString() );

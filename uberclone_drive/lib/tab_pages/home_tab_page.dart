@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +10,7 @@ import 'package:uberclone_drive/Assistant/assistant_methodos.dart';
 import 'package:uberclone_drive/allScreens/registeration_screen.dart';
 import 'package:uberclone_drive/configMaps.dart';
 import 'package:uberclone_drive/main.dart';
+import 'package:uberclone_drive/models/drivers.dart';
 import 'package:uberclone_drive/notifications/push_notification_service.dart';
 
 class HomeTabPage extends StatefulWidget {
@@ -23,11 +25,12 @@ class HomeTabPage extends StatefulWidget {
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
+
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
   GoogleMapController newGoogleMapController;
 
-  Position currentPosition;
+  
 
   var geoLocator = Geolocator();
 
@@ -59,6 +62,14 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   void getCurrentDriverInfo() async{
     currentFirebaseUser = await FirebaseAuth.instance.currentUser;
+
+    driversRef.child(currentFirebaseUser.uid).once().then((DataSnapshot dataSnapshot) {
+      if(dataSnapshot.value != null ){
+        driversInformation = Drivers.fromSnapshort(dataSnapshot);
+
+      }
+    });
+
     PushNotificationsService pushNotificationsService = PushNotificationsService();
 
     pushNotificationsService.initialize(context);
@@ -70,6 +81,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        
         GoogleMap(
             mapType: MapType.normal,
             myLocationButtonEnabled: true,
@@ -161,7 +173,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     Geofire.initialize("availableDrivers");
     Geofire.setLocation(currentFirebaseUser.uid, currentPosition.latitude, currentPosition.longitude);
-//ddddddddddddddddddd
+
+    rideRequestRef.set("searching");
     rideRequestRef.onValue.listen((event) {
       
     });
