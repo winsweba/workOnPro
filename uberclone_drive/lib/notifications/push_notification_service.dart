@@ -68,11 +68,11 @@ class PushNotificationsService{
         assetsAudioPlayer.play();
 
         double dropOffLocationLat = double.parse(dataSnapshot.value['dropoff']['latitude'].toString() );
-        double dropOffLocationLng = double.parse(dataSnapshot.value['dropoff']['logitude'].toString() );
-        String dropOffAddress = dataSnapshot.value['dropoff_address'].toString();
+        double dropOffLocationLng = double.parse(dataSnapshot.value['dropoff']['longitude'].toString() );
+        String dropOffAddress = dataSnapshot.value['dropoff_addresss'].toString();
 
         double pickUpLocationLat = double.parse(dataSnapshot.value['pickup']['latitude'].toString() );
-        double pickUpLocationLng = double.parse(dataSnapshot.value['pickup']['logitude'].toString() );
+        double pickUpLocationLng = double.parse(dataSnapshot.value['pickup']['longitude'].toString() );
         String pickUpAddress = dataSnapshot.value['pickup_address'].toString();
 
         String paymentMethod = dataSnapshot.value['payment_method'].toString();
