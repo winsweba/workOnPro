@@ -1,4 +1,6 @@
+import 'package:barber_booking/screens/home_screen.dart';
 import 'package:barber_booking/state/state_mangement.dart';
+import 'package:barber_booking/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_ui/firebase_auth_ui.dart';
 import 'package:firebase_auth_ui/providers.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +23,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/home':
+            return PageTransition(
+                settings: settings,
+                child: HomePage(), 
+                type: PageTransitionType.fade);
+            break;
+          default:
+            return null;
+        }
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -32,64 +47,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePage extends ConsumerWidget {
   GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        key: scaffoldState,
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/images/my_bg.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton.icon(
-                  onPressed: () => processLogin(context),
-                  icon: Icon(Icons.phone, color: Colors.white),
-                  label: Text(
-                    "LOGIN WITH PHONE",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.black)),
-                ),
-              )
-            ],
-          ),
-        ));
-  }
 
   processLogin(BuildContext context) {
     var user = FirebaseAuth.instance.currentUser;
@@ -97,15 +61,23 @@ class _MyHomePageState extends State<MyHomePage> {
     if (user == null) // User not login, show log in
     {
       FirebaseAuthUi.instance()
-          .launchAuth([AuthProvider.phone()]).then((firebaseUser) {
+          .launchAuth([AuthProvider.phone()]).then((firebaseUser) async{
         // Refesf state
         context.read(userLogged).state = FirebaseAuth.instance.currentUser;
 
-        ScaffoldMessenger.of(scaffoldState.currentContext)
-            .showSnackBar(SnackBar(
-          content: Text(
-              'Login success ${FirebaseAuth.instance.currentUser.phoneNumber}'),
-        ));
+        // ScaffoldMessenger.of(scaffoldState.currentContext)
+        //     .showSnackBar(SnackBar(
+        //   content: Text(
+        //       'Login success ${FirebaseAuth.instance.currentUser.phoneNumber}'),
+        // ));
+        
+
+        // Start new Screen 
+        // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+
+        await checkLoginState(context, true);
+
+
       }).catchError((e) {
         if (e is PlatformException) if (e.code ==
             FirebaseAuthUi.kUserCancelledError)
@@ -123,5 +95,69 @@ class _MyHomePageState extends State<MyHomePage> {
       // user alreader login, state home page
 
     }
+  }
+
+  @override
+  Widget build(BuildContext context, watch) {
+    return Scaffold(
+        key: scaffoldState,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/my_bg.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                  padding: const EdgeInsets.all(16),
+                  width: MediaQuery.of(context).size.width,
+                  child: FutureBuilder(
+                    future: checkLoginState(context, false),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting)
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      else {
+                        var userState = snapshot.data as LOGIN_STATE;
+                        if (userState == LOGIN_STATE.LOGGED) {
+                          return Container();
+                        } else {
+                          return ElevatedButton.icon(
+                            onPressed: () => processLogin(context),
+                            icon: Icon(Icons.phone, color: Colors.white),
+                            label: Text(
+                              "LOGIN WITH PHONE",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all(Colors.black)),
+                          );
+                        }
+                      }
+                    },
+                  ))
+            ],
+          ),
+        ));
+  }
+
+  Future<LOGIN_STATE> checkLoginState(BuildContext context, bool fromLogin) async {
+    await Future.delayed(Duration(seconds: fromLogin == true ? 0 : 3)).then((value) {
+      FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+        //If get token, we pritn it
+        print("$token");
+        context.read(userToken).state = token;
+        //And because user already login,
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      });
+    });
+    return FirebaseAuth.instance.currentUser != null
+        ? LOGIN_STATE.LOGGED
+        : LOGIN_STATE.NOT_LOGIN;
   }
 }
