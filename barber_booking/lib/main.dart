@@ -1,6 +1,7 @@
 import 'package:barber_booking/screens/home_screen.dart';
 import 'package:barber_booking/state/state_mangement.dart';
 import 'package:barber_booking/utils/utils.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_ui/firebase_auth_ui.dart';
 import 'package:firebase_auth_ui/providers.dart';
@@ -8,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:page_transition/page_transition.dart';
 
 Future<void> main() async {
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends ConsumerWidget {
   GlobalKey<ScaffoldState> scaffoldState = new GlobalKey();
 
-  processLogin(BuildContext context) {
+  processLogin(BuildContext context,) {
     var user = FirebaseAuth.instance.currentUser;
 
     if (user == null) // User not login, show log in
@@ -75,7 +77,7 @@ class MyHomePage extends ConsumerWidget {
         // Start new Screen 
         // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
 
-        await checkLoginState(context, true);
+        await checkLoginState(context, true, scaffoldState);
 
 
       }).catchError((e) {
@@ -115,7 +117,7 @@ class MyHomePage extends ConsumerWidget {
                   padding: const EdgeInsets.all(16),
                   width: MediaQuery.of(context).size.width,
                   child: FutureBuilder(
-                    future: checkLoginState(context, false),
+                    future: checkLoginState(context, false, scaffoldState),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting)
                         return Center(
@@ -146,16 +148,85 @@ class MyHomePage extends ConsumerWidget {
         ));
   }
 
-  Future<LOGIN_STATE> checkLoginState(BuildContext context, bool fromLogin) async {
-    await Future.delayed(Duration(seconds: fromLogin == true ? 0 : 3)).then((value) {
-      FirebaseAuth.instance.currentUser.getIdToken().then((token) {
+  Future<LOGIN_STATE> checkLoginState(BuildContext context, bool fromLogin, GlobalKey<ScaffoldState> scaffoldState ) async {
+    
+        if(!context.read(forceReload).state ){
+    await Future.delayed(Duration(seconds: fromLogin == true ? 0 : 3)).then((value) =>{
+      FirebaseAuth.instance.currentUser.getIdToken().then((token) async {
         //If get token, we pritn it
         print("$token");
         context.read(userToken).state = token;
-        //And because user already login,
+        //Check user in firebase 
+        CollectionReference userRef = FirebaseFirestore.instance.collection("User");
+        DocumentSnapshot snapshotUser = await userRef
+        .doc(FirebaseAuth.instance.currentUser.phoneNumber)
+        .get();
+        // Force reload state 
+        context.read(forceReload).state = true;
+        if(snapshotUser.exists ){
+          // Because user already login we will start in Screeen
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-      });
+        }
+        else{
+          // If user Info is not Available 
+          var nameController = TextEditingController();
+          var addressController = TextEditingController();
+          Alert(
+            context: context,
+            title: "UPLOAD PROFILES",
+            content: Column(
+              children: [
+                TextField( decoration: InputDecoration(
+                  icon: Icon(Icons.account_circle),
+                  labelText: "Name",
+                ),
+                controller: nameController,
+                 ),
+                 TextField( decoration: InputDecoration(
+                  icon: Icon(Icons.home),
+                  labelText: "Address",
+                ),
+                controller: addressController,
+                 ),
+              ],
+            ),
+            buttons: [
+              DialogButton(child: Text( "CANCEL"), onPressed: () => Navigator.pop(context) ),
+              DialogButton(child: Text( "UPDATE"), onPressed: () {
+                //Update to Server
+                userRef.doc(FirebaseAuth.instance.currentUser.phoneNumber)
+                .set({
+                  'name': nameController.text,
+                  "address": addressController.text,
+                }).then((value) async {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(scaffoldState.currentContext )
+                  .showSnackBar(SnackBar(content: Text("UPDATE PROFILES SUCCESSFULLY!"),) );
+
+              
+                    await Future.delayed(Duration( seconds: 1), () {
+
+                    // Because user already login we will start in Screeen
+                  Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+
+                  } );
+
+                  
+                   
+                } )
+                .catchError((e){
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(scaffoldState.currentContext )
+                  .showSnackBar(SnackBar(content: Text('$e'),) );
+                }); 
+              } ),
+            ],
+          ).show(); // Dont for get to bring the show()
+        }
+      })
     });
+    
+    }
     return FirebaseAuth.instance.currentUser != null
         ? LOGIN_STATE.LOGGED
         : LOGIN_STATE.NOT_LOGIN;
