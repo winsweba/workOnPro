@@ -101,7 +101,8 @@ class MyHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, watch) {
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
         key: scaffoldState,
         body: Container(
           decoration: BoxDecoration(
@@ -145,7 +146,8 @@ class MyHomePage extends ConsumerWidget {
                   ))
             ],
           ),
-        ));
+        )
+        ) );
   }
 
   Future<LOGIN_STATE> checkLoginState(BuildContext context, bool fromLogin, GlobalKey<ScaffoldState> scaffoldState ) async {
