@@ -1,5 +1,5 @@
 import 'package:barber_booking/screens/home_screen.dart';
-import 'package:barber_booking/screens/looking_screen.dart';
+import 'package:barber_booking/screens/booking_screen.dart';
 import 'package:barber_booking/state/state_mangement.dart';
 import 'package:barber_booking/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
