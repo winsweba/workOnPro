@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.shop_users">
+     <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="shop_users"
         android:icon="@mipmap/ic_launcher">
