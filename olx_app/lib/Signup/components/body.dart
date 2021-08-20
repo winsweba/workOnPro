@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -83,6 +84,8 @@ class _SignupBodyState extends State<SignupBody> {
       userId = currentUser.uid;
       userEmail = currentUser.email;
       getUserName = _nameController.text.trim();
+
+      saveUserData();
     }).catchError((error){
       Navigator.pop(context);
       showDialog(
@@ -103,6 +106,18 @@ class _SignupBodyState extends State<SignupBody> {
     }
   }
 
+  void saveUserData() {
+    Map<String, dynamic> userData = {
+      'userName' : _nameController.text.trim(),
+      'uid': userId,
+      'userNumber': _phoneController.text.trim(),
+      'imgPro': userPhotoUrl,
+      'time': DateTime.now(),
+      'status': "approved",
+    };
+
+    FirebaseFirestore.instance.collection('users').doc(userId).set(userData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +174,7 @@ class _SignupBodyState extends State<SignupBody> {
               text: "SIGNUP",
               press: ()
               {
+                upload();
               },
             ),
             SizedBox(height: _screenHeight * 0.03,),
