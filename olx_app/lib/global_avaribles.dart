@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 String userId = "";
 String userEmail = "";
-String userImage = "";
+String userImageUrl = "";
 String getUserName = "";
 
 String addUserName = "";
 String addUserImage = "";
 
 String completeAddress = "";
-List<Placemark> placemark;
+List<Placemark> placemarks;
 Position position;
