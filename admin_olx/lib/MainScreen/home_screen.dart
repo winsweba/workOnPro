@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -10,6 +13,37 @@ class _HomeScreenState extends State<HomeScreen> {
   
   String timeString = "";
   String dateString = "";
+
+  String formatDate (DateTime dateTime) {
+    return DateFormat("dd MMM, yyyy").format(dateTime);
+  }
+
+  String formatTime (DateTime dateTime) {
+    return DateFormat("hh:mm:ss a").format(dateTime);
+  }
+
+  getTime(){
+    final DateTime now = DateTime.now();
+    final String formattedTime = formatTime(now);
+    final String formattedDate = formatDate(now);
+
+    if(this.mounted) {
+      setState(() {
+              timeString = formattedTime;
+              dateString = formattedDate;
+            });
+    }
+  }
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      dateString = formatDate(DateTime.now());
+      timeString = formatTime(DateTime.now());
+
+      Timer.periodic(Duration(seconds: 1), (Timer t) => getTime());
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
           title: Text("Admin Home Page", style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0 ),),
         ),
         body: Center(

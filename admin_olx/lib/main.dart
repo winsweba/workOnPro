@@ -1,4 +1,6 @@
+import 'package:admin_olx/MainScreen/home_screen.dart';
 import 'package:admin_olx/login/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: LoginScreen(),
+      home: FirebaseAuth.instance.currentUser != null ? HomeScreen() : LoginScreen(),
     );
   }
 }
