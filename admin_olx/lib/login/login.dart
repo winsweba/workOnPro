@@ -1,128 +1,156 @@
-import 'dart:js';
-
 import 'package:admin_olx/DialogBox/errorDialog.dart';
 import 'package:admin_olx/DialogBox/loadingDialog.dart';
-import 'package:admin_olx/MainScreen/home_screen.dart';
-import 'package:admin_olx/login/backgroundPainter.dart';
+import 'package:admin_olx/Login/backgroundPainter.dart';
+import 'package:admin_olx/MainScreens/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
+
+
 class LoginScreen extends StatefulWidget {
-
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
-    
-class _LoginScreenState extends State<LoginScreen> {
 
-  String email = "";
-  String password = ""; 
 
-  returnEmailFiled(IconData icon, bool isObscure){
+
+class _LoginScreenState extends State<LoginScreen>
+{
+  String email="";
+  String password="";
+
+  returnEmailField(IconData icon, bool isObscure)
+  {
     return TextField(
-      onChanged: (value){
+      onChanged: (value)
+      {
         email = value;
       },
       obscureText: isObscure,
-      style: TextStyle(fontSize: 13.0, color: Colors.white),
+      style: TextStyle(fontSize: 15.0, color: Colors.white),
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.green)
+          borderSide: BorderSide(color: Colors.green),
         ),
         hintText: "Email",
         hintStyle: TextStyle(color: Colors.white),
-        icon: Icon(icon, color: Colors.green,)
+        icon: Icon(
+          icon,
+          color: Colors.green,
+        ),
       ),
     );
   }
 
-  returnPasswordFiled(IconData icon, bool isObscure){
+  returnPasswordField(IconData icon, bool isObscure)
+  {
     return TextField(
-      onChanged: (value){
+      onChanged: (value)
+      {
         password = value;
       },
       obscureText: isObscure,
-      style: TextStyle(fontSize: 13.0, color: Colors.white),
+      style: TextStyle(fontSize: 15.0, color: Colors.white),
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.green)
+          borderSide: BorderSide(color: Colors.green),
         ),
         hintText: "Password",
         hintStyle: TextStyle(color: Colors.white),
-        icon: Icon(icon, color: Colors.green,)
+        icon: Icon(
+          icon,
+          color: Colors.green,
+        ),
       ),
     );
   }
 
-  returnLongButton(BuildContext context) {
+  returnLoginButton()
+  {
     return ElevatedButton(
-      onPressed: () {
-        if (email != "" && password != "")
+      onPressed: ()
+      {
+        if(email != "" && password != "")
         {
-          // Login
-          loginAdmin(context);
+          //login
+          loginAdmin();
         }
       },
-      child: Text("Login" , style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 2.0),),
+      child: Text(
+        "Login",
+        style: TextStyle(
+          color: Colors.white,
+          letterSpacing: 2.0,
+          fontSize: 16.0,
+        ),
+      ),
     );
   }
 
-  loginAdmin(BuildContext context) async{
+  loginAdmin() async
+  {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (context)
+      {
         return LoadingAlertDialog(
-          message: "Please wait.........",
+          message: "please wait...",
         );
       }
     );
 
     User currentUser;
-
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
-    ).then((aAuth) {
+    ).then((aAuth)
+    {
       currentUser = aAuth.user;
-    }).catchError((error) {
+    }).catchError((error)
+    {
       Navigator.pop(context);
 
       showDialog(
-      context: context,
-      builder: (context) {
-        return ErrorAlertDialog(
-          message:"Error Occoured" + error.toString(),
-        );
-      }
-    );
-
+          context: context,
+          builder: (context)
+          {
+            return ErrorAlertDialog(
+              message: "Error Occured: " + error.toString(),
+            );
+          }
+      );
     });
 
-    if (currentUser != null ){
-      // Homepage
-      Route newRoute = MaterialPageRoute(builder: (context) => HomeScreen() );
+    if(currentUser != null)
+    {
+      //homepage
+      Route newRoute = MaterialPageRoute(builder: (context) => HomeScreen());
       Navigator.pushReplacement(context, newRoute);
     }
-    else {
-      // Login page
+    else
+    {
+      //loginPage
+      Route newRoute = MaterialPageRoute(builder: (context) => LoginScreen());
+      Navigator.pushReplacement(context, newRoute);
+    }
+  }
 
-      Route newRoute = MaterialPageRoute(builder: (context) => LoginScreen() );
-      Navigator.pushReplacement(context, newRoute);
-    }
-  } 
+
   @override
-  Widget build(BuildContext context) {
-    
-  double _screenWidth = MediaQuery.of(context).size.width, _screenHeight = MediaQuery.of(context).size.height;
+  Widget build(BuildContext context)
+  {
+    double _screenWidth = MediaQuery.of(context).size.width,
+        _screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.black87,
       body: Stack(
         alignment: Alignment.lerp(
-          Alignment.lerp(Alignment.centerLeft, Alignment.center, 0.3),
-          Alignment.topCenter,
-          0.15,
+            Alignment.lerp(Alignment.centerRight, Alignment.center, 0.3),
+            Alignment.topCenter,
+            0.15,
         ),
         children: [
           CustomPaint(
@@ -131,37 +159,40 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Center(
             child: Container(
-              width: _screenWidth * 5,
+              width: _screenWidth * .5,
               child: Column(
                 children: [
                   Center(
-                    child: Padding(padding: EdgeInsets.symmetric(vertical: 40.0),
-                    child: Image.asset("images/admin.png", width: 300, height: 300,),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40.0),
+                      child: Image.asset("images/admin.png", width: 300, height: 300,),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.symmetric(horizontal: 50.0),
-                  child: returnEmailFiled(Icons.person, false),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.0),
+                    child: returnEmailField(Icons.person, false),
                   ),
                   SizedBox(height: 20.0,),
-                  Padding(padding: EdgeInsets.symmetric(horizontal: 50.0),
-                  child: returnPasswordFiled(Icons.person, true),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 50.0),
+                    child: returnPasswordField(Icons.person, true),
                   ),
                   SizedBox(height: 40.0,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 50.0),
-                  child: returnLongButton(context),
-                  ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 50.0),
+                        child: returnLoginButton(),
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
-      
     );
   }
 }

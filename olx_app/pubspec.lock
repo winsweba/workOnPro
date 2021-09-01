@@ -261,6 +261,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  maps_launcher:
+    dependency: "direct main"
+    description:
+      name: maps_launcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   matcher:
     dependency: transitive
     description:
@@ -443,4 +450,4 @@ packages:
     version: "5.1.1"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.24.0-7.0"
+  flutter: ">=2.0.0"

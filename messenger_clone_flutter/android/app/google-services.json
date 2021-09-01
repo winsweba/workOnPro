@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "353674028204",
+    "project_id": "messgerapp",
+    "storage_bucket": "messgerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353674028204:android:717593b32b063f8b392b09",
+        "android_client_info": {
+          "package_name": "com.example.messenger_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "353674028204-2hv8blmj12omtcatbvvh0e9fi6j0cseo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALLYBzA-5BQG_AFcfR0hwQFSD9QbON4co"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "353674028204-2hv8blmj12omtcatbvvh0e9fi6j0cseo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
