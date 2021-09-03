@@ -24,7 +24,7 @@ class SignupBody extends StatefulWidget {
 
 class _SignupBodyState extends State<SignupBody> {
 
-  String userPhotoUrl = "";
+  // String userPhotoUrl = "";
 
   File _image;
   final picker = ImagePicker();
@@ -66,11 +66,18 @@ class _SignupBodyState extends State<SignupBody> {
 
     } );
 
+    // await storageTaskSnapshot.ref.getDownloadURL().then((url) {
+    //   userPhotoUrl = url;
+    //   print(userPhotoUrl);
+    //   _register();
+    // } );
+
     await storageTaskSnapshot.ref.getDownloadURL().then((url) {
-      userPhotoUrl = url;
-      print(userPhotoUrl);
+      userImageUrl = url;
+      print(userImageUrl);
       _register();
     } );
+
   }
 
   void _register() async {
@@ -111,7 +118,8 @@ class _SignupBodyState extends State<SignupBody> {
       'userName' : _nameController.text.trim(),
       'uid': userId,
       'userNumber': _phoneController.text.trim(),
-      'imgPro': userPhotoUrl,
+      // 'imgPro': userPhotoUrl,
+      'imgPro': userImageUrl,
       'time': DateTime.now(),
       'status': "approved",
     };

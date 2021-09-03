@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_slider/image_slider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:olx_app/home_screene.dart';
 
 class ImageSliderScreen extends StatefulWidget {
 
@@ -32,6 +33,7 @@ class _ImageSliderScreenState extends State<ImageSliderScreen> with SingleTicker
   static List<String> links = [];
 
 
+
   @override
     void initState() {
       // TODO: implement initState
@@ -50,11 +52,21 @@ class _ImageSliderScreenState extends State<ImageSliderScreen> with SingleTicker
     links.add(widget.urlImage5);
     }
 
+  _buildBackButton (){
+    return IconButton(
+      icon: Icon(Icons.arrow_back, color: Colors.white,),
+      onPressed: () {
+        Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
+        Navigator.pushReplacement(context, newRoute);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: _buildBackButton(),
         title: Text(widget.title, style: TextStyle(letterSpacing: 2.0, fontFamily: "varela"),),
       ),
 

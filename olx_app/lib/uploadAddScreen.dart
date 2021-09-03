@@ -87,6 +87,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
               ),
               SizedBox(height: 5.0,),
               TextField(
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(hintText: "Enter Your Number"),
                 onChanged: (value) {
                   this.userNumber = value;
@@ -94,6 +95,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
               ),
               SizedBox(height: 5.0,),
               TextField(
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(hintText: "Enter Item price"),
                 onChanged: (value) {
                   this.itemPrice = value;
@@ -115,6 +117,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
               ),
               SizedBox(height: 5.0,),
               TextField(
+                maxLines: 4,
                 decoration: InputDecoration(hintText: "Write item Description "),
                 onChanged: (value) {
                   this.description = value;
