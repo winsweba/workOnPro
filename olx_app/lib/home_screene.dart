@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olx_app/Welcome/welcome_screen.dart';
+import 'package:olx_app/details_screen.dart';
 import 'package:olx_app/global_avaribles.dart';
 import 'package:olx_app/image_slider_screen.dart';
+import 'package:olx_app/info_screen.dart';
+import 'package:olx_app/payment_screen.dart';
 import 'package:olx_app/profileScreen.dart';
 import 'package:olx_app/search_product.dart';
 import 'package:olx_app/uploadAddScreen.dart';
 import 'package:timeago/timeago.dart' as tAgo;
+import 'package:toast/toast.dart';
 
 class HomeScreene extends StatefulWidget {
 
@@ -23,7 +27,12 @@ class _HomeScreeneState extends State<HomeScreene> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   QuerySnapshot items;
+  
 
+void showToast(String msg,BuildContext context ,{int duration, int gravity}){
+    Toast.show( msg, context, duration: duration, gravity: gravity);
+  }
+  
   Future<bool> showDialogForUpdateDate(selectedDoc, oldUserName, oldPhoneNumber, oldItemPrice, oldItemName, oldItemColor, oldItemDescription) async{
     return showDialog(
       context: context,
@@ -51,6 +60,7 @@ class _HomeScreeneState extends State<HomeScreene> {
 
                 TextFormField(
                   initialValue: oldPhoneNumber,
+                  keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: "Eneter Your Phone Number",
                   ),
@@ -65,6 +75,7 @@ class _HomeScreeneState extends State<HomeScreene> {
 
                 TextFormField(
                   initialValue: oldItemPrice,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Price ",
                   ),
@@ -134,8 +145,27 @@ class _HomeScreeneState extends State<HomeScreene> {
               ElevatedButton(
                 child: Text("Udate Now"),
                 onPressed: () {
-                  Navigator.pop(context);
-                  Map<String, dynamic> itemData = {
+                  if(oldUserName == '' ){
+                    showToast("Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldPhoneNumber == '' ){
+                    showToast("Phone Number Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemPrice == '' ){
+                    showToast("Item Price Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemName == '' ){
+                    showToast("Item Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemColor == '' ){
+                    showToast("Item Color Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemDescription== '' ){
+                    showToast("Item Description Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else{
+                    Navigator.pop(context);
+                    Map<String, dynamic> itemData = {
                     'userName': oldUserName,
                     'userNumber': oldPhoneNumber,
                     'itemPrice': oldItemPrice,
@@ -149,6 +179,8 @@ class _HomeScreeneState extends State<HomeScreene> {
                   }).catchError((onError){
                     print(onError);
                   });
+                  }
+                  
                 },
               ),
             ],
@@ -307,7 +339,24 @@ class _HomeScreeneState extends State<HomeScreene> {
 
                   GestureDetector(
                     onDoubleTap: () {
-                      Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
+                      // Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
+                      //   title: items.docs[i].get("itemModel"),
+                      //   itemColor: items.docs[i].get("itemColor"),
+                      //   userNumber:  items.docs[i].get("userNumber"),
+                      //   description: items.docs[i].get("description"),
+                      //   lat: items.docs[i].get("lat"),
+                      //   lng: items.docs[i].get("lng"),
+                      //   address: items.docs[i].get("address"),
+                      //   urlImage1: items.docs[i].get("urlImage1"),
+                      //   urlImage2: items.docs[i].get("urlImage2"),
+                      //   urlImage3: items.docs[i].get("urlImage3"),
+                      //   urlImage4: items.docs[i].get("urlImage4"),
+                      //   urlImage5: items.docs[i].get("urlImage5"),
+                      // ));
+                      // Navigator.pushReplacement(context, newRoute);
+
+
+                       Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: items.docs[i].get("itemModel"),
                         itemColor: items.docs[i].get("itemColor"),
                         userNumber:  items.docs[i].get("userNumber"),
@@ -321,7 +370,7 @@ class _HomeScreeneState extends State<HomeScreene> {
                         urlImage4: items.docs[i].get("urlImage4"),
                         urlImage5: items.docs[i].get("urlImage5"),
                       ));
-                      Navigator.pushReplacement(context, newRoute);
+                      Navigator.push(context, newRoute);
                     },
 
                     child: Padding(
@@ -404,7 +453,7 @@ class _HomeScreeneState extends State<HomeScreene> {
           TextButton(
             onPressed: () {
               Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: userId));
-                Navigator.pushReplacement(context, newRoute);
+                Navigator.push(context, newRoute);
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -414,7 +463,7 @@ class _HomeScreeneState extends State<HomeScreene> {
           TextButton(
             onPressed: () {
               Route newRoute = MaterialPageRoute(builder: (context) => SearchProduct());
-                Navigator.pushReplacement(context, newRoute);
+                Navigator.push(context, newRoute);
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -431,6 +480,16 @@ class _HomeScreeneState extends State<HomeScreene> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Icon(Icons.login_outlined, color: Colors.white, ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Route newRoute = MaterialPageRoute(builder: (context) => InfoScreen());
+              Navigator.push(context, newRoute);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.info, color: Colors.white, ),
             ),
           ),
         ],
@@ -461,10 +520,13 @@ class _HomeScreeneState extends State<HomeScreene> {
         tooltip: 'Add post',
         child: Icon(Icons.add),
         onPressed: () {
-          Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-          Navigator.pushReplacement(context, newRoute);
 
-          
+        // Route newRoute = MaterialPageRoute(builder: (context) => PaymentScreen());
+        // Navigator.pushReplacement(context, newRoute);
+     
+        Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
+        Navigator.pushReplacement(context, newRoute);
+
         },
       ),
     );

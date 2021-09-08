@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx_app/DialogBox/error_dialog.dart';
 import 'package:olx_app/DialogBox/loading_dialog.dart';
@@ -24,10 +25,10 @@ class SignupBody extends StatefulWidget {
 
 class _SignupBodyState extends State<SignupBody> {
 
-  // String userPhotoUrl = "";
+  String userPhotoUrl = "";
 
   File _image;
-  final picker = ImagePicker();
+  final _picker = ImagePicker();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -37,13 +38,53 @@ class _SignupBodyState extends State<SignupBody> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
-  chooseImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    File file = File(pickedFile.path);
+  // chooseImage() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //   File file = File(pickedFile.path);
 
-    setState(() {
-      _image = file;
+  //   setState(() {
+  //     _image = file;
+  //   });
+  // }
+
+  chooseImage() async {
+    PickedFile image;
+    File croppedFile;
+
+
+   
+    
+      //Get Image From Divce 
+    image =await _picker.getImage(source: ImageSource.gallery);
+    
+    
+    //Upload to Firebase
+    if(image != null) {
+      // _isUploading.sink.add(true);
+      // Geting Image Properties
+      ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+
+
+      //CropImage
+      if(properties.height > properties.width){
+        var yoffset = (properties.height - properties.width)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(),properties.width, properties.width);
+      } else if (properties.width > properties.height){
+        var xoffset = (properties.width - properties.height)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0 , properties.height, properties.height);
+      } else {
+        croppedFile = File(image.path);
+      }
+
+      File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path, quality: 100, targetHeight: 600, targetWidth: 600);
+
+      setState(() {
+      _image = compressedFile;
     });
+      
+    }else{
+      print('No Path Received');
+    }
   }
 
   upload() async{
@@ -66,17 +107,17 @@ class _SignupBodyState extends State<SignupBody> {
 
     } );
 
-    // await storageTaskSnapshot.ref.getDownloadURL().then((url) {
-    //   userPhotoUrl = url;
-    //   print(userPhotoUrl);
-    //   _register();
-    // } );
-
     await storageTaskSnapshot.ref.getDownloadURL().then((url) {
-      userImageUrl = url;
-      print(userImageUrl);
+      userPhotoUrl = url;
+      print(userPhotoUrl);
       _register();
     } );
+
+    // await storageTaskSnapshot.ref.getDownloadURL().then((url) {
+    //   userImageUrl = url;
+    //   print(userImageUrl);
+    //   _register();
+    // } );
 
   }
 
@@ -118,8 +159,8 @@ class _SignupBodyState extends State<SignupBody> {
       'userName' : _nameController.text.trim(),
       'uid': userId,
       'userNumber': _phoneController.text.trim(),
-      // 'imgPro': userPhotoUrl,
-      'imgPro': userImageUrl,
+      'imgPro': userPhotoUrl,
+      // 'imgPro': userImageUrl,
       'time': DateTime.now(),
       'status': "approved",
     };
@@ -182,7 +223,24 @@ class _SignupBodyState extends State<SignupBody> {
               text: "SIGNUP",
               press: ()
               {
+
+                if (_nameController.text.length < 3 )
+                  {
+                    // displayToastMessage("Name must be at lest 3 characters.", context);
+                  }
+
+                  else if (!_emailController.text.contains(regExpEmail) )
+                  {
+                    // displayToastMessage("Email address is not Valid", context);
+                  }
+                  else if (_passwordController.text.length < 6 )
+                  {
+                    // displayToastMessage("Password must be at lest 6 characters.", context);
+                  }
+                  else{
+                    
                 upload();
+                  }
               },
             ),
             SizedBox(height: _screenHeight * 0.03,),
@@ -216,3 +274,7 @@ class _SignupBodyState extends State<SignupBody> {
     );
   }
 }
+
+
+  final RegExp regExpEmail = RegExp(
+    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');

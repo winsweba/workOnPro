@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:olx_app/details_screen.dart';
 import 'package:olx_app/global_avaribles.dart';
 import 'package:olx_app/home_screene.dart';
 import 'package:olx_app/image_slider_screen.dart';
 import 'package:timeago/timeago.dart' as tAgo;
+import 'package:toast/toast.dart';
 
 class ProfileScreen extends StatefulWidget {
 
@@ -27,6 +29,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   QuerySnapshot items;
 
   // appMethods itemsObject = new appMethods();
+
+  void showToast(String msg,BuildContext context ,{int duration, int gravity}){
+    Toast.show( msg, context, duration: duration, gravity: gravity);
+  }
 
   Future<bool> showDialogForUpdateDate(selectedDoc,) async{
     return showDialog(
@@ -132,8 +138,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ElevatedButton(
                 child: Text("Udate Now"),
                 onPressed: () {
-                  Navigator.pop(context);
-                  Map<String, dynamic> itemData = {
+                   if(this.userName.length > 3){
+                      showToast("User Name must not be less then 3", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.userNumber.length == 10 ){
+                      showToast("User Nummber Must be 10", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemPrice == '' ){
+                      showToast("Item Price is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemModel.length > 3 ){
+                      showToast("Item Tepy is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.description.length > 5 ){
+                      showToast("Description must not be less then 5", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else{
+                    Navigator.pop(context);
+                    Map<String, dynamic> itemData = {
                     'userName': this.userName,
                     'userNumber': this.userNumber,
                     'itemPrice': this.itemPrice,
@@ -147,6 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }).catchError((onError){
                     print(onError);
                   });
+                    }
                 },
               ),
             ],
@@ -268,7 +291,7 @@ getResultUser(){
 
                   GestureDetector(
                     onDoubleTap: () {
-                      Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
+                      Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: items.docs[i].get("itemModel"),
                         itemColor: items.docs[i].get("itemColor"),
                         userNumber:  items.docs[i].get("userNumber"),
@@ -282,7 +305,7 @@ getResultUser(){
                         urlImage4: items.docs[i].get("urlImage4"),
                         urlImage5: items.docs[i].get("urlImage5"),
                       ));
-                      Navigator.pushReplacement(context, newRoute);
+                      Navigator.push(context, newRoute);
                     },
 
                     child: Padding(

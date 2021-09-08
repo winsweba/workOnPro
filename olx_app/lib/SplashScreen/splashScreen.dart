@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
         Navigator.pushReplacement(context, newRoute);
       }
+
     });
   }
 

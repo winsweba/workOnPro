@@ -6,6 +6,7 @@ import 'package:olx_app/image_slider_screen.dart';
 import 'package:olx_app/profileScreen.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 
+
 class SearchProduct extends StatefulWidget {
 
   @override

@@ -79,7 +79,7 @@ class _LoginBodyState extends State<LoginBody> {
         context: context,
         builder: (con){
           return ErrorAlertDialog(
-            message: "This Account has been block by admin. Please contact the our helpline",
+            message: "This Account has been block by admin. Please contact the our helpline: 0241012217",
           );
         }
       );

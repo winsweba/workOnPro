@@ -40,9 +40,25 @@ class _ImageSliderScreenState extends State<ImageSliderScreen> with SingleTicker
       super.initState();
 
       getLinks();
-
-      tabController = TabController(length: 5, vsync: this);
+      tabController = TabController(length: links.length, vsync: this);
+      
     }
+
+    @override
+    void dispose() {
+      
+      if(links.length > 5 ){
+        getLinks().dispose();
+        tabController?.dispose();
+      }
+      // TODO: implement initState
+      super.dispose();
+
+
+     
+    }
+
+    
 
     getLinks(){
     links.add(widget.urlImage1);
@@ -53,11 +69,19 @@ class _ImageSliderScreenState extends State<ImageSliderScreen> with SingleTicker
     }
 
   _buildBackButton (){
+    
+    setState(() {
+          getLinks().clear();
+        });
+
     return IconButton(
       icon: Icon(Icons.arrow_back, color: Colors.white,),
       onPressed: () {
         Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
         Navigator.pushReplacement(context, newRoute);
+
+        
+
       },
     );
   }

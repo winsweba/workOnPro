@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx_app/DialogBox/loading_dialog.dart';
 import 'package:olx_app/global_avaribles.dart';
@@ -18,6 +19,8 @@ class UploadAddScreen extends StatefulWidget {
 }
 
 class _UploadAddScreenState extends State<UploadAddScreen> {
+
+  String userPhotoUrl = "";
   
   bool uploading = false, next = false;
   double val = 0;
@@ -27,7 +30,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
 
   List<File> _image = [];
   List<String> urlsList = [];
-  final picker = ImagePicker();
+  final _picker = ImagePicker();
 
   FirebaseAuth auth = FirebaseAuth.instance;
   String userName = "";
@@ -128,13 +131,32 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: ElevatedButton(
                   onPressed: () {
-                    showDialog(context: context, builder: (con) {
+                    
+
+                    if(this.userName.length < 3){
+                      showToast("User Name must not be less then 3", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.userNumber.length < 8 ){
+                      showToast("User Nummber Must be 10", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemPrice == '' ){
+                      showToast("Item Price is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemModel.length < 2 ){
+                      showToast("Item Tepy is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.description.length < 5 ){
+                      showToast("Description must not be less then 5", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else{
+
+                      showDialog(context: context, builder: (con) {
                       return LoadingAlertDialog(
                         message: "Uploading........",
                       );
                     });
 
-                    uploadFile().whenComplete(() { 
+                      uploadFile().whenComplete(() { 
                       Map<String, dynamic> addData ={
                         'userName' : this.userName,
                         'uId': auth.currentUser.uid,
@@ -148,7 +170,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                         'urlImage3': urlsList[2].toString(),
                         'urlImage4': urlsList[3].toString(),
                         'urlImage5': urlsList[4].toString(),
-                        'imgPro': userImageUrl,
+                        'imgPro': userPhotoUrl,
                         'lat': position.latitude,
                         'lng': position.longitude,
                         'address': completeAddress,
@@ -163,6 +185,38 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                         print(onError);
                       });
                     });
+
+                    }
+
+                    // uploadFile().whenComplete(() { 
+                    //   Map<String, dynamic> addData ={
+                    //     'userName' : this.userName,
+                    //     'uId': auth.currentUser.uid,
+                    //     'userNumber': this.userNumber,
+                    //     'itemPrice': this.itemPrice,
+                    //     'itemModel': this.itemModel,
+                    //     'itemColor': this.itemColor,
+                    //     'description': this.description,
+                    //     'urlImage1': urlsList[0].toString(),
+                    //     'urlImage2': urlsList[1].toString(),
+                    //     'urlImage3': urlsList[2].toString(),
+                    //     'urlImage4': urlsList[3].toString(),
+                    //     'urlImage5': urlsList[4].toString(),
+                    //     'imgPro': userImageUrl,
+                    //     'lat': position.latitude,
+                    //     'lng': position.longitude,
+                    //     'address': completeAddress,
+                    //     'time': DateTime.now(),
+                    //     'status': "not approved",
+                        
+                    //   };
+                    //   FirebaseFirestore.instance.collection('items').add(addData).then((value) {
+                    //     print("Data Added Successfully");
+                    //     Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreene()));
+                    //   }).catchError((onError){
+                    //     print(onError);
+                    //   });
+                    // });
                   },
                   child: Text("Upload", style: TextStyle(color: Colors.white),),
                 ),
@@ -221,16 +275,58 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
     );
   }
 
-  chooseImage() async{
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-          _image.add(File(pickedFile?.path));
-        });
-        if (pickedFile.path == null ) retriveeLostData();
+
+
+  chooseImage() async {
+    PickedFile image;
+    File croppedFile;
+
+
+   
+    
+      //Get Image From Divce 
+    image =await _picker.getImage(source: ImageSource.gallery);
+    
+    
+    //Upload to Firebase
+    if(image != null) {
+      // _isUploading.sink.add(true);
+      // Geting Image Properties
+      ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+
+
+      //CropImage
+      if(properties.height > properties.width){
+        var yoffset = (properties.height - properties.width)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(),properties.width, properties.width);
+      } else if (properties.width > properties.height){
+        var xoffset = (properties.width - properties.height)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0 , properties.height, properties.height);
+      } else {
+        croppedFile = File(image.path);
+      }
+
+      File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path, quality: 100, targetHeight: 600, targetWidth: 600);
+
+      setState(() {
+      _image.add(File(compressedFile.path));
+    });
+      
+    }else{
+      print('No Path Received');
+    }
   }
 
+  // chooseImage() async{
+  //   final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+  //   setState(() {
+  //         _image.add(File(pickedFile?.path));
+  //       });
+  //       if (pickedFile.path == null ) retriveeLostData();
+  // }
+
   Future<void> retriveeLostData() async {
-    final LostData response = await picker.getLostData();
+    final LostData response = await _picker.getLostData();
     if (response.isEmpty) {
       return;
     }
