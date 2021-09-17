@@ -42,8 +42,13 @@ dependencies:
   geocoding: ^2.0.0
   url_launcher: ^6.0.4
   maps_launcher: ^2.0.0
-  flutterwave: ^0.0.2
+  # flutterwave: ^0.0.2
   flutter_native_image: ^0.0.5+2
+  flutter_native_admob: ^2.1.0+3
+  # paystack_manager:
+  # pay: ^1.0.1
+
+  
 
 
 
@@ -66,6 +71,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/gpay.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

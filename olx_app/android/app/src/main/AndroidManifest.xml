@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
    <application
-        android:label="olx_app"
+        android:label="Badu Easy Sell"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -42,5 +42,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+            <meta-data 
+              android:name="com.google.android.gms.ads.APPLICATION_ID" 
+              android:value="ca-app-pub-2635835949649414~4933201598"/>
+              
+              <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
     </application>
 </manifest>
