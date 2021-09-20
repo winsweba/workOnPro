@@ -1,40 +1,42 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:olx_app/details_screen.dart';
-import 'package:olx_app/global_avaribles.dart';
-import 'package:olx_app/home_screene.dart';
-import 'package:olx_app/image_slider_screen.dart';
+import 'package:flutter_native_admob/native_admob_controller.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:olx_app/Welcome/welcome_screen.dart';
+import 'package:olx_app/otherScreens/details_screen.dart';
+import 'package:olx_app/otherScreens/global_avaribles.dart';
+import 'package:olx_app/otherScreens/info_screen.dart';
+import 'package:olx_app/otherScreens/payment_screen.dart';
+import 'package:olx_app/otherScreens/profileScreen.dart';
+import 'package:olx_app/otherScreens/search_product.dart';
+import 'package:olx_app/otherScreens/uploadAddScreen.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 import 'package:toast/toast.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 
-class ProfileScreen extends StatefulWidget {
-
-  String sellerId;
-  ProfileScreen({this.sellerId});
+class HomeScreene extends StatefulWidget {
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _HomeScreeneState createState() => _HomeScreeneState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _HomeScreeneState extends State<HomeScreene> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  String userName = "";
-  String userNumber = "";
-  String itemPrice = "";
-  String itemModel = "";
-  String itemColor = "";
-  String description = "";
+
   QuerySnapshot items;
+  
 
-  // appMethods itemsObject = new appMethods();
-
-  void showToast(String msg,BuildContext context ,{int duration, int gravity}){
+void showToast(String msg,BuildContext context ,{int duration, int gravity}){
     Toast.show( msg, context, duration: duration, gravity: gravity);
   }
-
-  Future<bool> showDialogForUpdateDate(selectedDoc,) async{
+  
+  Future<bool> showDialogForUpdateDate(selectedDoc, oldUserName, oldPhoneNumber, oldItemPrice, oldItemName, oldItemColor, oldItemDescription) async{
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -46,12 +48,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
+                  initialValue: oldUserName,
                   decoration: InputDecoration(
                     hintText: "Eneter Your Name",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.userName = value;
+                        oldUserName = value;
                                         });
                   },
                 ),
@@ -59,12 +62,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 5.0,),
 
                 TextFormField(
+                  initialValue: oldPhoneNumber,
+                  keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: "Eneter Your Phone Number",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.userNumber= value;
+                        oldPhoneNumber = value;
                                         });
                   },
                 ),
@@ -72,12 +77,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 5.0,),
 
                 TextFormField(
+                  initialValue: oldItemPrice,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Price ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.itemPrice = value;
+                        oldItemPrice = value;
                                         });
                   },
                 ),
@@ -86,12 +93,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 5.0,),
 
                 TextFormField(
+                  initialValue: oldItemName,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Name ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.itemModel= value;
+                        oldItemName = value;
                                         });
                   },
                 ),
@@ -100,12 +108,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 5.0,),
 
                 TextFormField(
+                  initialValue: oldItemColor,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Color ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.itemColor = value;
+                        oldItemColor = value;
                                         });
                   },
                 ),
@@ -114,12 +123,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(height: 5.0,),
 
                 TextFormField(
+                  initialValue: oldItemDescription,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Description ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        this.description = value;
+                        oldItemDescription = value;
                                         });
                   },
                 ),
@@ -138,30 +148,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ElevatedButton(
                 child: Text("Udate Now"),
                 onPressed: () {
-                   if(this.userName.length > 3){
-                      showToast("User Name must not be less then 3", context,duration: 2,gravity: Toast.CENTER);
-                    }
-                    else if(this.userNumber.length == 10 ){
-                      showToast("User Nummber Must be 10", context,duration: 2,gravity: Toast.CENTER);
-                    }
-                    else if(this.itemPrice == '' ){
-                      showToast("Item Price is needed", context,duration: 2,gravity: Toast.CENTER);
-                    }
-                    else if(this.itemModel.length > 3 ){
-                      showToast("Item Tepy is needed", context,duration: 2,gravity: Toast.CENTER);
-                    }
-                    else if(this.description.length > 5 ){
-                      showToast("Description must not be less then 5", context,duration: 2,gravity: Toast.CENTER);
-                    }
-                    else{
+                  if(oldUserName == '' ){
+                    showToast("Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldPhoneNumber == '' ){
+                    showToast("Phone Number Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemPrice == '' ){
+                    showToast("Item Price Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemName == '' ){
+                    showToast("Item Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemColor == '' ){
+                    showToast("Item Color Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else if(oldItemDescription== '' ){
+                    showToast("Item Description Is needed", context, duration: 2, gravity: Toast.CENTER) ;
+                  }
+                  else{
                     Navigator.pop(context);
                     Map<String, dynamic> itemData = {
-                    'userName': this.userName,
-                    'userNumber': this.userNumber,
-                    'itemPrice': this.itemPrice,
-                    'itemModel': this.itemModel,
-                    'itemColor': this.itemColor,
-                    'description': this.description,
+                    'userName': oldUserName,
+                    'userNumber': oldPhoneNumber,
+                    'itemPrice': oldItemPrice,
+                    'itemModel': oldItemName,
+                    'itemColor': oldItemColor,
+                    'description': oldItemDescription,
                   };
 
                   FirebaseFirestore.instance.collection("items").doc(selectedDoc).update(itemData).then((value) {
@@ -169,7 +182,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }).catchError((onError){
                     print(onError);
                   });
-                    }
+                  }
+                  
                 },
               ),
             ],
@@ -179,40 +193,69 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  _buildBackButton (){
-    return IconButton(
-      icon: Icon(Icons.arrow_back, color: Colors.white,),
-      onPressed: () {
-        Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
-        Navigator.pushReplacement(context, newRoute);
-      },
-    );
+  getMyData() {
+    FirebaseFirestore.instance.collection("users").doc(userId).get().then((results) {
+      setState(() {
+              userImageUrl = results.data()['imagePro'];
+              getUserName = results.data()['userName'];
+            });
+    });
   }
-  _buildUserImage() {
-    return Container(
-      width: 50,
-      height: 40,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          image: NetworkImage(addUserImage),
-          fit: BoxFit.fill,
-        ),
-      ),
-    );
+  
+
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      getUserAddress();
+
+      userId = FirebaseAuth.instance.currentUser.uid;
+      userEmail = FirebaseAuth.instance.currentUser.email;
+
+      FirebaseFirestore.instance.collection("items")
+      .where("status", isEqualTo: "approved")
+      .orderBy("time", descending: true)
+      .get().then((result) {
+        setState(() {
+                  items = result;
+                });
+      });
+
+      getMyData();
+
+    }
+
+  getUserAddress() async{
+    Position newPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high );
+
+    position = newPosition;
+
+    placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+    Placemark placemark = placemarks[0];
+
+    String newCompleteAddress = 
+    '${placemark.subThoroughfare} ${placemark.thoroughfare}, '
+    '${placemark.subThoroughfare} ${placemark.locality}, '
+    '${placemark.subAdministrativeArea}, '
+    '${placemark.administrativeArea} ${placemark.postalCode}, '
+    '${placemark.country}';
+
+    completeAddress = newCompleteAddress;
+    print(completeAddress);
+
+    return completeAddress;
   }
 
-getResultUser(){
-  FirebaseFirestore.instance.collection("items").where("uId", isEqualTo: widget.sellerId).where("status", isEqualTo: "approved")
-  .get().then((results) {
-    setState(() {
-          items = results;
-          addUserName = items.docs[0].get('userName');
-          addUserImage = items.docs[0].get('imgPro');
-        });
-  });
-}
-  Widget showItemList() {
+  
+  
+
+  @override
+  Widget build(BuildContext context) {
+    double _screenWidth = MediaQuery.of(context).size.width,
+    _screenHeight = MediaQuery.of(context).size.height;
+
+    Widget showItemList() {
       
       if(items != null ) {
         return ListView.builder(
@@ -229,8 +272,8 @@ getResultUser(){
                     child: ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          // Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          // Navigator.pushReplacement(context, newRoute); 
+                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
+                          Navigator.pushReplacement(context, newRoute); 
                         },
 
                         child: Container(
@@ -247,8 +290,8 @@ getResultUser(){
                       ) ,
                       title: GestureDetector(
                         onTap: () {
-                          // Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          // Navigator.pushReplacement(context, newRoute); 
+                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
+                          Navigator.pushReplacement(context, newRoute); 
                         },
 
                         child: Text(items.docs[i].get("userName"),
@@ -261,7 +304,15 @@ getResultUser(){
                             GestureDetector(
                               onTap: () {
                                 if(items.docs[i].get('uId') == userId ) {
-                                  showDialogForUpdateDate(items.docs[i].id );
+                                  showDialogForUpdateDate(
+                                    items.docs[i].id,
+                                    items.docs[i].get('userName'),
+                                    items.docs[i].get('userNumber'),
+                                    items.docs[i].get('itemPrice'),
+                                    items.docs[i].get('itemModel'),
+                                    items.docs[i].get('itemColor'),
+                                    items.docs[i].get('description'),
+                                  );
                                 }
                               },
 
@@ -291,7 +342,24 @@ getResultUser(){
 
                   GestureDetector(
                     onDoubleTap: () {
-                      Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
+                      // Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
+                      //   title: items.docs[i].get("itemModel"),
+                      //   itemColor: items.docs[i].get("itemColor"),
+                      //   userNumber:  items.docs[i].get("userNumber"),
+                      //   description: items.docs[i].get("description"),
+                      //   lat: items.docs[i].get("lat"),
+                      //   lng: items.docs[i].get("lng"),
+                      //   address: items.docs[i].get("address"),
+                      //   urlImage1: items.docs[i].get("urlImage1"),
+                      //   urlImage2: items.docs[i].get("urlImage2"),
+                      //   urlImage3: items.docs[i].get("urlImage3"),
+                      //   urlImage4: items.docs[i].get("urlImage4"),
+                      //   urlImage5: items.docs[i].get("urlImage5"),
+                      // ));
+                      // Navigator.pushReplacement(context, newRoute);
+
+
+                       Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: items.docs[i].get("itemModel"),
                         itemColor: items.docs[i].get("itemColor"),
                         userNumber:  items.docs[i].get("userNumber"),
@@ -371,31 +439,69 @@ getResultUser(){
         );
       }
       else{
-        return Text('Loading.........');
+        return Center(child: CircularProgressIndicator(),);
       }
     }
-  @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      getResultUser();
-      
-    }
-  @override
-  Widget build(BuildContext context) {
-    double _screenWidth = MediaQuery.of(context).size.width,
-    _screenHeight = MediaQuery.of(context).size.height;
+
+    //// Admob
+    /// 
+    Timer(Duration(seconds: 10), () {
+      _bannerAd?.show();
+    });
 
     return Scaffold(
       appBar: AppBar(
-        leading: _buildBackButton(),
-        title: Row(
-          children: [
-            _buildUserImage(),
-            SizedBox(width: 10,),
-            Text(addUserName)
-          ],
+        leading: IconButton(
+          icon: Icon(Icons.refresh, color: Colors.white,),
+          onPressed: () {
+            Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
+                Navigator.pushReplacement(context, newRoute);
+          },
         ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: userId));
+                Navigator.push(context, newRoute);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.person, color: Colors.white, ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Route newRoute = MaterialPageRoute(builder: (context) => SearchProduct());
+                Navigator.push(context, newRoute);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.search, color: Colors.white, ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              auth.signOut().then((_){
+                Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
+                Navigator.pushReplacement(context, newRoute);
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.login_outlined, color: Colors.white, ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Route newRoute = MaterialPageRoute(builder: (context) => InfoScreen());
+              Navigator.push(context, newRoute);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Icon(Icons.info, color: Colors.white, ),
+            ),
+          ),
+        ],
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
@@ -410,6 +516,8 @@ getResultUser(){
             ),
           ),
         ),
+        title: Text('Home Page'),
+        centerTitle: false,
       ),
       body: Center(
         child: Container(
@@ -417,6 +525,65 @@ getResultUser(){
           child: showItemList(),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add post',
+        child: Icon(Icons.add),
+        onPressed: () {
+
+        Route newRoute = MaterialPageRoute(builder: (context) => PaymentScreen());
+        Navigator.push(context, newRoute);
+     
+        // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
+        // Navigator.pushReplacement(context, newRoute);
+
+        },
+      ),
     );
+
+
+    
+    
+  }
+
+  
+
+  ///////////////// Ad Mob 
+  ///
+  ///
+  /// 
+  BannerAd _bannerAd;
+  InterstitialAd _interstitialAd;
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
+  int _coins = 0;
+  final _nativeAdController = NativeAdmobController();
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+        targetingInfo: targetingInfo,
+        adUnitId: InterstitialAd.testAdUnitId,
+        listener: (MobileAdEvent event) {
+          print('interstitial event: $event');
+        });
+  }
+
+  BannerAd createBannerAdd() {
+    return BannerAd(
+        targetingInfo: targetingInfo,
+        adUnitId: BannerAd.testAdUnitId,
+        size: AdSize.smartBanner,
+        listener: (MobileAdEvent event) {
+          print('Bnner Event: $event');
+        });
+  }
+
+
+
+
+
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 }

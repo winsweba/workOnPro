@@ -45,7 +45,7 @@ class _CartPageState extends State<CartPage>
           else
           {
             Route route = MaterialPageRoute(builder: (c) => Address(totalAmount: totalAmount));
-            Navigator.pushReplacement(context, route);
+            Navigator.push(context, route);
           }
         },
         label: Text("Check Out"),

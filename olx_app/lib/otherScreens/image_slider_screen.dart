@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_slider/image_slider.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import 'package:olx_app/home_screene.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
 
 class ImageSliderScreen extends StatefulWidget {
 

@@ -45,8 +45,19 @@ dependencies:
   # flutterwave: ^0.0.2
   flutter_native_image: ^0.0.5+2
   flutter_native_admob: ^2.1.0+3
+  firebase_admob: ^0.11.2
   # paystack_manager:
   # pay: ^1.0.1
+  # flutter_paystack: ^1.0.5+1
+
+
+
+  flutter_icons: ^1.1.0
+  dio: 
+  pin_code_fields: ^6.1.0
+  pinput: ^0.2.2
+  webview_flutter: ^2.0.2
+
 
   
 

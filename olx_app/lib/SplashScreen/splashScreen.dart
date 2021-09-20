@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_app/Welcome/welcome_screen.dart';
-import 'package:olx_app/home_screene.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

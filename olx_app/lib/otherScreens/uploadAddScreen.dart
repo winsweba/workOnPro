@@ -7,8 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx_app/DialogBox/loading_dialog.dart';
-import 'package:olx_app/global_avaribles.dart';
-import 'package:olx_app/home_screene.dart';
+import 'package:olx_app/otherScreens/global_avaribles.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
 import 'package:toast/toast.dart';
 import 'package:path/path.dart' as Path;
 

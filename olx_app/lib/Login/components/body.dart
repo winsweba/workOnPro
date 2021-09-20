@@ -11,7 +11,7 @@ import 'package:olx_app/Widgets/already_have_an_account_acheck.dart';
 import 'package:olx_app/Widgets/rounded_button.dart';
 import 'package:olx_app/Widgets/rounded_input_field.dart';
 import 'package:olx_app/Widgets/rounded_password_field.dart';
-import 'package:olx_app/home_screene.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
 
 class LoginBody extends StatefulWidget {
   @override

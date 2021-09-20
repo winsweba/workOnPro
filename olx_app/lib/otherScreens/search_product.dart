@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:olx_app/home_screene.dart';
-import 'package:olx_app/image_slider_screen.dart';
-import 'package:olx_app/profileScreen.dart';
+import 'package:olx_app/otherScreens/details_screen.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
+import 'package:olx_app/otherScreens/image_slider_screen.dart';
+import 'package:olx_app/otherScreens/profileScreen.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 
 
@@ -144,7 +145,7 @@ class _SearchProductState extends State<SearchProduct> {
                       leading: GestureDetector(
                         onTap: () {
                           Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          Navigator.push(context, newRoute); 
                         },
 
                         child: Container(
@@ -162,7 +163,7 @@ class _SearchProductState extends State<SearchProduct> {
                       title: GestureDetector(
                         onTap: () {
                           Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          Navigator.push(context, newRoute); 
                         },
 
                         child: Text(items.docs[i].get("userName"),
@@ -173,7 +174,7 @@ class _SearchProductState extends State<SearchProduct> {
 
                   GestureDetector(
                     onDoubleTap: () {
-                      Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
+                      Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: items.docs[i].get("itemModel"),
                         itemColor: items.docs[i].get("itemColor"),
                         userNumber:  items.docs[i].get("userNumber"),
@@ -253,7 +254,7 @@ class _SearchProductState extends State<SearchProduct> {
         );
       }
       else{
-        return Text('Loading.........');
+        return Center(child: CircularProgressIndicator(),);
       }
     }
 

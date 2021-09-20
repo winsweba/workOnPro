@@ -1,39 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:olx_app/Welcome/welcome_screen.dart';
-import 'package:olx_app/details_screen.dart';
-import 'package:olx_app/global_avaribles.dart';
-import 'package:olx_app/image_slider_screen.dart';
-import 'package:olx_app/info_screen.dart';
-import 'package:olx_app/payment_screen.dart';
-import 'package:olx_app/profileScreen.dart';
-import 'package:olx_app/search_product.dart';
-import 'package:olx_app/uploadAddScreen.dart';
+import 'package:olx_app/otherScreens/details_screen.dart';
+import 'package:olx_app/otherScreens/global_avaribles.dart';
+import 'package:olx_app/otherScreens/home_screene.dart';
 import 'package:timeago/timeago.dart' as tAgo;
 import 'package:toast/toast.dart';
 
-class HomeScreene extends StatefulWidget {
+class ProfileScreen extends StatefulWidget {
+
+  String sellerId;
+  ProfileScreen({this.sellerId});
 
   @override
-  _HomeScreeneState createState() => _HomeScreeneState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _HomeScreeneState extends State<HomeScreene> {
+class _ProfileScreenState extends State<ProfileScreen> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  String userName = "";
+  String userNumber = "";
+  String itemPrice = "";
+  String itemModel = "";
+  String itemColor = "";
+  String description = "";
   QuerySnapshot items;
-  
 
-void showToast(String msg,BuildContext context ,{int duration, int gravity}){
+  // appMethods itemsObject = new appMethods();
+
+  void showToast(String msg,BuildContext context ,{int duration, int gravity}){
     Toast.show( msg, context, duration: duration, gravity: gravity);
   }
-  
-  Future<bool> showDialogForUpdateDate(selectedDoc, oldUserName, oldPhoneNumber, oldItemPrice, oldItemName, oldItemColor, oldItemDescription) async{
+
+  Future<bool> showDialogForUpdateDate(selectedDoc,) async{
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -45,13 +45,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  initialValue: oldUserName,
                   decoration: InputDecoration(
                     hintText: "Eneter Your Name",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldUserName = value;
+                        this.userName = value;
                                         });
                   },
                 ),
@@ -59,14 +58,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                 SizedBox(height: 5.0,),
 
                 TextFormField(
-                  initialValue: oldPhoneNumber,
-                  keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     hintText: "Eneter Your Phone Number",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldPhoneNumber = value;
+                        this.userNumber= value;
                                         });
                   },
                 ),
@@ -74,14 +71,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                 SizedBox(height: 5.0,),
 
                 TextFormField(
-                  initialValue: oldItemPrice,
-                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Price ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldItemPrice = value;
+                        this.itemPrice = value;
                                         });
                   },
                 ),
@@ -90,13 +85,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                 SizedBox(height: 5.0,),
 
                 TextFormField(
-                  initialValue: oldItemName,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Name ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldItemName = value;
+                        this.itemModel= value;
                                         });
                   },
                 ),
@@ -105,13 +99,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                 SizedBox(height: 5.0,),
 
                 TextFormField(
-                  initialValue: oldItemColor,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Color ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldItemColor = value;
+                        this.itemColor = value;
                                         });
                   },
                 ),
@@ -120,13 +113,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                 SizedBox(height: 5.0,),
 
                 TextFormField(
-                  initialValue: oldItemDescription,
                   decoration: InputDecoration(
                     hintText: "Eneter Item Description ",
                   ),
                   onChanged: (value) {
                     setState(() {
-                        oldItemDescription = value;
+                        this.description = value;
                                         });
                   },
                 ),
@@ -145,33 +137,30 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
               ElevatedButton(
                 child: Text("Udate Now"),
                 onPressed: () {
-                  if(oldUserName == '' ){
-                    showToast("Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldPhoneNumber == '' ){
-                    showToast("Phone Number Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemPrice == '' ){
-                    showToast("Item Price Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemName == '' ){
-                    showToast("Item Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemColor == '' ){
-                    showToast("Item Color Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemDescription== '' ){
-                    showToast("Item Description Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else{
+                   if(this.userName.length > 3){
+                      showToast("User Name must not be less then 3", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.userNumber.length == 10 ){
+                      showToast("User Nummber Must be 10", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemPrice == '' ){
+                      showToast("Item Price is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.itemModel.length > 3 ){
+                      showToast("Item Tepy is needed", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else if(this.description.length > 5 ){
+                      showToast("Description must not be less then 5", context,duration: 2,gravity: Toast.CENTER);
+                    }
+                    else{
                     Navigator.pop(context);
                     Map<String, dynamic> itemData = {
-                    'userName': oldUserName,
-                    'userNumber': oldPhoneNumber,
-                    'itemPrice': oldItemPrice,
-                    'itemModel': oldItemName,
-                    'itemColor': oldItemColor,
-                    'description': oldItemDescription,
+                    'userName': this.userName,
+                    'userNumber': this.userNumber,
+                    'itemPrice': this.itemPrice,
+                    'itemModel': this.itemModel,
+                    'itemColor': this.itemColor,
+                    'description': this.description,
                   };
 
                   FirebaseFirestore.instance.collection("items").doc(selectedDoc).update(itemData).then((value) {
@@ -179,8 +168,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                   }).catchError((onError){
                     print(onError);
                   });
-                  }
-                  
+                    }
                 },
               ),
             ],
@@ -190,69 +178,40 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
     );
   }
 
-  getMyData() {
-    FirebaseFirestore.instance.collection("users").doc(userId).get().then((results) {
-      setState(() {
-              userImageUrl = results.data()['imagePro'];
-              getUserName = results.data()['userName'];
-            });
-    });
+  _buildBackButton (){
+    return IconButton(
+      icon: Icon(Icons.arrow_back, color: Colors.white,),
+      onPressed: () {
+        Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
+        Navigator.pushReplacement(context, newRoute);
+      },
+    );
   }
-  
-
-  @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      getUserAddress();
-
-      userId = FirebaseAuth.instance.currentUser.uid;
-      userEmail = FirebaseAuth.instance.currentUser.email;
-
-      FirebaseFirestore.instance.collection("items")
-      .where("status", isEqualTo: "approved")
-      .orderBy("time", descending: true)
-      .get().then((result) {
-        setState(() {
-                  items = result;
-                });
-      });
-
-      getMyData();
-
-    }
-
-  getUserAddress() async{
-    Position newPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high );
-
-    position = newPosition;
-
-    placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-
-    Placemark placemark = placemarks[0];
-
-    String newCompleteAddress = 
-    '${placemark.subThoroughfare} ${placemark.thoroughfare}, '
-    '${placemark.subThoroughfare} ${placemark.locality}, '
-    '${placemark.subAdministrativeArea}, '
-    '${placemark.administrativeArea} ${placemark.postalCode}, '
-    '${placemark.country}';
-
-    completeAddress = newCompleteAddress;
-    print(completeAddress);
-
-    return completeAddress;
+  _buildUserImage() {
+    return Container(
+      width: 50,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          image: NetworkImage(addUserImage),
+          fit: BoxFit.fill,
+        ),
+      ),
+    );
   }
 
-  
-  
-
-  @override
-  Widget build(BuildContext context) {
-    double _screenWidth = MediaQuery.of(context).size.width,
-    _screenHeight = MediaQuery.of(context).size.height;
-
-    Widget showItemList() {
+getResultUser(){
+  FirebaseFirestore.instance.collection("items").where("uId", isEqualTo: widget.sellerId).where("status", isEqualTo: "approved")
+  .get().then((results) {
+    setState(() {
+          items = results;
+          addUserName = items.docs[0].get('userName');
+          addUserImage = items.docs[0].get('imgPro');
+        });
+  });
+}
+  Widget showItemList() {
       
       if(items != null ) {
         return ListView.builder(
@@ -269,8 +228,8 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                     child: ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          // Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
+                          // Navigator.pushReplacement(context, newRoute); 
                         },
 
                         child: Container(
@@ -287,8 +246,8 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                       ) ,
                       title: GestureDetector(
                         onTap: () {
-                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          // Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
+                          // Navigator.pushReplacement(context, newRoute); 
                         },
 
                         child: Text(items.docs[i].get("userName"),
@@ -301,15 +260,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                             GestureDetector(
                               onTap: () {
                                 if(items.docs[i].get('uId') == userId ) {
-                                  showDialogForUpdateDate(
-                                    items.docs[i].id,
-                                    items.docs[i].get('userName'),
-                                    items.docs[i].get('userNumber'),
-                                    items.docs[i].get('itemPrice'),
-                                    items.docs[i].get('itemModel'),
-                                    items.docs[i].get('itemColor'),
-                                    items.docs[i].get('description'),
-                                  );
+                                  showDialogForUpdateDate(items.docs[i].id );
                                 }
                               },
 
@@ -339,24 +290,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
 
                   GestureDetector(
                     onDoubleTap: () {
-                      // Route newRoute = MaterialPageRoute(builder: (context) => ImageSliderScreen(
-                      //   title: items.docs[i].get("itemModel"),
-                      //   itemColor: items.docs[i].get("itemColor"),
-                      //   userNumber:  items.docs[i].get("userNumber"),
-                      //   description: items.docs[i].get("description"),
-                      //   lat: items.docs[i].get("lat"),
-                      //   lng: items.docs[i].get("lng"),
-                      //   address: items.docs[i].get("address"),
-                      //   urlImage1: items.docs[i].get("urlImage1"),
-                      //   urlImage2: items.docs[i].get("urlImage2"),
-                      //   urlImage3: items.docs[i].get("urlImage3"),
-                      //   urlImage4: items.docs[i].get("urlImage4"),
-                      //   urlImage5: items.docs[i].get("urlImage5"),
-                      // ));
-                      // Navigator.pushReplacement(context, newRoute);
-
-
-                       Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
+                      Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: items.docs[i].get("itemModel"),
                         itemColor: items.docs[i].get("itemColor"),
                         userNumber:  items.docs[i].get("userNumber"),
@@ -436,63 +370,31 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
         );
       }
       else{
-        return Text('Loading.........');
+        return Center(child: CircularProgressIndicator(),);
       }
     }
+  @override
+    void initState() {
+      // TODO: implement initState
+      super.initState();
+      getResultUser();
+      
+    }
+  @override
+  Widget build(BuildContext context) {
+    double _screenWidth = MediaQuery.of(context).size.width,
+    _screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.refresh, color: Colors.white,),
-          onPressed: () {
-            Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
-                Navigator.pushReplacement(context, newRoute);
-          },
+        leading: _buildBackButton(),
+        title: Row(
+          children: [
+            _buildUserImage(),
+            SizedBox(width: 10,),
+            Text(addUserName)
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: userId));
-                Navigator.push(context, newRoute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.person, color: Colors.white, ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Route newRoute = MaterialPageRoute(builder: (context) => SearchProduct());
-                Navigator.push(context, newRoute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.search, color: Colors.white, ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              auth.signOut().then((_){
-                Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
-                Navigator.pushReplacement(context, newRoute);
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.login_outlined, color: Colors.white, ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Route newRoute = MaterialPageRoute(builder: (context) => InfoScreen());
-              Navigator.push(context, newRoute);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.info, color: Colors.white, ),
-            ),
-          ),
-        ],
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
@@ -507,27 +409,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
             ),
           ),
         ),
-        title: Text('Home Page'),
-        centerTitle: false,
       ),
       body: Center(
         child: Container(
           width: _screenWidth,
           child: showItemList(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add post',
-        child: Icon(Icons.add),
-        onPressed: () {
-
-        // Route newRoute = MaterialPageRoute(builder: (context) => PaymentScreen());
-        // Navigator.pushReplacement(context, newRoute);
-     
-        Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-        Navigator.pushReplacement(context, newRoute);
-
-        },
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:e_shop/Widgets/loadingWidget.dart';
 import 'package:e_shop/main.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as ImD;
@@ -26,6 +27,8 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
   TextEditingController _shortInfoTextEditingController = TextEditingController();
   String productId = DateTime.now().millisecondsSinceEpoch.toString();
   bool uploading = false;
+  File _imageFile;
+  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -135,20 +138,99 @@ takeImage(mContext)
   capturePhotoWithCamera() async
   {
     Navigator.pop(context);
-    File imageFile = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0);
+
+
+
+    PickedFile image;
+    File croppedFile;
+
+      //Get Image From Divce 
+     image =await _picker.getImage(source: ImageSource.camera);
+    
+    
+    //Upload to Firebase
+    if(image != null) {
+      // _isUploading.sink.add(true);
+      // Geting Image Properties
+      ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+
+      //CropImage
+      if(properties.height > properties.width){
+        var yoffset = (properties.height - properties.width)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(),properties.width, properties.width);
+      } else if (properties.width > properties.height){
+        var xoffset = (properties.width - properties.height)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0 , properties.height, properties.height);
+      } else {
+        croppedFile = File(image.path);
+      }
+
+      File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path, quality: 100, targetHeight: 600, targetWidth: 600);
+
+      setState(() {
+      _imageFile = compressedFile;
+    });
+      
+    }else{
+      print('No Path Received');
+    }
+
+    
+
+
+    // File imageFile = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0);
 
     setState(() {
-      file = imageFile;
+      file = _imageFile;
     });
   }
 
   pickPhotoFromGallery() async
   {
     Navigator.pop(context);
-    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery,);
+
+
+
+    PickedFile image;
+    File croppedFile;
+
+      //Get Image From Divce 
+     image =await _picker.getImage(source: ImageSource.gallery);
+    
+    
+    //Upload to Firebase
+    if(image != null) {
+      // _isUploading.sink.add(true);
+      // Geting Image Properties
+      ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
+
+      //CropImage
+      if(properties.height > properties.width){
+        var yoffset = (properties.height - properties.width)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(),properties.width, properties.width);
+      } else if (properties.width > properties.height){
+        var xoffset = (properties.width - properties.height)/2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0 , properties.height, properties.height);
+      } else {
+        croppedFile = File(image.path);
+      }
+
+      File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path, quality: 100, targetHeight: 600, targetWidth: 600);
+
+      setState(() {
+      _imageFile = compressedFile;
+    });
+      
+    }else{
+      print('No Path Received');
+    }
+
+
+
+    // File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery,);
 
     setState(() {
-      file = imageFile;
+      file = _imageFile;
     });
   }
 

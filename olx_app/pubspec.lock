@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -85,6 +92,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  firebase_admob:
+    dependency: "direct main"
+    description:
+      name: firebase_admob
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.2"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -153,6 +167,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_icons:
+    dependency: "direct main"
+    description:
+      name: flutter_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   flutter_native_admob:
     dependency: "direct main"
     description:
@@ -338,6 +359,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  pin_code_fields:
+    dependency: "direct main"
+    description:
+      name: pin_code_fields
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.1.0"
+  pinput:
+    dependency: "direct main"
+    description:
+      name: pinput
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.6"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -462,6 +497,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  webview_flutter:
+    dependency: "direct main"
+    description:
+      name: webview_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.13"
   xml:
     dependency: transitive
     description:

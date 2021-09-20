@@ -83,7 +83,7 @@ class _AddressState extends State<Address>
           onPressed: ()
           {
             Route route = MaterialPageRoute(builder: (c) => AddAddress());
-            Navigator.pushReplacement(context, route);
+            Navigator.push(context, route);
           },
         ),
       ),
