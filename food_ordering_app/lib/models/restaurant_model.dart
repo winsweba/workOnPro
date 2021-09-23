@@ -1,12 +1,12 @@
 class RestaurantModel {
-  String address = "", name = "", imageUrl = "", paymentUrl = "", phone = "";
+  String  restaurantId='',address = "", name = "", imageUrl = "", paymentUrl = "", phone = "";
 
   RestaurantModel({ 
-  this.address,
-  this.name,
-  this.imageUrl,
-  this.paymentUrl,
-  this.phone,
+  required this.address,
+  required this.name,
+  required this.imageUrl,
+  required this.paymentUrl,
+  required this.phone,
     });
 
   RestaurantModel.fromJson(Map<String, dynamic> json) {

@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class RestaurantImageWidget extends StatelessWidget {
   final String imageUrl;
-  const RestaurantImageWidget({this.imageUrl});
+  const RestaurantImageWidget({required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class RestaurantImageWidget extends StatelessWidget {
 class RestaurantInfoWidget extends StatelessWidget {
   final String name;
   final String address;
-  const RestaurantInfoWidget({this.name, this.address});
+  const RestaurantInfoWidget({required this.name, required this.address});
 
   @override
   Widget build(BuildContext context) {

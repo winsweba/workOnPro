@@ -4,24 +4,24 @@ class PopulerItemModel{
   String foodId = "",name = "",menuId = "",image = "";
 
   PopulerItemModel({
-    this.foodId,
-    this.name,
-    this.menuId,
-    this.image,
+    required this.foodId,
+    required this.name,
+    required this.menuId,
+    required this.image,
   });
 
   PopulerItemModel.fromJson(Map<String, dynamic> json) {
-    foodId = json["foodId"];
-    name = json["name"];
-    menuId = json["menuId"];
-    image = json["image"];
+    foodId = json["food_id"] == null ? '' : json['food_id'];
+    name = json["name"] == null ? '' : json['name'];
+    menuId = json["menu_id"] == null ? '' : json['menu_id'];
+    image = json["image"] == null ? '' : json['image'];
   }
 
   Map<String, dynamic> toJson(){
    var data = Map<String, dynamic>();
-   data['foodId'] = this.foodId;
+   data['food_id'] = this.foodId;
    data['name'] = this.name;
-   data['menuId'] = this.menuId;
+   data['menu_id'] = this.menuId;
    data['image'] = this.image;
 
    return data;

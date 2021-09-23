@@ -7,7 +7,7 @@ import 'package:food_ordering_app/models/restaurant_model.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
-import 'package:food_ordering_app/view_model/main_view_model_imp.dart';
+import 'package:food_ordering_app/view_model/main_vm/main_view_model_imp.dart';
 import 'package:food_ordering_app/widget/common/common_widget.dart';
 import 'package:food_ordering_app/widget/main/main_widget.dart';
 import 'package:get/get.dart';
@@ -24,7 +24,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final FirebaseApp app;
 
-  const MyApp({this.app});
+  const MyApp({required this.app});
   // MyApp({required this.app});
 
   @override
@@ -43,7 +43,7 @@ class MyHomePage extends StatelessWidget {
   final viewModel = MainViewModelImp();
   final mainStateController = Get.put(MainStateController());
 
-  MyHomePage({this.app});
+  MyHomePage({required this.app});
 
   @override
   Widget build(BuildContext context) {
