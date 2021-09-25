@@ -9,33 +9,60 @@ class SecuredByFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Icon(
+        
+        // SizedBox(
+        //   width: 5,
+        // ),
+
+        SizedBox(
+          width: 5,
+        ),
+
+        Container(
+          alignment: Alignment.center,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
           // Icons.lock,
           FontAwesome.lock,
           size: 18,
           color: UIColors.primaryColor,
         ),
-        SizedBox(
-          width: 5,
-        ),
-        Text(
-          "Secured by",
-          style: TextStyle(
-            color: UIColors.primaryColor,
+              //icon
+              Text(
+                "Secured by",
+                style: TextStyle(
+                  color: UIColors.primaryColor,
+                ),
+              ),
+              Image(
+                image: AssetImage("assets/images/paystacklogo.png",),
+                height: 40,
+                width: 50,
+              ),
+            ],
           ),
         ),
+
         SizedBox(
           width: 5,
         ),
         Image(
-          image: AssetImage("assets/images/paystack.png",
-              package: "paystack_manager"),
-          height: 30,
-          width: 80,
+          image: AssetImage(
+            "assets/images/momo.jpg",
+          ),
+          height: 400,
+          width: 500,
         ),
       ],
     );

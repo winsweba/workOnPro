@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_native_image/flutter_native_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:olx_app/DialogBox/loading_dialog.dart';
+import 'package:olx_app/otherScreens/get_home_screen.dart';
 import 'package:olx_app/otherScreens/global_avaribles.dart';
 import 'package:olx_app/otherScreens/home_screene.dart';
 import 'package:toast/toast.dart';
@@ -180,7 +181,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                       };
                       FirebaseFirestore.instance.collection('items').add(addData).then((value) {
                         print("Data Added Successfully");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreene()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => GetHomeScreen()));
                       }).catchError((onError){
                         print(onError);
                       });
@@ -357,9 +358,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
     }
   }
 
-  void showToast(String msg,BuildContext context ,{int duration, int gravity}){
-    Toast.show( msg, context, duration: duration, gravity: gravity);
-  }
+  
 
   @override
     void initState() {
@@ -368,3 +367,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
       imgRef = FirebaseFirestore.instance.collection("imageUrls");
     }
 }
+
+void showToast(String msg,BuildContext context ,{int duration, int gravity}){
+    Toast.show( msg, context, duration: duration, gravity: gravity);
+  }

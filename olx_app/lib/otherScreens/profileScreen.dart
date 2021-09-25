@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_app/otherScreens/details_screen.dart';
@@ -315,7 +318,7 @@ getResultUser(){
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "\$" + items.docs[i].get("itemPrice"),
+                      "GHS " + items.docs[i].get("itemPrice"),
                       style: TextStyle(
                         fontFamily: "Babas",
                         letterSpacing: 2.0,
@@ -378,12 +381,27 @@ getResultUser(){
       // TODO: implement initState
       super.initState();
       getResultUser();
+
+      ///////////////////////////////////// Admob ////////////////////////////////
+
+      FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-2635835949649414~7809170937');
+    _bannerAd = createBannerAdd()..load();
       
     }
   @override
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width,
     _screenHeight = MediaQuery.of(context).size.height;
+
+
+
+    //// Admob
+    /// 
+    Timer(Duration(seconds: 10), () {
+      _bannerAd?.show(anchorType: AnchorType.bottom,);
+    });
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -418,4 +436,29 @@ getResultUser(){
       ),
     );
   }
+
+
+
+/////////////////////////////   Admob///////////////////////////////////////////////
+  BannerAd _bannerAd;
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
+
+  BannerAd createBannerAdd() {
+    return BannerAd(
+        targetingInfo: targetingInfo,
+        adUnitId: "ca-app-pub-2635835949649414/9747711208",
+        size: AdSize.smartBanner,
+        listener: (MobileAdEvent event) {
+          print('Bnner Event: $event');
+        });
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+
+
 }

@@ -20,7 +20,7 @@ class GetHomeScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
-                    Navigator.push(context, newRoute);
+                    Navigator.pushReplacement(context, newRoute);
                   },
                   child: Container(
                   alignment: Alignment.center,

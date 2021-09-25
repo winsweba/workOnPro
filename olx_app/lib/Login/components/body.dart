@@ -132,7 +132,7 @@ class _LoginBodyState extends State<LoginBody> {
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
-              login: false,
+              login: true,
               press: () {
                 Navigator.push(
                   context,

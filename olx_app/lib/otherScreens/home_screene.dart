@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_admob/native_admob_controller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:olx_app/Welcome/welcome_screen.dart';
@@ -223,6 +222,16 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
 
       getMyData();
 
+
+
+
+///////////////////////////////////// Admob ////////////////////////////////
+
+      FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-2635835949649414~7809170937');
+    _bannerAd = createBannerAdd()..load();
+    _interstitialAd = createInterstitialAd()..load();
+
+
     }
 
   getUserAddress() async{
@@ -384,7 +393,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "\$" + items.docs[i].get("itemPrice"),
+                      "GHS " + items.docs[i].get("itemPrice"),
                       style: TextStyle(
                         fontFamily: "Babas",
                         letterSpacing: 2.0,
@@ -446,7 +455,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
     //// Admob
     /// 
     Timer(Duration(seconds: 10), () {
-      _bannerAd?.show();
+      _bannerAd?.show(anchorType: AnchorType.bottom, anchorOffset: kBottomNavigationBarHeight);
     });
 
     return Scaffold(
@@ -461,6 +470,10 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
         actions: [
           TextButton(
             onPressed: () {
+              
+              _bannerAd?.dispose();
+                _bannerAd = null;
+
               Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: userId));
                 Navigator.push(context, newRoute);
             },
@@ -493,6 +506,9 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
           ),
           TextButton(
             onPressed: () {
+              _bannerAd?.dispose();
+                _bannerAd = null;
+                _interstitialAd?.show();
               Route newRoute = MaterialPageRoute(builder: (context) => InfoScreen());
               Navigator.push(context, newRoute);
             },
@@ -554,12 +570,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
   BannerAd _bannerAd;
   InterstitialAd _interstitialAd;
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
-  int _coins = 0;
-  final _nativeAdController = NativeAdmobController();
+  // int _coins = 0;
+  // final _nativeAdController = NativeAdmobController();
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
         targetingInfo: targetingInfo,
-        adUnitId: InterstitialAd.testAdUnitId,
+        adUnitId: "ca-app-pub-2635835949649414/9170810913",
         listener: (MobileAdEvent event) {
           print('interstitial event: $event');
         });
@@ -568,7 +584,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
   BannerAd createBannerAdd() {
     return BannerAd(
         targetingInfo: targetingInfo,
-        adUnitId: BannerAd.testAdUnitId,
+        adUnitId: 'ca-app-pub-2635835949649414/9747711208',
         size: AdSize.smartBanner,
         listener: (MobileAdEvent event) {
           print('Bnner Event: $event');

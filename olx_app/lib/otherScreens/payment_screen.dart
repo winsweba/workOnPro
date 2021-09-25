@@ -30,6 +30,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Center(
           child: Column(
             children: [
+
+              Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(color: Colors.white,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //icon
+                      Icon(Icons.dangerous_rounded, color: Colors.red,),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "Make sure to ha 5 different images of your product",
+                        style: TextStyle(color: Colors.black, fontSize: 12.5),
+                      )
+                    ],
+                  ),
+                ),
+              SizedBox(height: 20,),
              Text("Make a payment of ", style: TextStyle(fontFamily: "Lobster", fontSize: 22),),
              Text("GHS 2 before uploading your item.",style: TextStyle(fontFamily: "Lobster", fontSize: 22),),
              Text("with your mobile money number.",style: TextStyle(fontFamily: "Lobster", fontSize: 22),),
@@ -76,7 +98,7 @@ void _checkPayment() {
       PaystackPayManager(context: context)
         ..setSecretKey("sk_test_497a33c8e41bfc7e5592c49d61e0501164299257")
         // ..setCompanyAssetImage(Image(image: NetworkImage("YOUR-IMAGE-URL")))
-        ..setAmount(2)
+        ..setAmount(200)
         ..setReference(DateTime.now().millisecondsSinceEpoch.toString())
         ..setCurrency("GHS")
         ..setEmail("winweba@gmail.com")

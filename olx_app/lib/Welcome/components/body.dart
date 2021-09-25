@@ -15,7 +15,7 @@ class WelcomeBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "OLX  Clone",
+              "Badu Shoprite",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: "Signatra",

@@ -19,18 +19,18 @@ class _PaymentOptionHeaderState extends State<PaymentOptionHeader> {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        //Company/app logo
-        Container(
-          width: 30,
-          height: 30,
-          child: widget.paymentInfo.companyAssetImage ??
-              Image(
-                image: AssetImage(
-                  "assets/images/paystack_icon.png",
-                  package: "paystack_manager",
-                ),
-              ),
-        ),
+        // Company/app logo
+
+        // Container(
+        //   width: 30,
+        //   height: 30,
+        //   child: widget.paymentInfo.companyAssetImage ??
+        //       Image(
+        //         image: AssetImage(
+        //           "assets/images/badulogo.jpg",
+        //         ),
+        //       ),
+        // ),
 
         Expanded(
           child: Column(

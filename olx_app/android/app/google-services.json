@@ -79,6 +79,43 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310853562051:android:99b32dbc78aa6e4801bc76",
+        "android_client_info": {
+          "package_name": "winchester.winsweb.badushoprite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310853562051-d79gkh75ub74p559i957u07hs0npuga4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "winchester.winsweb.badushoprite",
+            "certificate_hash": "25321bf5c8a6311bf0be774b98576468b81a90bb"
+          }
+        },
+        {
+          "client_id": "310853562051-a96n894q5m1m2in7v02qn2o3799astku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSmPApOZXnwc36un6-JOVqCA0PQ3cdeOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310853562051-a96n894q5m1m2in7v02qn2o3799astku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

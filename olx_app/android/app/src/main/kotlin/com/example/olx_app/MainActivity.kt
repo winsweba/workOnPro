@@ -1,4 +1,4 @@
-package com.example.olx_app
+package winchester.winsweb.badushoprite
 
 import io.flutter.embedding.android.FlutterActivity
 

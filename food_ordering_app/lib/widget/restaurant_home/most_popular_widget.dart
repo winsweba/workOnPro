@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:food_ordering_app/models/populer_item_model.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/strings/restaurant_home_string.dart';
-import 'package:food_ordering_app/view_model/restaurent_home_vm/restaurant_home_vm.dart';
+import 'package:food_ordering_app/view_model/restaurent_home_details_vm/restaurant_home_details_vm.dart';
 import 'package:food_ordering_app/widget/common/common_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MostPopularWidget extends StatelessWidget {
-  final RestaurantHomeViewModel viewModel;
+  final RestaurantHomeDetailViewModel viewModel;
   final MainStateController mainStateController;
 
   const MostPopularWidget(

@@ -199,7 +199,7 @@ class _SearchProductState extends State<SearchProduct> {
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
                     child: Text(
-                      "\$" + items.docs[i].get("itemPrice"),
+                      "GHS" + items.docs[i].get("itemPrice"),
                       style: TextStyle(
                         fontFamily: "Babas",
                         letterSpacing: 2.0,

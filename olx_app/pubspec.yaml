@@ -44,7 +44,7 @@ dependencies:
   maps_launcher: ^2.0.0
   # flutterwave: ^0.0.2
   flutter_native_image: ^0.0.5+2
-  flutter_native_admob: ^2.1.0+3
+  # flutter_native_admob: ^2.1.0+3
   firebase_admob: ^0.11.2
   # paystack_manager:
   # pay: ^1.0.1
@@ -57,6 +57,14 @@ dependencies:
   pin_code_fields: ^6.1.0
   pinput: ^0.2.2
   webview_flutter: ^2.0.2
+
+
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/badus.jpg"
 
 
   

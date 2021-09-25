@@ -17,6 +17,8 @@ import 'package:olx_app/Widgets/rounded_password_field.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebaseStorage;
 import 'package:olx_app/otherScreens/global_avaribles.dart';
 import 'package:olx_app/otherScreens/home_screene.dart';
+import 'package:olx_app/otherScreens/uploadAddScreen.dart';
+import 'package:toast/toast.dart';
 class SignupBody extends StatefulWidget {
   @override
   _SignupBodyState createState() => _SignupBodyState();
@@ -225,16 +227,16 @@ class _SignupBodyState extends State<SignupBody> {
 
                 if (_nameController.text.length < 3 )
                   {
-                    // displayToastMessage("Name must be at lest 3 characters.", context);
+                    showToast("Name must be at lest 3 characters.", context,duration: 2,gravity: Toast.CENTER);
                   }
 
                   else if (!_emailController.text.contains(regExpEmail) )
                   {
-                    // displayToastMessage("Email address is not Valid", context);
+                    showToast("Email address is not Valid", context,duration: 2,gravity: Toast.CENTER);
                   }
                   else if (_passwordController.text.length < 6 )
                   {
-                    // displayToastMessage("Password must be at lest 6 characters.", context);
+                    showToast("Password must be at lest 6 characters.", context,duration: 2,gravity: Toast.CENTER);
                   }
                   else{
                     
