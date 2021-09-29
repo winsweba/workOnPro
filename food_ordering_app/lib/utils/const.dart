@@ -1,0 +1,1 @@
+const MY_CART_KEY = "CART_STORAGE";

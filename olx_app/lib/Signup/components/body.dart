@@ -262,14 +262,6 @@ class _SignupBodyState extends State<SignupBody> {
           ],
 
 
-
-
-
-
-
-
-
-
         ),
       ),
     );

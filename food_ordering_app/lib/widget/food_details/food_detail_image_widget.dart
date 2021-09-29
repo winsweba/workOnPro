@@ -1,13 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ordering_app/const/const.dart';
+import 'package:food_ordering_app/sate/cart_state.dart';
+import 'package:food_ordering_app/sate/food_detail_state.dart';
 import 'package:food_ordering_app/sate/food_list_state.dart';
 import 'package:food_ordering_app/utils/utils.dart';
+import 'package:get/get.dart';
 
 class FoodDetailImageWidget extends StatelessWidget {
   final FoodListStateController foodListStateController;
+  final CartStateController cartStateController = Get.find();
+  final FoodDetailStateController foodDetailStateController = Get.find();
 
-   FoodDetailImageWidget({Key? key, required this.foodListStateController})
+  FoodDetailImageWidget({Key? key, required this.foodListStateController})
       : super(key: key);
 
   @override
@@ -18,7 +23,7 @@ class FoodDetailImageWidget extends StatelessWidget {
           width: double.infinity,
           height: foodDetailImageAreaSize(context) * 0.9,
           child: Hero(
-            tag:  foodListStateController.selectedFood.value.name,
+            tag: foodListStateController.selectedFood.value.name,
             child: CachedNetworkImage(
               imageUrl: foodListStateController.selectedFood.value.image,
               fit: BoxFit.cover,
@@ -52,7 +57,9 @@ class FoodDetailImageWidget extends StatelessWidget {
                 ),
                 FloatingActionButton(
                   heroTag: FAB_CART_TAG,
-                  onPressed: () {},
+                  onPressed: () => cartStateController.addToCart(
+                      foodListStateController.selectedFood.value,
+                      quantity: foodDetailStateController.quantity.value),
                   child: Icon(
                     Icons.add_shopping_cart,
                     color: Colors.black,

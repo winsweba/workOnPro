@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/models/category_model.dart';
+import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/category_state.dart';
 import 'package:food_ordering_app/sate/food_list_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
@@ -19,7 +20,9 @@ import 'package:google_fonts/google_fonts.dart';
 class FoodListScreen extends StatelessWidget {
   // final viewModel = CategoryViewModelImp();
   final CategoryStateController categoryStateController = Get.find();
-  final FoodListStateController foodListStateController = Get.put(FoodListStateController());
+  final FoodListStateController foodListStateController =
+      Get.put(FoodListStateController());
+  final CartStateController cartStateController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +44,14 @@ class FoodListScreen extends StatelessWidget {
                 (index) => InkWell(
                   onTap: () {
                     // Need
-                    foodListStateController.selectedFood.value = 
-                    categoryStateController.selectedCategory.value.foods[index];
-                    Get.to(() => FoodDetailScreen()); 
+                    foodListStateController.selectedFood.value =
+                        categoryStateController
+                            .selectedCategory.value.foods[index];
+                    Get.to(() => FoodDetailScreen());
                   },
                   child: Hero(
-                    tag: categoryStateController.selectedCategory.value.foods[index].name,
+                    tag: categoryStateController
+                        .selectedCategory.value.foods[index].name,
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height / 6 * 2,
                       child: Card(
@@ -97,7 +102,6 @@ class FoodListScreen extends StatelessWidget {
                                                   fontSize: 16,
                                                 ),
                                               ),
-                  
                                               Text(
                                                 '$priceText: \$${categoryStateController.selectedCategory.value.foods[index].price}',
                                                 textAlign: TextAlign.center,
@@ -107,14 +111,23 @@ class FoodListScreen extends StatelessWidget {
                                                   fontSize: 16,
                                                 ),
                                               ),
-                  
                                               Row(
                                                 children: [
-                                                  IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border, color: Colors.white,)),
-                  
-                                                  SizedBox(width: 50,),
-                  
-                                                  IconButton(onPressed: () {}, icon: Icon(Icons.add_shopping_cart, color: Colors.white,))
+                                                  IconButton(
+                                                      onPressed: () {},
+                                                      icon: Icon(
+                                                        Icons.favorite_border,
+                                                        color: Colors.white,
+                                                      )),
+                                                  SizedBox(
+                                                    width: 50,
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () =>cartStateController.addToCart(categoryStateController.selectedCategory.value.foods[index]) ,
+                                                      icon: Icon(
+                                                        Icons.add_shopping_cart,
+                                                        color: Colors.white,
+                                                      ))
                                                 ],
                                               )
                                             ],

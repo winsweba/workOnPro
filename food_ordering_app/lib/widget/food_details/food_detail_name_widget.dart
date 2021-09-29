@@ -46,18 +46,19 @@ class FoodDetailNameWidget extends StatelessWidget {
                     fontSize: 16,
                   ),
                 ),
-                Obx(() => ElegantNumberButton(
-                  initialValue: foodDetailStateController.quntity.value,
-                  minValue: 1,
-                  maxValue: 100,
-                  color: Colors.amber,
-                  onChanged: (value) {
-                    print('Clicked ${value}');
-                    foodDetailStateController.quntity.value = value.toInt();
-                  }
-                      ,
-                  decimalPlaces: 0,
-                ) ),
+                Obx(
+                  () => ElegantNumberButton(
+                    initialValue: foodDetailStateController.quantity.value,
+                    minValue: 1,
+                    maxValue: 100,
+                    color: Colors.amber,
+                    onChanged: (value) {
+                      print('Clicked ${value}');
+                      foodDetailStateController.quantity.value = value.toInt();
+                    },
+                    decimalPlaces: 0,
+                  ),
+                ),
               ],
             ),
           ],
