@@ -6,14 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 class MenuWidget extends StatelessWidget {
 
   final String menuName;
-  final VoidCallback callbackl;
+  final VoidCallback callback;
   final IconData icon;
 
-  const MenuWidget({Key? key, required this.callbackl, required this.icon, required this.menuName}) : super(key: key);
+  const MenuWidget({Key? key, required this.callback, required this.icon, required this.menuName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(onTap: callbackl, 
+    return InkWell(onTap: callback, 
             child: Padding(
               padding:
               const EdgeInsets.symmetric(horizontal: 16 ),

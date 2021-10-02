@@ -45,6 +45,8 @@ dependencies:
   get_storage: any
   intl: any
   flutter_slidable: any
+  firebase_auth: any
+  flutter_auth_ui: any
 
 dev_dependencies:
   flutter_test:

@@ -20,6 +20,8 @@ import 'package:google_fonts/google_fonts.dart';
 class FoodListScreen extends StatelessWidget {
   // final viewModel = CategoryViewModelImp();
   final CategoryStateController categoryStateController = Get.find();
+  final MainStateController mainStateController = Get.find();
+
   final FoodListStateController foodListStateController =
       Get.put(FoodListStateController());
   final CartStateController cartStateController = Get.find();
@@ -123,7 +125,15 @@ class FoodListScreen extends StatelessWidget {
                                                     width: 50,
                                                   ),
                                                   IconButton(
-                                                      onPressed: () =>cartStateController.addToCart(categoryStateController.selectedCategory.value.foods[index]) ,
+                                                      onPressed: () => cartStateController.addToCart(
+                                                          categoryStateController
+                                                              .selectedCategory
+                                                              .value
+                                                              .foods[index],
+                                                          mainStateController
+                                                              .selectedRestaurant
+                                                              .value
+                                                              .restaurantId),
                                                       icon: Icon(
                                                         Icons.add_shopping_cart,
                                                         color: Colors.white,

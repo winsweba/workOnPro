@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
+import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/strings/cart_strings.dart';
 import 'package:food_ordering_app/utils/utils.dart';
 import 'package:food_ordering_app/view_model/cart_vm/cart_view_model_imp.dart';
@@ -17,21 +18,32 @@ class CartDetailScreen extends StatelessWidget {
   final box = GetStorage();
   final CartStateController controller = Get.find();
   final CartViewModelImp cartViewModel = new CartViewModelImp();
+  final MainStateController mainStateController = Get.find();
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cart"),
         actions: [
-          controller.getQuantity() > 0
+          controller.getQuantity(mainStateController.selectedRestaurant.value.restaurantId ) > 0
               ? IconButton(
-                  onPressed: () {},
+                  onPressed: () => Get.defaultDialog(
+                                title: clearCartConfirmTitleText,
+                                textCancel: cancelText,
+                                confirmTextColor: Colors.yellow,
+                                middleText: clearCartConfirmContentText,
+                                textConfirm: confirmText,
+                                onConfirm: () =>
+                                    cartViewModel.clearCart(controller,),
+                              ),
                   icon: Icon(Icons.clear),
                 )
               : Container(),
         ],
       ),
-      body: controller.getQuantity() > 0
+      body: controller.getQuantity(mainStateController.selectedRestaurant.value.restaurantId) > 0
           ? Obx(
               () => Column(
                 children: [
@@ -70,7 +82,8 @@ class CartDetailScreen extends StatelessWidget {
                                     maxValue: 100,
                                     color: Colors.amber,
                                     onChanged: (value) {
-                                      cartViewModel.updateCart(controller, index, value.toInt());
+                                      cartViewModel.updateCart(
+                                          controller, index, value.toInt());
                                     },
                                     decimalPlaces: 0,
                                   ),
@@ -86,14 +99,25 @@ class CartDetailScreen extends StatelessWidget {
                             caption: deleteText,
                             icon: Icons.delete,
                             color: Colors.red,
-                            onTap: () {},
+                            onTap: () {
+                              Get.defaultDialog(
+                                title: deleteCartConfirmTitleText,
+                                textCancel: cancelText,
+                                confirmTextColor: Colors.yellow,
+                                middleText: deleteCartConfirmContentText,
+                                textConfirm: confirmText,
+                                onConfirm: () =>
+                                    cartViewModel.deleteCart(controller, index),
+                              );
+                            },
                           )
                         ],
                       ),
                     ),
                   ),
-
-                  TotalWidget(controller: controller,),
+                  TotalWidget(
+                    controller: controller,
+                  ),
                 ],
               ),
             )
@@ -103,31 +127,3 @@ class CartDetailScreen extends StatelessWidget {
     );
   }
 }
-
-
-// Card(
-//                     elevation: 12,
-//                     child: Padding(padding: EdgeInsets.all(16),
-//                     child: Column(
-//                       children: [
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children:[
-//                             Text(
-//                               totalText,
-//                               style: GoogleFonts.jetBrainsMono(
-//                                 fontSize: 20, fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                             Text(
-//                               totalText,
-//                               style: GoogleFonts.jetBrainsMono(
-//                                 fontSize: 20, fontWeight: FontWeight.bold,
-//                               ),
-//                             ),
-//                           ]
-//                         )
-//                       ],
-//                     ),
-//                      ) ,
-//                   ),

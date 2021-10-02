@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:food_ordering_app/models/food_model.dart';
 
 class CartModel extends FoodModel {
   int quantity = 0;
+  String restaurantId = '';
 
   CartModel({
   
@@ -13,7 +16,7 @@ class CartModel extends FoodModel {
     size,
    description,
 
-  required this.quantity}):super(
+  required this.quantity,required this.restaurantId }):super(
     id:id,
     name:name,
     price:price,
@@ -26,6 +29,7 @@ class CartModel extends FoodModel {
   factory CartModel.fromJson(Map<String, dynamic> json) {
     final food = FoodModel.fromJson(json);
     final quantity = json['quantity'];
+    final restaurantId = json['restaurantId'];
     return CartModel(
       id:food.id,
     name:food.name,
@@ -35,6 +39,7 @@ class CartModel extends FoodModel {
     size:food.size,
    description:food.description,
    quantity: quantity,
+   restaurantId: restaurantId,
     );
   }
 
@@ -48,6 +53,7 @@ class CartModel extends FoodModel {
    data['size'] = this.size.map((v) => v.toJson()).toList();
    data['addon'] = this.addon.map((v) => v.toJson()).toList();
    data['quantity'] = this.quantity;
+   data['restaurantId'] = this.restaurantId;
 
    return data;
   }

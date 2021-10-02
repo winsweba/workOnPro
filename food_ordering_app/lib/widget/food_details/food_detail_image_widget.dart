@@ -4,6 +4,7 @@ import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/food_detail_state.dart';
 import 'package:food_ordering_app/sate/food_list_state.dart';
+import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/utils/utils.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,7 @@ class FoodDetailImageWidget extends StatelessWidget {
   final FoodListStateController foodListStateController;
   final CartStateController cartStateController = Get.find();
   final FoodDetailStateController foodDetailStateController = Get.find();
+  final MainStateController mainStateController = Get.find();
 
   FoodDetailImageWidget({Key? key, required this.foodListStateController})
       : super(key: key);
@@ -59,6 +61,7 @@ class FoodDetailImageWidget extends StatelessWidget {
                   heroTag: FAB_CART_TAG,
                   onPressed: () => cartStateController.addToCart(
                       foodListStateController.selectedFood.value,
+                      mainStateController.selectedRestaurant.value.restaurantId,
                       quantity: foodDetailStateController.quantity.value),
                   child: Icon(
                     Icons.add_shopping_cart,

@@ -3,15 +3,15 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/strings/restaurant_home_string.dart';
 import 'package:food_ordering_app/view_model/menu_vm/menu_viewmodel_imp.dart';
-import 'package:food_ordering_app/widget/menu/categories_menu_widget.dart';
+import 'package:food_ordering_app/widget/menu/menu_widget.dart';
 import 'package:food_ordering_app/widget/menu/home_menu_widget.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:food_ordering_app/widget/menu/menu_widget_callback.dart';
 
 class MenuScreen extends StatelessWidget {
   final ZoomDrawerController zoomDrawerController;
-  final viewModel =  MenuViewModelImp();
+  final viewModel = MenuViewModelImp();
 
-   MenuScreen(this.zoomDrawerController);
+  MenuScreen(this.zoomDrawerController);
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +49,35 @@ class MenuScreen extends StatelessWidget {
             Divider(
               thickness: 1,
             ),
-            MenuWidget(icon: Icons.list, menuName: categoryText, callbackl: viewModel.navigateCategory,)
+            MenuWidget(
+              icon: Icons.restaurant_menu_rounded,
+              menuName: restaurantListText,
+              callback: viewModel.backToRestaurantList,
+            ),
+            Divider(
+              thickness: 1,
+            ),
+            MenuWidget(
+              icon: Icons.list,
+              menuName: categoryText,
+              callback: viewModel.navigateCategory,
+            ),
+            Spacer(),
+            
+            Divider(
+              thickness: 1,
+            ),
+            MenuWidgetCallback(
+              icon: viewModel.checkLoginState(context) ? Icons.logout : Icons.login, 
+              menuName:viewModel.checkLoginState(context) ? loginText : logoutText,
+              callback: viewModel.checkLoginState(context) ? viewModel.logout : viewModel.login,
+            ),
+            Divider(
+              thickness: 1,
+            ),
           ],
         ),
       ),
     );
   }
 }
-
