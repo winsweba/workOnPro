@@ -13,7 +13,7 @@ class MenuWidgetCallback extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(onTap: callback(context), 
+    return InkWell(onTap: () => callback(context), 
             child: Padding(
               padding:
               const EdgeInsets.symmetric(horizontal: 16 ),

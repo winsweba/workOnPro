@@ -34,6 +34,7 @@ class MenuViewModelImp implements MenuViewModel {
       androidOption: AndroidOption(
         enableSmartLock: false,
         showLogo: true,
+        overrideTheme: true,
       ),
       ).then((value) {
         navigationHome(context);
@@ -68,3 +69,4 @@ class MenuViewModelImp implements MenuViewModel {
     box.write(KEY_TOKEN, token);
   }
 }
+ 

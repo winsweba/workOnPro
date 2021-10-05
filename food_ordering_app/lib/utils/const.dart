@@ -1,2 +1,3 @@
 const MY_CART_KEY = "CART_STORAGE";
 const KEY_TOKEN = "TOKEN";
+const KEY_ANONYMOUS = 'ANONYMOUS';

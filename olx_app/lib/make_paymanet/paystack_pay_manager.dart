@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:olx_app/make_paymanet/models/payment_info.dart';
 import 'package:olx_app/make_paymanet/models/transaction_status.dart';
 import 'package:olx_app/make_paymanet/views/paystack_payment_checkout_page.dart';
+import 'package:olx_app/otherScreens/uploadAddScreen.dart';
 
 
 class PaystackPayManager {
@@ -161,8 +162,10 @@ class PaystackPayManager {
     }
   }
 
-  onSuccesful(Function onSuccesful) {
+  onSuccesful(Function onSuccesfu ,BuildContext context) {
     _onSuccessful = onSuccesful;
+    // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
+    //                 Navigator.pushReplacement(context, newRoute);
   }
 
   onPending(Function onPending) {

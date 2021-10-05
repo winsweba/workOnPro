@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_ordering_app/models/cart_model.dart';
 import 'package:food_ordering_app/models/food_model.dart';
 import 'package:food_ordering_app/strings/cart_strings.dart';
@@ -12,22 +13,27 @@ class CartStateController extends GetxController {
   var cart = List<CartModel>.empty(growable: true).obs;
   final box = GetStorage();
 
-  getCart(String restaurantId) =>
-      cart.where((item) => item.restaurantId == restaurantId);
+  getCart(String restaurantId) => cart.where((item) =>
+      item.restaurantId == restaurantId &&
+      (FirebaseAuth.instance.currentUser == null
+          ? item.userUid == KEY_ANONYMOUS
+          : item.userUid == FirebaseAuth.instance.currentUser!.uid));
 
   addToCart(FoodModel foodModel, String restaurantId, {int quantity: 1}) async {
     try {
       var cartItem = CartModel(
-        id: foodModel.id,
-        name: foodModel.name,
-        description: foodModel.description,
-        image: foodModel.image,
-        price: foodModel.price,
-        addon: foodModel.addon,
-        size: foodModel.size,
-        quantity: quantity,
-        restaurantId: restaurantId,
-      );
+          id: foodModel.id,
+          name: foodModel.name,
+          description: foodModel.description,
+          image: foodModel.image,
+          price: foodModel.price,
+          addon: foodModel.addon,
+          size: foodModel.size,
+          quantity: quantity,
+          restaurantId: restaurantId,
+          userUid: FirebaseAuth.instance.currentUser == null
+              ? KEY_ANONYMOUS
+              : FirebaseAuth.instance.currentUser!.uid);
 
       if (isExists(cartItem, restaurantId)) {
         // if cart already day
@@ -50,7 +56,11 @@ class CartStateController extends GetxController {
   }
 
   isExists(CartModel cartItem, String restaurantId) =>
-      cart.any((e) => e.id == cartItem.id && e.restaurantId == restaurantId);
+      cart.any((e) => e.id == cartItem.id && e.restaurantId == restaurantId && (
+        FirebaseAuth.instance.currentUser == null
+          ? e.userUid == KEY_ANONYMOUS
+          : e.userUid == FirebaseAuth.instance.currentUser!.uid
+      ));
 
   sumCart(String restaurantId) => getCart(restaurantId).length == 0
       ? 0
@@ -60,16 +70,19 @@ class CartStateController extends GetxController {
 
   getQuantity(String restaurantId) => getCart(restaurantId).length == 0
       ? 0
-      : getCart(restaurantId).map((e) => e.quantity).reduce((value, element) => value + element);
+      : getCart(restaurantId)
+          .map((e) => e.quantity)
+          .reduce((value, element) => value + element);
 
-  getShippingFee(String restaurantId ) => sumCart(restaurantId) * 0.1;
+  getShippingFee(String restaurantId) => sumCart(restaurantId) * 0.1;
 
   /// 10% of total value
 
-  getSubTotal(String restaurantId ) => sumCart(restaurantId) + getShippingFee(restaurantId);
+  getSubTotal(String restaurantId) =>
+      sumCart(restaurantId) + getShippingFee(restaurantId);
 
-  clearCart(String restaurantId ) {
-    getCart(restaurantId).clear();
+  clearCart(String restaurantId) {
+    cart = getCart(restaurantId).clear();
     saveDatabase();
   }
 

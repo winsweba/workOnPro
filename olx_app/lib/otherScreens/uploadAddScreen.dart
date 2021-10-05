@@ -9,7 +9,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:olx_app/DialogBox/loading_dialog.dart';
 import 'package:olx_app/otherScreens/get_home_screen.dart';
 import 'package:olx_app/otherScreens/global_avaribles.dart';
-import 'package:olx_app/otherScreens/home_screene.dart';
 import 'package:toast/toast.dart';
 import 'package:path/path.dart' as Path;
 

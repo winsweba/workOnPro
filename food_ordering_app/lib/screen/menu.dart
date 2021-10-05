@@ -69,7 +69,7 @@ class MenuScreen extends StatelessWidget {
             ),
             MenuWidgetCallback(
               icon: viewModel.checkLoginState(context) ? Icons.logout : Icons.login, 
-              menuName:viewModel.checkLoginState(context) ? loginText : logoutText,
+              menuName:viewModel.checkLoginState(context) ? logoutText: loginText ,
               callback: viewModel.checkLoginState(context) ? viewModel.logout : viewModel.login,
             ),
             Divider(

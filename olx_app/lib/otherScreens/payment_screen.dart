@@ -96,14 +96,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
 void _checkPayment() {
     try {
       PaystackPayManager(context: context)
-        ..setSecretKey("sk_test_497a33c8e41bfc7e5592c49d61e0501164299257")
+        ..setSecretKey("sk_live_6058ffe6b150454ccc83f2f60b0a55f9bdf71a51")
         // ..setCompanyAssetImage(Image(image: NetworkImage("YOUR-IMAGE-URL")))
-        ..setAmount(200)
+        ..setAmount(10)
         ..setReference(DateTime.now().millisecondsSinceEpoch.toString())
         ..setCurrency("GHS")
-        ..setEmail("winweba@gmail.com")
-        ..setFirstName("Samuel")
-        ..setLastName("Adekunle")
+        ..setEmail("winweb@outlook.com")
+        ..setFirstName("win")
+        ..setLastName("erenst")
         ..setMetadata(
           {
             "custom_fields": [
@@ -115,7 +115,7 @@ void _checkPayment() {
             ]
           },
         )
-        ..onSuccesful(_onPaymentSuccessful)
+        ..onSuccesful(_onPaymentSuccessful, context)
         ..onPending(_onPaymentPending)
         ..onFailed(_onPaymentFailed)
         ..onCancel(_onCancel)
@@ -130,8 +130,8 @@ void _checkPayment() {
     print('Transaction succesful');
     print(
         "Transaction message ==> ${transaction.message}, Ref ${transaction.refrenceNumber}");
-        Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-                    Navigator.pushReplacement(context, newRoute);
+        // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
+        //             Navigator.pushReplacement(context, newRoute);
   }
 
   void _onPaymentPending(Transaction transaction) {
