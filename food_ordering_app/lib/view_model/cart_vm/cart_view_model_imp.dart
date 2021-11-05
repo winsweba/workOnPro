@@ -7,13 +7,15 @@ class CartViewModelImp implements CartViewModel {
 
   final MainStateController mainStateController = Get.find();
   
-  void updateCart(CartStateController controller, int index, int value) {
+  void updateCart(CartStateController controller,String  restaurantId ,int index, int value) {
+    controller.cart.value = controller.getCart(restaurantId);
     controller.cart[index].quantity = value;
     controller.cart.refresh();
     controller.saveDatabase();
   }
 
-   void deleteCart(CartStateController controller, int index,){
+   void deleteCart(CartStateController controller, String  restaurantId,int index,){
+     controller.cart.value = controller.getCart(restaurantId);
      controller.cart.removeAt(index);
      controller.saveDatabase();
 

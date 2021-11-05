@@ -49,14 +49,14 @@ class _PaymentOTPEntryViewState extends State<PaymentOTPEntryView> {
           SizedBox(
             height: 40,
           ),
-          Image(
-            image: AssetImage(
-              "assets/images/otp.png",
-              package: "paystack_manager",
-            ),
-            width: 30,
-            height: 40,
-          ),
+          // Image(
+          //   image: AssetImage(
+          //     "assets/images/otp.png",
+          //     package: "paystack_manager",
+          //   ),
+          //   width: 30,
+          //   height: 40,
+          // ),
           SizedBox(
             height: 20,
           ),

@@ -2,14 +2,11 @@ library paystack_manager;
 
 // Expose the following files
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:olx_app/make_paymanet/models/payment_info.dart';
 import 'package:olx_app/make_paymanet/models/transaction_status.dart';
 import 'package:olx_app/make_paymanet/views/paystack_payment_checkout_page.dart';
-import 'package:olx_app/otherScreens/uploadAddScreen.dart';
-
 
 class PaystackPayManager {
   BuildContext _context;
@@ -162,10 +159,8 @@ class PaystackPayManager {
     }
   }
 
-  onSuccesful(Function onSuccesfu ,BuildContext context) {
+  onSuccesful(Function onSuccesful) {
     _onSuccessful = onSuccesful;
-    // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-    //                 Navigator.pushReplacement(context, newRoute);
   }
 
   onPending(Function onPending) {

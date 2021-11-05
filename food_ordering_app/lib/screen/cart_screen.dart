@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:food_ordering_app/models/cart_model.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/strings/cart_strings.dart';
@@ -20,36 +21,41 @@ class CartDetailScreen extends StatelessWidget {
   final CartViewModelImp cartViewModel = new CartViewModelImp();
   final MainStateController mainStateController = Get.find();
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Cart"),
         actions: [
-          controller.getQuantity(mainStateController.selectedRestaurant.value.restaurantId ) > 0
+          controller.getQuantity(mainStateController
+                      .selectedRestaurant.value.restaurantId) >
+                  0
               ? IconButton(
                   onPressed: () => Get.defaultDialog(
-                                title: clearCartConfirmTitleText,
-                                textCancel: cancelText,
-                                confirmTextColor: Colors.yellow,
-                                middleText: clearCartConfirmContentText,
-                                textConfirm: confirmText,
-                                onConfirm: () =>
-                                    cartViewModel.clearCart(controller,),
-                              ),
+                    title: clearCartConfirmTitleText,
+                    textCancel: cancelText,
+                    confirmTextColor: Colors.yellow,
+                    middleText: clearCartConfirmContentText,
+                    textConfirm: confirmText,
+                    onConfirm: () => cartViewModel.clearCart(
+                      controller,
+                    ),
+                  ),
                   icon: Icon(Icons.clear),
                 )
               : Container(),
         ],
       ),
-      body: controller.getQuantity(mainStateController.selectedRestaurant.value.restaurantId) > 0
+      body: controller.getQuantity(
+                  mainStateController.selectedRestaurant.value.restaurantId) >
+              0
           ? Obx(
               () => Column(
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: controller.cart.length,
+                      itemCount: controller.getCart(mainStateController
+                          .selectedRestaurant.value.restaurantId).length,
                       itemBuilder: (context, index) => Slidable(
                         child: Card(
                           elevation: 8.0,
@@ -67,23 +73,33 @@ class CartDetailScreen extends StatelessWidget {
                                     flex: 2,
                                     child: CartImageWidget(
                                       controller: controller,
-                                      cartModel: controller.cart[index],
+                                      cartModel: controller.getCart(
+                                          mainStateController.selectedRestaurant
+                                              .value.restaurantId)[index],
                                     )),
                                 Expanded(
                                   flex: 6,
                                   child: CartInfo(
-                                      cartModel: controller.cart[index]),
+                                       cartModel: controller.getCart(
+                                          mainStateController.selectedRestaurant
+                                              .value.restaurantId)[index]),
                                 ),
                                 Center(
                                   child: ElegantNumberButton(
-                                    initialValue:
-                                        controller.cart[index].quantity,
+                                    initialValue: controller
+                                        .getCart(mainStateController
+                                            .selectedRestaurant
+                                            .value
+                                            .restaurantId)[index]
+                                        .quantity,
                                     minValue: 1,
                                     maxValue: 100,
                                     color: Colors.amber,
                                     onChanged: (value) {
                                       cartViewModel.updateCart(
-                                          controller, index, value.toInt());
+                                          controller,
+                                          mainStateController.selectedRestaurant.value.restaurantId 
+                                          ,index, value.toInt());
                                     },
                                     decimalPlaces: 0,
                                   ),
@@ -106,8 +122,11 @@ class CartDetailScreen extends StatelessWidget {
                                 confirmTextColor: Colors.yellow,
                                 middleText: deleteCartConfirmContentText,
                                 textConfirm: confirmText,
-                                onConfirm: () =>
-                                    cartViewModel.deleteCart(controller, index),
+                                onConfirm: () 
+                                {
+                                  cartViewModel.deleteCart(controller,mainStateController.selectedRestaurant.value.restaurantId ,index);
+                                  Get.back();
+                                }
                               );
                             },
                           )

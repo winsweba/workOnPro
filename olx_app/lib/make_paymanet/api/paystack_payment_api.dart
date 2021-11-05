@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:olx_app/make_paymanet/models/api_response.dart';
 import 'package:olx_app/make_paymanet/models/payment_info.dart';
-import 'package:olx_app/otherScreens/uploadAddScreen.dart';
 
 import 'apis.dart';
 
@@ -153,11 +151,6 @@ class PaystackPaymentApi {
     String refrence,
     String otp,
     PaymentInfo paymentInfo,
-
-
-
-    
-    BuildContext context
   }) async {
     APIResponse apiResponse;
 
@@ -182,19 +175,6 @@ class PaystackPaymentApi {
       if (response.statusCode == 200) {
         //format the response data for system to continue operating
         apiResponse = APIResponse.fromObject(response.data);
-
-
-      // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-      // Navigator.pushReplacement(context, newRoute);
-
-
-
-
-
-
-
-
-
       } else {
         var errorMessage = "Request Failed. Please try again later";
 
@@ -260,25 +240,6 @@ class PaystackPaymentApi {
       if (response.statusCode == 200) {
         //format the response data for system to continue operating
         apiResponse = APIResponse.fromObject(response.data);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       } else {
         var errorMessage = "Request Failed. Please try again later";
 

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:olx_app/make_paymanet/api/paystack_payment_api.dart';
 import 'package:olx_app/make_paymanet/data/payment_options.dart';
@@ -13,6 +11,7 @@ import 'package:olx_app/make_paymanet/widgets/bank_payment_view.dart';
 import 'package:olx_app/make_paymanet/widgets/card_payment_view.dart';
 import 'package:olx_app/make_paymanet/widgets/loading_Transaction_view.dart';
 import 'package:olx_app/make_paymanet/widgets/mobile_money_payment_view.dart';
+import 'package:olx_app/make_paymanet/widgets/new_payment_birthday_entry_view.dart';
 import 'package:olx_app/make_paymanet/widgets/payment_address_entry_view.dart';
 import 'package:olx_app/make_paymanet/widgets/payment_bank_auth_view.dart';
 import 'package:olx_app/make_paymanet/widgets/payment_birthday_entry_view.dart';
@@ -22,7 +21,6 @@ import 'package:olx_app/make_paymanet/widgets/payment_options_selector_view.dart
 import 'package:olx_app/make_paymanet/widgets/payment_otp_entry_view.dart';
 import 'package:olx_app/make_paymanet/widgets/payment_phone_entry.dart';
 import 'package:olx_app/make_paymanet/widgets/payment_pin_entry_view.dart';
-import 'package:olx_app/otherScreens/uploadAddScreen.dart';
 
 class PaystackPaymentCheckOutPage extends StatefulWidget {
   PaystackPaymentCheckOutPage({
@@ -52,13 +50,6 @@ class _PaystackPaymentCheckOutPageState
   String _transactionReference = "";
   String _bankAuthUrl = "";
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   startTimer();
-  // }
-
   @override
   Widget build(BuildContext context) {
     //List of available payment options
@@ -86,20 +77,20 @@ class _PaystackPaymentCheckOutPageState
           );
         }
         //The view to show when user select CARD payment option
-        // else if (_selectedPaymentOption.isCard) {
-        //   pageBodyContent = CardPaymentView(
-        //     paymentInfo: widget.paymentInfo,
-        //     onSubmit: _processCardPayment,
-        //   );
-        // }
-        // //The view to show when user select BANK payment option
-        // else if (_selectedPaymentOption.isBank) {
-        //   pageBodyContent = BankPaymentView(
-        //     paymentInfo: widget.paymentInfo,
-        //     message: "Please enter your bank account details",
-        //     onSubmit: _processBankPayment,
-        //   );
-        // }
+        else if (_selectedPaymentOption.isCard) {
+          pageBodyContent = CardPaymentView(
+            paymentInfo: widget.paymentInfo,
+            onSubmit: _processCardPayment,
+          );
+        }
+        //The view to show when user select BANK payment option
+        else if (_selectedPaymentOption.isBank) {
+          pageBodyContent = BankPaymentView(
+            paymentInfo: widget.paymentInfo,
+            message: "Please enter your bank account details",
+            onSubmit: _processBankPayment,
+          );
+        }
         //The view to show when user select BANK payment option
         else if (_selectedPaymentOption.isMomo) {
           pageBodyContent = MobileMoneyPaymentView(
@@ -141,8 +132,6 @@ class _PaystackPaymentCheckOutPageState
           message: _transactionStateMessage,
           onSubmit: _processSendOTP,
         );
-        // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-        // Navigator.pushReplacement(context, newRoute);
 
         break;
       case TransactionState.SEND_PHONE:
@@ -155,8 +144,6 @@ class _PaystackPaymentCheckOutPageState
           message: _transactionStateMessage,
           onSubmit: _processSendPhone,
         );
-        // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-        // Navigator.pushReplacement(context, newRoute);
         break;
 
       case TransactionState.SEND_ADDRESS:
@@ -169,8 +156,6 @@ class _PaystackPaymentCheckOutPageState
           message: _transactionStateMessage,
           onSubmit: _processSendAddress,
         );
-        // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-        // Navigator.pushReplacement(context, newRoute);
         break;
 
       case TransactionState.SEND_BIRTHDATE:
@@ -204,6 +189,19 @@ class _PaystackPaymentCheckOutPageState
         break;
 
       default:
+
+      /// AAAAAAAAAAAAAAAADDDDDDDDDDDDDDDDDDDDDDD
+      /// 
+      ///  
+      _transactionStateMessage = _transactionStateMessage.isEmpty
+            ? "Please enter MOMO PIN the contiune"
+            : _transactionStateMessage;
+        pageBodyContent = NewPaymentEntryView(
+          paymentInfo: widget.paymentInfo,
+          message: _transactionStateMessage,
+          onSubmit: _processSendDOB,
+        );
+      
         break;
     }
 
@@ -569,41 +567,6 @@ class _PaystackPaymentCheckOutPageState
           response.displayText ?? response.dataMessage,
           apiResponse: response,
         );
-
-    //     Timer(Duration(seconds: 5), () async{
-      // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-      // Navigator.pushReplacement(context, newRoute);
-
-    // });
-
-
-
-
-
-      // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-      // Navigator.pushReplacement(context, newRoute);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       }
       //else show the user an error/failed page
       else {
@@ -739,24 +702,20 @@ class _PaystackPaymentCheckOutPageState
     });
 
     if (transactionState == TransactionState.SUCCESS) {
-      Transaction transaction = Transaction.fromObject(apiResponse, /* context */);
+      Transaction transaction = Transaction.fromObject(apiResponse);
       Navigator.pop(
         context,
         transaction,
       );
-
-      // Route newRoute = MaterialPageRoute(builder: (context) => UploadAddScreen());
-      // Navigator.pushReplacement(context, newRoute);
-
     } else if (transactionState == TransactionState.PENDING) {
-      Transaction transaction = Transaction.fromObject(apiResponse, /* context */);
+      Transaction transaction = Transaction.fromObject(apiResponse);
       Navigator.pop(
         context,
         transaction,
       );
     } else if (transactionState == TransactionState.FAILED &&
         apiResponse != null) {
-      Transaction transaction = Transaction.fromObject(apiResponse, /* context */);
+      Transaction transaction = Transaction.fromObject(apiResponse);
       Navigator.pop(
         context,
         transaction,

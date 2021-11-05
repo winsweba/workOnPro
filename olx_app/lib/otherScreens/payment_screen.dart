@@ -96,9 +96,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
 void _checkPayment() {
     try {
       PaystackPayManager(context: context)
-        ..setSecretKey("sk_live_6058ffe6b150454ccc83f2f60b0a55f9bdf71a51")
+        ..setSecretKey("sk_live_bf50b228e7e5144c4a8b5a185fbc2fd2556eda72")
         // ..setCompanyAssetImage(Image(image: NetworkImage("YOUR-IMAGE-URL")))
-        ..setAmount(10)
+        ..setAmount(20)
         ..setReference(DateTime.now().millisecondsSinceEpoch.toString())
         ..setCurrency("GHS")
         ..setEmail("winweb@outlook.com")
@@ -115,7 +115,7 @@ void _checkPayment() {
             ]
           },
         )
-        ..onSuccesful(_onPaymentSuccessful, context)
+        ..onSuccesful(_onPaymentSuccessful,)
         ..onPending(_onPaymentPending)
         ..onFailed(_onPaymentFailed)
         ..onCancel(_onCancel)

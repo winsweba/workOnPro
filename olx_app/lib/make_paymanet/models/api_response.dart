@@ -1,5 +1,3 @@
-
-
 import 'package:olx_app/make_paymanet/models/transaction_status.dart';
 
 class APIResponse {

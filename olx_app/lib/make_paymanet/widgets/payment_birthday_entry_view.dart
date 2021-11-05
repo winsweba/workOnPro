@@ -47,17 +47,17 @@ class _PaymentBirthDayEntryViewState extends State<PaymentBirthDayEntryView> {
           Divider(
             height: 30,
           ),
-          SizedBox(
-            height: 40,
-          ),
-          Image(
-            image: AssetImage(
-              "assets/images/dob.png",
-              package: "paystack_manager",
-            ),
-            width: 30,
-            height: 40,
-          ),
+          // SizedBox(
+          //   height: 40,
+          // ),
+          // Image(
+          //   image: AssetImage(
+          //     "assets/images/dob.png",
+          //     package: "paystack_manager",
+          //   ),
+          //   width: 30,
+          //   height: 40,
+          // ),
           SizedBox(
             height: 20,
           ),

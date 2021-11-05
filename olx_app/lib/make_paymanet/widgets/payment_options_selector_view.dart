@@ -47,12 +47,12 @@ class _PaymentOptionSelectorViewState extends State<PaymentOptionSelectorView> {
               Text(
                 "Use one of the payment methods below to pay",
               ),
-              // SizedBox(
-              //   height: 5,
-              // ),
-              // Text(
-              //   "${widget.paymentInfo.currency} ${widget.paymentInfo.formatedAmount}",
-              // ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                "${widget.paymentInfo.currency} 2",
+              ),
               SizedBox(
                 height: 20,
               ),
