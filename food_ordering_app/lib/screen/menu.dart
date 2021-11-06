@@ -62,6 +62,14 @@ class MenuScreen extends StatelessWidget {
               menuName: categoryText,
               callback: viewModel.navigateCategory,
             ),
+            Divider(
+              thickness: 1,
+            ),
+            MenuWidget(
+              icon: Icons.shopping_cart_rounded,
+              menuName: cartText,
+              callback: viewModel.navigateCat,
+            ),
             Spacer(),
             
             Divider(

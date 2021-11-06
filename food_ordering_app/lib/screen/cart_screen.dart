@@ -54,8 +54,10 @@ class CartDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: controller.getCart(mainStateController
-                          .selectedRestaurant.value.restaurantId).length,
+                      itemCount: controller
+                          .getCart(mainStateController
+                              .selectedRestaurant.value.restaurantId)
+                          .length,
                       itemBuilder: (context, index) => Slidable(
                         child: Card(
                           elevation: 8.0,
@@ -80,7 +82,7 @@ class CartDetailScreen extends StatelessWidget {
                                 Expanded(
                                   flex: 6,
                                   child: CartInfo(
-                                       cartModel: controller.getCart(
+                                      cartModel: controller.getCart(
                                           mainStateController.selectedRestaurant
                                               .value.restaurantId)[index]),
                                 ),
@@ -98,8 +100,10 @@ class CartDetailScreen extends StatelessWidget {
                                     onChanged: (value) {
                                       cartViewModel.updateCart(
                                           controller,
-                                          mainStateController.selectedRestaurant.value.restaurantId 
-                                          ,index, value.toInt());
+                                          mainStateController.selectedRestaurant
+                                              .value.restaurantId,
+                                          index,
+                                          value.toInt());
                                     },
                                     decimalPlaces: 0,
                                   ),
@@ -117,17 +121,19 @@ class CartDetailScreen extends StatelessWidget {
                             color: Colors.red,
                             onTap: () {
                               Get.defaultDialog(
-                                title: deleteCartConfirmTitleText,
-                                textCancel: cancelText,
-                                confirmTextColor: Colors.yellow,
-                                middleText: deleteCartConfirmContentText,
-                                textConfirm: confirmText,
-                                onConfirm: () 
-                                {
-                                  cartViewModel.deleteCart(controller,mainStateController.selectedRestaurant.value.restaurantId ,index);
-                                  Get.back();
-                                }
-                              );
+                                  title: deleteCartConfirmTitleText,
+                                  textCancel: cancelText,
+                                  confirmTextColor: Colors.yellow,
+                                  middleText: deleteCartConfirmContentText,
+                                  textConfirm: confirmText,
+                                  onConfirm: () {
+                                    cartViewModel.deleteCart(
+                                        controller,
+                                        mainStateController.selectedRestaurant
+                                            .value.restaurantId,
+                                        index);
+                                    Get.back();
+                                  });
                             },
                           )
                         ],
@@ -137,6 +143,15 @@ class CartDetailScreen extends StatelessWidget {
                   TotalWidget(
                     controller: controller,
                   ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        onPressed: () => cartViewModel.processCheckout(context,controller
+                          .getCart(mainStateController
+                              .selectedRestaurant.value.restaurantId)),
+                        child: Text(checkOutText)),
+                  )
                 ],
               ),
             )

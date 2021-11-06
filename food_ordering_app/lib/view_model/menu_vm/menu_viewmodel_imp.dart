@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_auth_ui/flutter_auth_ui.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
+import 'package:food_ordering_app/screen/cart_screen.dart';
 import 'package:food_ordering_app/screen/category.dart';
 import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
@@ -99,4 +100,7 @@ class MenuViewModelImp implements MenuViewModel {
     Get.offAll(() => RestaurantHome() );
 
   }
+  
+  @override
+  void navigateCat() => Get.to(()=>CartDetailScreen());
 }

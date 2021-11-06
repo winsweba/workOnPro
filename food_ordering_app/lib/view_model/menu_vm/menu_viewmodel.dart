@@ -7,4 +7,5 @@ abstract class MenuViewModel {
   void login(BuildContext context);
   void logout(BuildContext context);
   void navigationHome(BuildContext context);
+  void navigateCat();
 }

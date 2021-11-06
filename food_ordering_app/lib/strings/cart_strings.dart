@@ -12,3 +12,4 @@ final cancelText = "Cancle";
 final confirmText = "Confirm";
 final clearCartConfirmTitleText ="Clear";
 final clearCartConfirmContentText = 'Do you want to clear';
+final checkOutText = 'Checkout';
