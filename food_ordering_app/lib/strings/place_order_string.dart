@@ -6,3 +6,4 @@ const paymentText = 'Payment';
 const codText = 'Cash On Delivery';
 const brainTreeText = "Braintree";
 const commentText = 'Comment';
+const isRequiredText = 'is required';
