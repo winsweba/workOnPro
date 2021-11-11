@@ -159,35 +159,37 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           Center(
             child: Container(
-              width: _screenWidth * .5,
-              child: Column(
-                children: [
-                  Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: Image.asset("images/admin.png", width: 300, height: 300,),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.0),
-                    child: returnEmailField(Icons.person, false),
-                  ),
-                  SizedBox(height: 20.0,),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 50.0),
-                    child: returnPasswordField(Icons.person, true),
-                  ),
-                  SizedBox(height: 40.0,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 50.0),
-                        child: returnLoginButton(),
+              width: _screenWidth,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40.0),
+                        child: Image.asset("images/admin.png", width: 250, height: 250,),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      child: returnEmailField(Icons.person, false),
+                    ),
+                    SizedBox(height: 20.0,),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 50.0),
+                      child: returnPasswordField(Icons.person, true),
+                    ),
+                    SizedBox(height: 40.0,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 50.0),
+                          child: returnLoginButton(),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

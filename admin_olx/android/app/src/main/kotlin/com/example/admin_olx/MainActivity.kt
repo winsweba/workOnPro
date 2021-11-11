@@ -1,4 +1,4 @@
-package com.example.admin_olx
+package winchester.winsweb.asancoshopriteadmin
 
 import io.flutter.embedding.android.FlutterActivity
 

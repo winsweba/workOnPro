@@ -24,7 +24,7 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
   String description;
   String urlImage;
   String itemLocation;
-
+QuerySnapshot users;
 
   Future<bool> showDialogForApprovingAd(selectedDoc) async
   {
@@ -81,7 +81,6 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
     );
   }
 
-
   @override
   Widget build(BuildContext context)
   {
@@ -114,8 +113,8 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
                     padding: EdgeInsets.all(8.0),
                     child: ListTile(
                       leading: Container(
-                        width: 60,
-                        height: 60,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
@@ -124,7 +123,7 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
                           ),
                         ),
                       ),
-                      title: Text(ads.docs[i].get("userName")),
+                      // title: Text(ads.docs[i].get("userName")),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -174,6 +173,17 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
                       child: Image.network(
                         ads.docs[i].get("urlImage1"),
                         fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Text("Name: " + ads.docs[i].get("userName"),
+                      style: TextStyle(
+                        letterSpacing: 2.0,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -289,9 +299,11 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen>
         centerTitle: true,
       ),
       body: Center(
-        child: Container(
-          width: _screenWidth * .5,
-          child: showAdsList(),
+        child: SingleChildScrollView(
+          child: Container(
+            width: _screenWidth,
+            child: showAdsList(),
+          ),
         ),
       ),
     );

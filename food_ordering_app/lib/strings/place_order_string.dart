@@ -7,3 +7,8 @@ const codText = 'Cash On Delivery';
 const brainTreeText = "Braintree";
 const commentText = 'Comment';
 const isRequiredText = 'is required';
+
+const orderSuccessText = 'Order Success';
+const orderFailedText = 'Order Failed';
+const orderSuccessMessageText = 'Your Order has been placed';
+const orderFailMessageText = 'Your Order submit faild';

@@ -7,6 +7,7 @@ import 'package:admin_olx/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 
@@ -91,23 +92,23 @@ class _HomeScreenState extends State<HomeScreen>
               style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0),
           ),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  timeString + "\n\n" + dateString,
-                  style: TextStyle(fontSize: 30.0, color: Colors.white, letterSpacing: 3.0, fontWeight: FontWeight.bold),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+        
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    timeString + "\n\n" + dateString,
+                    style: TextStyle(fontSize: 25.0, color: Colors.white, letterSpacing: 3.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-
-              Row(
+        Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
+        
                   ElevatedButton.icon(
                     icon: Icon(Icons.check_box, color: Colors.white,),
                     label: Text(
@@ -115,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen>
                       style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
                     ),
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(50)),
+                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
                       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                     ),
@@ -123,11 +124,11 @@ class _HomeScreenState extends State<HomeScreen>
                     {
                       //go to approve ads page
                       Route newRoute = MaterialPageRoute(builder: (_) => ApproveAdsScreen());
-                      Navigator.pushReplacement(context, newRoute);
+                      Navigator.push(context, newRoute);
                     },
                   ),
-                  SizedBox(width: 50.0,),
-
+                  SizedBox(height: 20.0,),
+        
                   ElevatedButton.icon(
                     icon: Icon(Icons.person_add, color: Colors.white,),
                     label: Text(
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen>
                       style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
                     ),
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(50)),
+                      padding: MaterialStateProperty.all(EdgeInsets.all(20)),
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                       foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                     ),
@@ -143,60 +144,62 @@ class _HomeScreenState extends State<HomeScreen>
                     {
                       //go to approve all accounts page
                       Route newRoute = MaterialPageRoute(builder: (_) => ActivateAccountsScreen());
-                      Navigator.pushReplacement(context, newRoute);
+                      Navigator.push(context, newRoute);
                     },
                   ),
                 ],
               ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.block_flipped, color: Colors.white,),
-                    label: Text(
-                      "Block an Account".toUpperCase(),
-                      style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
-                    ),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(50)),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    onPressed: ()
-                    {
-                      //go to blocked accounts page
-                      Route newRoute = MaterialPageRoute(builder: (_) => BlockedAccountsScreen());
-                      Navigator.pushReplacement(context, newRoute);
-                    },
-                  ),
-                  SizedBox(width: 50.0,),
-
-                  ElevatedButton.icon(
-                    icon: Icon(Icons.logout, color: Colors.white,),
-                    label: Text(
-                      "Logout".toUpperCase(),
-                      style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
-                    ),
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(EdgeInsets.all(50)),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
-                      foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    onPressed: ()
-                    {
-                      //logout admin
-                      FirebaseAuth.instance.signOut().then((value)
+                
+            SizedBox(height: 20.0,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+        
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.block_flipped, color: Colors.white,),
+                      label: Text(
+                        "Block an Account".toUpperCase(),
+                        style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
+                      ),
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      ),
+                      onPressed: ()
                       {
-                        Route newRoute = MaterialPageRoute(builder: (_) => LoginScreen());
-                        Navigator.pushReplacement(context, newRoute);
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ],
+                        //go to blocked accounts page
+                        Route newRoute = MaterialPageRoute(builder: (_) => BlockedAccountsScreen());
+                        Navigator.push(context, newRoute);
+                      },
+                    ),
+                    SizedBox(height: 20.0,),
+        
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.logout, color: Colors.white,),
+                      label: Text(
+                        "Logout".toUpperCase(),
+                        style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0),
+                      ),
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                      ),
+                      onPressed: ()
+                      {
+                        //logout admin
+                        FirebaseAuth.instance.signOut().then((value)
+                        {
+                          Route newRoute = MaterialPageRoute(builder: (_) => LoginScreen());
+                          Navigator.pushReplacement(context, newRoute);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin_olx">
+    package="winchester.winsweb.asancoshopriteadmin">
    <application
-        android:label="admin_olx"
+        android:label="Asanco Admin"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

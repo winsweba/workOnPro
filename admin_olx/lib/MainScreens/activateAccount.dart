@@ -222,7 +222,7 @@ class _ActivateAccountsScreenState extends State<ActivateAccountsScreen>
       ),
       body: Center(
         child: Container(
-          width: _screenWidth * .5,
+          width: _screenWidth,
           child: showBlockedAccountList(),
         ),
       ),

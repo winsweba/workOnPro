@@ -2,6 +2,7 @@ const RESTAURENT_REF = "Restaurant";
 const MOST_POPULAR_REFF = 'MostPopular';
 const BEST_DEAL_REF = 'BestDeals';
 const CATEGORY_REF = 'Category';
+const ORDER_REF = 'Order';
 
 
 const COLOR_MENU_BG = 0xFFB71C1c;

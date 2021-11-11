@@ -9,6 +9,7 @@ import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/screen/cart_screen.dart';
 import 'package:food_ordering_app/screen/category.dart';
+import 'package:food_ordering_app/screen/order_history_screen.dart';
 import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
 import 'package:food_ordering_app/utils/const.dart';
@@ -61,7 +62,7 @@ class MenuViewModelImp implements MenuViewModel {
   void logout(BuildContext context) {
     Get.defaultDialog(
       title: logoutTitle,
-      content: Text(logoutText),
+      content: Text(logoutMessageText),
       backgroundColor: Colors.white,
       cancel:
           ElevatedButton(onPressed: () => Get.back(), child: Text(cancelText)),
@@ -103,4 +104,9 @@ class MenuViewModelImp implements MenuViewModel {
   
   @override
   void navigateCat() => Get.to(()=>CartDetailScreen());
+
+  @override
+  void viewOrderHistory(BuildContext context) {
+    Get.to(() => OrderHistoryScreen());
+  }
 }

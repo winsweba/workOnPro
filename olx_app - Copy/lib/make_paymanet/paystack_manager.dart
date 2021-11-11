@@ -1,0 +1,2 @@
+library paystack_manager;
+

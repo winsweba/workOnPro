@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:food_ordering_app/const/const.dart';
+import 'package:food_ordering_app/strings/main_strings.dart';
 import 'package:food_ordering_app/strings/restaurant_home_string.dart';
 import 'package:food_ordering_app/view_model/menu_vm/menu_viewmodel_imp.dart';
 import 'package:food_ordering_app/widget/menu/menu_widget.dart';
@@ -70,15 +71,32 @@ class MenuScreen extends StatelessWidget {
               menuName: cartText,
               callback: viewModel.navigateCat,
             ),
-            Spacer(),
-            
             Divider(
               thickness: 1,
             ),
             MenuWidgetCallback(
-              icon: viewModel.checkLoginState(context) ? Icons.logout : Icons.login, 
-              menuName:viewModel.checkLoginState(context) ? logoutText: loginText ,
-              callback: viewModel.checkLoginState(context) ? viewModel.logout : viewModel.login,
+              icon: Icons.list,
+              menuName: orderHistoryText,
+              callback: viewModel.checkLoginState(context)
+                  ? viewModel.viewOrderHistory
+                  : viewModel.login,
+            ),
+            Divider(
+              thickness: 1,
+            ),
+            Spacer(),
+            Divider(
+              thickness: 1,
+            ),
+            MenuWidgetCallback(
+              icon: viewModel.checkLoginState(context)
+                  ? Icons.logout
+                  : Icons.login,
+              menuName:
+                  viewModel.checkLoginState(context) ? logoutText : loginText,
+              callback: viewModel.checkLoginState(context)
+                  ? viewModel.logout
+                  : viewModel.login,
             ),
             Divider(
               thickness: 1,
