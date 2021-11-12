@@ -63,9 +63,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
               Center(
                 child: Text(
-                  "Sell, Purchase or Exchange your Old Home Appliances",
+                  "Asanco Shoprite",
                   style: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 30.0,
                     color: Colors.white,
                     fontFamily: "Lobster"
                   ),

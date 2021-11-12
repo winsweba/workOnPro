@@ -1,4 +1,5 @@
 import 'package:admin_olx/MainScreens/adDescription.dart';
+import 'package:admin_olx/MainScreens/details_screen.dart';
 import 'package:admin_olx/MainScreens/home.dart';
 import 'package:admin_olx/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -154,7 +155,22 @@ QuerySnapshot users;
                   GestureDetector(
                     onDoubleTap: ()
                     {
-                      Route newRoute = MaterialPageRoute(builder: (_) => AdsDescriptionScreen(
+                      // Route newRoute = MaterialPageRoute(builder: (_) => AdsDescriptionScreen(
+                      //   title: ads.docs[i].get("itemModel"),
+                      //   itemColor: ads.docs[i].get("itemColor"),
+                      //   userNumber:  ads.docs[i].get("userNumber"),
+                      //   description: ads.docs[i].get("description"),
+                      //   address: ads.docs[i].get("address"),
+                      //   urlImage1: ads.docs[i].get("urlImage1"),
+                      //   urlImage2: ads.docs[i].get("urlImage2"),
+                      //   urlImage3: ads.docs[i].get("urlImage3"),
+                      //   urlImage4: ads.docs[i].get("urlImage4"),
+                      //   urlImage5: ads.docs[i].get("urlImage5"),
+                      // ));
+                      // Navigator.pushReplacement(context, newRoute);
+
+
+                      Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
                         title: ads.docs[i].get("itemModel"),
                         itemColor: ads.docs[i].get("itemColor"),
                         userNumber:  ads.docs[i].get("userNumber"),
@@ -166,7 +182,8 @@ QuerySnapshot users;
                         urlImage4: ads.docs[i].get("urlImage4"),
                         urlImage5: ads.docs[i].get("urlImage5"),
                       ));
-                      Navigator.pushReplacement(context, newRoute);
+                      Navigator.push(context, newRoute);
+                      
                     },
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
@@ -299,11 +316,9 @@ QuerySnapshot users;
         centerTitle: true,
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: _screenWidth,
-            child: showAdsList(),
-          ),
+        child: Container(
+          width: _screenWidth,
+          child: showAdsList(),
         ),
       ),
     );

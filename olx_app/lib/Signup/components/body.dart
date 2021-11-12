@@ -133,6 +133,7 @@ class _SignupBodyState extends State<SignupBody> {
       userId = currentUser.uid;
       userEmail = currentUser.email;
       getUserName = _nameController.text.trim();
+      getPhone = _phoneController.text.trim();
 
       saveUserData();
     }).catchError((error){
@@ -207,11 +208,21 @@ class _SignupBodyState extends State<SignupBody> {
               },
             ),
             RoundedInputField(
+              keyboardType: TextInputType.emailAddress,
               hintText: "Email",
               icon: Icons.person,
               onChanged: (value)
               {
                 _emailController.text = value;
+              },
+            ),
+            RoundedInputField(
+              keyboardType: TextInputType.phone,
+              hintText: "Phone",
+              icon: Icons.phone_android,
+              onChanged: (value)
+              {
+                _phoneController.text = value;
               },
             ),
             RoundedPasswordField(
@@ -237,6 +248,10 @@ class _SignupBodyState extends State<SignupBody> {
                   else if (_passwordController.text.length < 6 )
                   {
                     showToast("Password must be at lest 6 characters.", context,duration: 2,gravity: Toast.CENTER);
+                  }
+                  else if (_phoneController.text.length < 9 )
+                  {
+                    showToast("Check phone number.", context,duration: 2,gravity: Toast.CENTER);
                   }
                   else{
                     

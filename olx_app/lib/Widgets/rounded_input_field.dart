@@ -6,19 +6,21 @@ import 'package:olx_app/Widgets/text_field_container.dart';
 
 class RoundedInputField extends StatelessWidget {
   final String hintText;
+  final TextInputType keyboardType;
   final IconData icon;
   final ValueChanged<String> onChanged;
-  const RoundedInputField({
+   RoundedInputField({
     Key key,
     this.hintText,
     this.icon = Icons.person,
-    this.onChanged,
+    this.onChanged, this.keyboardType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextField(
+        keyboardType: keyboardType,
         onChanged: onChanged,
         cursorColor: Colors.deepPurple,
         decoration: InputDecoration(

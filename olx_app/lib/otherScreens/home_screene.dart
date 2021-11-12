@@ -257,7 +257,51 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
   }
 
   
-  
+  Future<bool> showDialogForSignOutd() async
+  {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context)
+      {
+        return AlertDialog(
+          title: Text(
+            "SignOut",
+            style: TextStyle(fontSize: 24, letterSpacing: 2.0, fontWeight: FontWeight.bold),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Do you want to Sign Out?"),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              child: Text(
+                "Cancel",
+              ),
+              onPressed: ()
+              {
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "Sign Out Now",
+              ),
+              onPressed: ()
+              {
+                auth.signOut().then((_){
+                Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
+                Navigator.pushReplacement(context, newRoute);
+              });
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -494,10 +538,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
           ),
           TextButton(
             onPressed: () {
-              auth.signOut().then((_){
-                Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
-                Navigator.pushReplacement(context, newRoute);
-              });
+
+              showDialogForSignOutd();
+              // auth.signOut().then((_){
+              //   Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
+              //   Navigator.pushReplacement(context, newRoute);
+              // });
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
@@ -541,7 +587,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
           child: showItemList(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+     /*  floatingActionButton: FloatingActionButton(
         tooltip: 'Add post',
         child: Icon(Icons.add),
         onPressed: () {
@@ -553,6 +599,28 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
         // Navigator.pushReplacement(context, newRoute);
 
         },
+      ), */
+
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  shape: RoundedRectangleBorder(),
+                  primary: Theme.of(context).accentColor,
+                ),
+                onPressed: (){
+                  Route newRoute = MaterialPageRoute(builder: (context) => PaymentScreen());
+                  Navigator.push(context, newRoute);
+                },
+                child: Text("I want to sell: Add Items here"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
 

@@ -46,7 +46,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
       appBar: AppBar(
         title: Text(
           next ? "Please write Items's Info " : "Choose Item Images",
-          style: TextStyle(fontSize: 10.0, fontFamily: "Lobster", letterSpacing: 2.0 ),
+          style: TextStyle(fontSize: 16.0, fontFamily: "Lobster", letterSpacing: 2.0 ),
         ),
         actions: [
           next ? Container()
@@ -180,7 +180,7 @@ class _UploadAddScreenState extends State<UploadAddScreen> {
                       };
                       FirebaseFirestore.instance.collection('items').add(addData).then((value) {
                         print("Data Added Successfully");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => GetHomeScreen()));
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GetHomeScreen()));
                       }).catchError((onError){
                         print(onError);
                       });
