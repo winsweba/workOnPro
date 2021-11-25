@@ -77,20 +77,20 @@ class _PaystackPaymentCheckOutPageState
           );
         }
         //The view to show when user select CARD payment option
-        else if (_selectedPaymentOption.isCard) {
-          pageBodyContent = CardPaymentView(
-            paymentInfo: widget.paymentInfo,
-            onSubmit: _processCardPayment,
-          );
-        }
-        //The view to show when user select BANK payment option
-        else if (_selectedPaymentOption.isBank) {
-          pageBodyContent = BankPaymentView(
-            paymentInfo: widget.paymentInfo,
-            message: "Please enter your bank account details",
-            onSubmit: _processBankPayment,
-          );
-        }
+        // else if (_selectedPaymentOption.isCard) {
+        //   pageBodyContent = CardPaymentView(
+        //     paymentInfo: widget.paymentInfo,
+        //     onSubmit: _processCardPayment,
+        //   );
+        // }
+        // //The view to show when user select BANK payment option
+        // else if (_selectedPaymentOption.isBank) {
+        //   pageBodyContent = BankPaymentView(
+        //     paymentInfo: widget.paymentInfo,
+        //     message: "Please enter your bank account details",
+        //     onSubmit: _processBankPayment,
+        //   );
+        // }
         //The view to show when user select BANK payment option
         else if (_selectedPaymentOption.isMomo) {
           pageBodyContent = MobileMoneyPaymentView(

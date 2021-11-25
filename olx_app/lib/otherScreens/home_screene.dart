@@ -19,236 +19,241 @@ import 'package:toast/toast.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 
 class HomeScreene extends StatefulWidget {
-
   @override
   _HomeScreeneState createState() => _HomeScreeneState();
 }
 
 class _HomeScreeneState extends State<HomeScreene> {
-
   FirebaseAuth auth = FirebaseAuth.instance;
 
   QuerySnapshot items;
-  
 
-void showToast(String msg,BuildContext context ,{int duration, int gravity}){
-    Toast.show( msg, context, duration: duration, gravity: gravity);
+  void showToast(String msg, BuildContext context,
+      {int duration, int gravity}) {
+    Toast.show(msg, context, duration: duration, gravity: gravity);
   }
-  
-  Future<bool> showDialogForUpdateDate(selectedDoc, oldUserName, oldPhoneNumber, oldItemPrice, oldItemName, oldItemColor, oldItemDescription) async{
+
+  Future<bool> showDialogForUpdateDate(selectedDoc, oldUserName, oldPhoneNumber,
+      oldItemPrice, oldItemName, oldItemColor, oldItemDescription) async {
     return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: AlertDialog(
-            title: Text("Update Data", style: TextStyle(fontSize: 24, fontFamily: "Bebas", letterSpacing: 2.0  ) ,),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  initialValue: oldUserName,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Your Name",
-                  ),
-                  onChanged: (value) {
-                    setState(() {
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return SingleChildScrollView(
+            child: AlertDialog(
+              title: Text(
+                "Update Data",
+                style: TextStyle(
+                    fontSize: 24, fontFamily: "Bebas", letterSpacing: 2.0),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    initialValue: oldUserName,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Your Name",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldUserName = value;
-                                        });
-                  },
-                ),
-                
-                SizedBox(height: 5.0,),
-
-                TextFormField(
-                  initialValue: oldPhoneNumber,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Your Phone Number",
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                    initialValue: oldPhoneNumber,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Your Phone Number",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldPhoneNumber = value;
-                                        });
-                  },
-                ),
-                
-                SizedBox(height: 5.0,),
-
-                TextFormField(
-                  initialValue: oldItemPrice,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Item Price ",
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                    initialValue: oldItemPrice,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Item Price ",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldItemPrice = value;
-                                        });
-                  },
-                ),
-                
-                
-                SizedBox(height: 5.0,),
-
-                TextFormField(
-                  initialValue: oldItemName,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Item Name ",
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                    initialValue: oldItemName,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Item Name ",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldItemName = value;
-                                        });
-                  },
-                ),
-                
-                
-                SizedBox(height: 5.0,),
-
-                TextFormField(
-                  initialValue: oldItemColor,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Item Color ",
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                    initialValue: oldItemColor,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Item Color ",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldItemColor = value;
-                                        });
-                  },
-                ),
-                
-                
-                SizedBox(height: 5.0,),
-
-                TextFormField(
-                  initialValue: oldItemDescription,
-                  decoration: InputDecoration(
-                    hintText: "Eneter Item Description ",
+                      });
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  TextFormField(
+                    initialValue: oldItemDescription,
+                    decoration: InputDecoration(
+                      hintText: "Eneter Item Description ",
+                    ),
+                    onChanged: (value) {
+                      setState(() {
                         oldItemDescription = value;
-                                        });
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                ],
+              ),
+              actions: [
+                ElevatedButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
                 ),
+                ElevatedButton(
+                  child: Text("Udate Now"),
+                  onPressed: () {
+                    if (oldUserName == '') {
+                      showToast("Name Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else if (oldPhoneNumber == '') {
+                      showToast("Phone Number Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else if (oldItemPrice == '') {
+                      showToast("Item Price Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else if (oldItemName == '') {
+                      showToast("Item Name Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else if (oldItemColor == '') {
+                      showToast("Item Color Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else if (oldItemDescription == '') {
+                      showToast("Item Description Is needed", context,
+                          duration: 2, gravity: Toast.CENTER);
+                    } else {
+                      Navigator.pop(context);
+                      Map<String, dynamic> itemData = {
+                        'userName': oldUserName,
+                        'userNumber': oldPhoneNumber,
+                        'itemPrice': oldItemPrice,
+                        'itemModel': oldItemName,
+                        'itemColor': oldItemColor,
+                        'description': oldItemDescription,
+                      };
 
-                SizedBox(height: 5.0,),
+                      FirebaseFirestore.instance
+                          .collection("items")
+                          .doc(selectedDoc)
+                          .update(itemData)
+                          .then((value) {
+                        print("Data Upatated Successfully");
+                      }).catchError((onError) {
+                        print(onError);
+                      });
+                    }
+                  },
+                ),
               ],
             ),
-            actions: [
-              ElevatedButton(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-
-              ElevatedButton(
-                child: Text("Udate Now"),
-                onPressed: () {
-                  if(oldUserName == '' ){
-                    showToast("Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldPhoneNumber == '' ){
-                    showToast("Phone Number Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemPrice == '' ){
-                    showToast("Item Price Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemName == '' ){
-                    showToast("Item Name Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemColor == '' ){
-                    showToast("Item Color Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else if(oldItemDescription== '' ){
-                    showToast("Item Description Is needed", context, duration: 2, gravity: Toast.CENTER) ;
-                  }
-                  else{
-                    Navigator.pop(context);
-                    Map<String, dynamic> itemData = {
-                    'userName': oldUserName,
-                    'userNumber': oldPhoneNumber,
-                    'itemPrice': oldItemPrice,
-                    'itemModel': oldItemName,
-                    'itemColor': oldItemColor,
-                    'description': oldItemDescription,
-                  };
-
-                  FirebaseFirestore.instance.collection("items").doc(selectedDoc).update(itemData).then((value) {
-                    print("Data Upatated Successfully");
-                  }).catchError((onError){
-                    print(onError);
-                  });
-                  }
-                  
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   getMyData() {
-    FirebaseFirestore.instance.collection("users").doc(userId).get().then((results) {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((results) {
       setState(() {
-              userImageUrl = results.data()['imagePro'];
-              getUserName = results.data()['userName'];
-            });
+        userImageUrl = results.data()['imagePro'];
+        getUserName = results.data()['userName'];
+      });
     });
   }
-  
 
   @override
-    void initState() {
-      // TODO: implement initState
-      super.initState();
-      getUserAddress();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserAddress();
 
-      userId = FirebaseAuth.instance.currentUser.uid;
-      userEmail = FirebaseAuth.instance.currentUser.email;
+    userId = FirebaseAuth.instance.currentUser.uid;
+    userEmail = FirebaseAuth.instance.currentUser.email;
 
-      FirebaseFirestore.instance.collection("items")
-      .where("status", isEqualTo: "approved")
-      .orderBy("time", descending: true)
-      .get().then((result) {
-        setState(() {
-                  items = result;
-                });
+    FirebaseFirestore.instance
+        .collection("items")
+        .where("status", isEqualTo: "approved")
+        .orderBy("time", descending: true)
+        .get()
+        .then((result) {
+      setState(() {
+        items = result;
       });
+    });
 
-      getMyData();
-
-
-
+    getMyData();
 
 ///////////////////////////////////// Admob ////////////////////////////////
 
-      FirebaseAdMob.instance.initialize(appId: 'ca-app-pub-2635835949649414~7809170937');
+    FirebaseAdMob.instance
+        .initialize(appId: 'ca-app-pub-2635835949649414~7809170937');
     _bannerAd = createBannerAdd()..load();
     _interstitialAd = createInterstitialAd()..load();
+  }
 
-
-    }
-
-  getUserAddress() async{
-    Position newPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high );
+  getUserAddress() async {
+    Position newPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     position = newPosition;
 
-    placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
 
     Placemark placemark = placemarks[0];
 
-    String newCompleteAddress = 
-    '${placemark.subThoroughfare} ${placemark.thoroughfare}, '
-    '${placemark.subThoroughfare} ${placemark.locality}, '
-    '${placemark.subAdministrativeArea}, '
-    '${placemark.administrativeArea} ${placemark.postalCode}, '
-    '${placemark.country}';
+    String newCompleteAddress =
+        '${placemark.subThoroughfare} ${placemark.thoroughfare}, '
+        '${placemark.subThoroughfare} ${placemark.locality}, '
+        '${placemark.subAdministrativeArea}, '
+        '${placemark.administrativeArea} ${placemark.postalCode}, '
+        '${placemark.country}';
 
     completeAddress = newCompleteAddress;
     print(completeAddress);
@@ -256,61 +261,69 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
     return completeAddress;
   }
 
-  
-  Future<bool> showDialogForSignOutd() async
-  {
+  Future<bool> showDialogForSignOutd() async {
     return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context)
-      {
-        return AlertDialog(
-          title: Text(
-            "SignOut",
-            style: TextStyle(fontSize: 24, letterSpacing: 2.0, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text("Do you want to Sign Out?"),
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "SignOut",
+              style: TextStyle(
+                  fontSize: 24,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Do you want to Sign Out?"),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                child: Text(
+                  "Cancel",
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              ElevatedButton(
+                child: Text(
+                  "Sign Out Now",
+                ),
+                onPressed: () {
+                  auth.signOut().then((_) {
+                    // Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
+                    // Navigator.pushReplacement(context, newRoute);
+
+                    Navigator.of(context).pushAndRemoveUntil(
+                      // the new route
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => WelcomeScreen(),
+                      ),
+
+                      // this function should return true when we're done removing routes
+                      // but because we want to remove all other screens, we make it
+                      // always return false
+                      (Route route) => false,
+                    );
+                  });
+                },
+              ),
             ],
-          ),
-          actions: [
-            ElevatedButton(
-              child: Text(
-                "Cancel",
-              ),
-              onPressed: ()
-              {
-                Navigator.pop(context);
-              },
-            ),
-            ElevatedButton(
-              child: Text(
-                "Sign Out Now",
-              ),
-              onPressed: ()
-              {
-                auth.signOut().then((_){
-                Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
-                Navigator.pushReplacement(context, newRoute);
-              });
-              },
-            ),
-          ],
-        );
-      }
-    );
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     double _screenWidth = MediaQuery.of(context).size.width,
-    _screenHeight = MediaQuery.of(context).size.height;
+        _screenHeight = MediaQuery.of(context).size.height;
 
     Widget showItemList() {
-      
-      if(items != null ) {
+      if (items != null) {
         return ListView.builder(
           itemCount: items.docs.length,
           shrinkWrap: true,
@@ -325,71 +338,79 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                     child: ListTile(
                       leading: GestureDetector(
                         onTap: () {
-                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          Route newRoute = MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                    sellerId: items.docs[i].get('uId'),
+                                  ));
+                          Navigator.pushReplacement(context, newRoute);
                         },
-
                         child: Container(
                           width: 60,
                           height: 60,
                           decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(items.docs[i].get("imgPro")),
-                            fit: BoxFit.fill,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(items.docs[i].get("imgPro")),
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
-                        ),
-                      ) ,
+                      ),
                       title: GestureDetector(
                         onTap: () {
-                          Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: items.docs[i].get('uId'),));
-                          Navigator.pushReplacement(context, newRoute); 
+                          Route newRoute = MaterialPageRoute(
+                              builder: (context) => ProfileScreen(
+                                    sellerId: items.docs[i].get('uId'),
+                                  ));
+                          Navigator.pushReplacement(context, newRoute);
                         },
-
-                        child: Text(items.docs[i].get("userName"),
+                        child: Text(
+                          items.docs[i].get("userName"),
                         ),
-                        ),
-                        trailing: items.docs[i].get("uId") == userId ? 
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                if(items.docs[i].get('uId') == userId ) {
-                                  showDialogForUpdateDate(
-                                    items.docs[i].id,
-                                    items.docs[i].get('userName'),
-                                    items.docs[i].get('userNumber'),
-                                    items.docs[i].get('itemPrice'),
-                                    items.docs[i].get('itemModel'),
-                                    items.docs[i].get('itemColor'),
-                                    items.docs[i].get('description'),
-                                  );
-                                }
-                              },
-
-                              child: Icon(Icons.edit_outlined),
+                      ),
+                      trailing: items.docs[i].get("uId") == userId
+                          ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    if (items.docs[i].get('uId') == userId) {
+                                      showDialogForUpdateDate(
+                                        items.docs[i].id,
+                                        items.docs[i].get('userName'),
+                                        items.docs[i].get('userNumber'),
+                                        items.docs[i].get('itemPrice'),
+                                        items.docs[i].get('itemModel'),
+                                        items.docs[i].get('itemColor'),
+                                        items.docs[i].get('description'),
+                                      );
+                                    }
+                                  },
+                                  child: Icon(Icons.edit_outlined),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                GestureDetector(
+                                  onDoubleTap: () {
+                                    if (items.docs[i].get('uId') == userId) {
+                                      FirebaseFirestore.instance
+                                          .collection('items')
+                                          .doc(items.docs[i].id)
+                                          .delete();
+                                      Route newRoute = MaterialPageRoute(
+                                          builder: (context) => HomeScreene());
+                                      Navigator.push(context, newRoute);
+                                    }
+                                  },
+                                  child: Icon(Icons.delete_forever_sharp),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [],
                             ),
-
-                            SizedBox(width: 20,),
-                            
-                            GestureDetector(
-                              onDoubleTap: () {
-                                if(items.docs[i].get('uId') == userId ){
-                                  FirebaseFirestore.instance.collection('items').doc(items.docs[i].id).delete();
-                                  Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
-                                  Navigator.push(context, newRoute);
-                                }
-                              },
-
-                              child: Icon(Icons.delete_forever_sharp),
-                            ),
-                          ],
-                        )  : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [],
-                        ),
                     ),
                   ),
 
@@ -411,27 +432,29 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                       // ));
                       // Navigator.pushReplacement(context, newRoute);
 
-
-                       Route newRoute = MaterialPageRoute(builder: (context) => DetailsScreen(
-                        title: items.docs[i].get("itemModel"),
-                        itemColor: items.docs[i].get("itemColor"),
-                        userNumber:  items.docs[i].get("userNumber"),
-                        description: items.docs[i].get("description"),
-                        lat: items.docs[i].get("lat"),
-                        lng: items.docs[i].get("lng"),
-                        address: items.docs[i].get("address"),
-                        urlImage1: items.docs[i].get("urlImage1"),
-                        urlImage2: items.docs[i].get("urlImage2"),
-                        urlImage3: items.docs[i].get("urlImage3"),
-                        urlImage4: items.docs[i].get("urlImage4"),
-                        urlImage5: items.docs[i].get("urlImage5"),
-                      ));
+                      Route newRoute = MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                                title: items.docs[i].get("itemModel"),
+                                itemColor: items.docs[i].get("itemColor"),
+                                userNumber: items.docs[i].get("userNumber"),
+                                description: items.docs[i].get("description"),
+                                lat: items.docs[i].get("lat"),
+                                lng: items.docs[i].get("lng"),
+                                address: items.docs[i].get("address"),
+                                urlImage1: items.docs[i].get("urlImage1"),
+                                urlImage2: items.docs[i].get("urlImage2"),
+                                urlImage3: items.docs[i].get("urlImage3"),
+                                urlImage4: items.docs[i].get("urlImage4"),
+                                urlImage5: items.docs[i].get("urlImage5"),
+                              ));
                       Navigator.push(context, newRoute);
                     },
-
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Image.network(items.docs[i].get('urlImage1'), fit: BoxFit.fill, ),
+                      child: Image.network(
+                        items.docs[i].get('urlImage1'),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   Padding(
@@ -445,7 +468,6 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                       ),
                     ),
                   ),
-                  
 
                   //model & time
                   Padding(
@@ -474,7 +496,8 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                             Padding(
                               padding: EdgeInsets.only(left: 10.0),
                               child: Align(
-                                child: Text(tAgo.format((items.docs[i].get("time")).toDate())),
+                                child: Text(tAgo.format(
+                                    (items.docs[i].get("time")).toDate())),
                                 alignment: Alignment.topLeft,
                               ),
                             ),
@@ -484,61 +507,88 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                     ),
                   ),
 
-                  SizedBox(height: 10.0,),
+                  SizedBox(
+                    height: 10.0,
+                  ),
                 ],
               ),
             );
           },
         );
-      }
-      else{
-        return Center(child: CircularProgressIndicator(),);
+      } else {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       }
     }
 
     //// Admob
-    /// 
+    ///
     Timer(Duration(seconds: 10), () {
-      _bannerAd?.show(anchorType: AnchorType.bottom, anchorOffset: kBottomNavigationBarHeight);
+      _bannerAd?.show(
+          anchorType: AnchorType.bottom,
+          anchorOffset: kBottomNavigationBarHeight);
     });
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.refresh, color: Colors.white,),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.white,
+          ),
           onPressed: () {
-            Route newRoute = MaterialPageRoute(builder: (context) => HomeScreene());
-                Navigator.pushReplacement(context, newRoute);
+            // Route newRoute =
+            //     MaterialPageRoute(builder: (context) => HomeScreene());
+            // Navigator.pushReplacement(context, newRoute);
+
+            Navigator.of(context).pushAndRemoveUntil(
+              // the new route
+              MaterialPageRoute(
+                builder: (BuildContext context) => HomeScreene(),
+              ),
+
+              // this function should return true when we're done removing routes
+              // but because we want to remove all other screens, we make it
+              // always return false
+              (Route route) => false,
+            );
           },
         ),
         actions: [
           TextButton(
             onPressed: () {
-              
               _bannerAd?.dispose();
-                _bannerAd = null;
+              _bannerAd = null;
 
-              Route newRoute = MaterialPageRoute(builder: (context) => ProfileScreen(sellerId: userId));
-                Navigator.push(context, newRoute);
+              Route newRoute = MaterialPageRoute(
+                  builder: (context) => ProfileScreen(sellerId: userId));
+              Navigator.push(context, newRoute);
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.person, color: Colors.white, ),
+              child: Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
             ),
           ),
           TextButton(
             onPressed: () {
-              Route newRoute = MaterialPageRoute(builder: (context) => SearchProduct());
-                Navigator.push(context, newRoute);
+              Route newRoute =
+                  MaterialPageRoute(builder: (context) => SearchProduct());
+              Navigator.push(context, newRoute);
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.search, color: Colors.white, ),
+              child: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
             ),
           ),
           TextButton(
             onPressed: () {
-
               showDialogForSignOutd();
               // auth.signOut().then((_){
               //   Route newRoute = MaterialPageRoute(builder: (context) => WelcomeScreen());
@@ -547,33 +597,37 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.login_outlined, color: Colors.white, ),
+              child: Icon(
+                Icons.login_outlined,
+                color: Colors.white,
+              ),
             ),
           ),
           TextButton(
             onPressed: () {
               _bannerAd?.dispose();
-                _bannerAd = null;
-                _interstitialAd?.show();
-              Route newRoute = MaterialPageRoute(builder: (context) => InfoScreen());
+              _bannerAd = null;
+              _interstitialAd?.show();
+              Route newRoute =
+                  MaterialPageRoute(builder: (context) => InfoScreen());
               Navigator.push(context, newRoute);
             },
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Icon(Icons.info, color: Colors.white, ),
+              child: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
         flexibleSpace: Container(
           decoration: new BoxDecoration(
             gradient: new LinearGradient(
-              colors: [
-                Colors.deepPurple[300],
-                Colors.deepPurple
-              ],
+              colors: [Colors.deepPurple[300], Colors.deepPurple],
               begin: const FractionalOffset(0.0, 0.0),
               end: const FractionalOffset(1.0, 0.0),
-              stops: [0.0,1.0],
+              stops: [0.0, 1.0],
               tileMode: TileMode.clamp,
             ),
           ),
@@ -587,7 +641,7 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
           child: showItemList(),
         ),
       ),
-     /*  floatingActionButton: FloatingActionButton(
+      /*  floatingActionButton: FloatingActionButton(
         tooltip: 'Add post',
         child: Icon(Icons.add),
         onPressed: () {
@@ -612,8 +666,9 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
                   shape: RoundedRectangleBorder(),
                   primary: Theme.of(context).accentColor,
                 ),
-                onPressed: (){
-                  Route newRoute = MaterialPageRoute(builder: (context) => PaymentScreen());
+                onPressed: () {
+                  Route newRoute =
+                      MaterialPageRoute(builder: (context) => PaymentScreen());
                   Navigator.push(context, newRoute);
                 },
                 child: Text("I want to sell: Add Items here"),
@@ -623,18 +678,12 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
         ),
       ),
     );
-
-
-    
-    
   }
 
-  
-
-  ///////////////// Ad Mob 
+  ///////////////// Ad Mob
   ///
   ///
-  /// 
+  ///
   BannerAd _bannerAd;
   InterstitialAd _interstitialAd;
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo();
@@ -658,11 +707,6 @@ void showToast(String msg,BuildContext context ,{int duration, int gravity}){
           print('Bnner Event: $event');
         });
   }
-
-
-
-
-
 
   @override
   void dispose() {

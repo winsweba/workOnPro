@@ -15,7 +15,7 @@ class WelcomeBody extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Badu Shoprite",
+              "Asanco Shoprite",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: "Signatra",
@@ -24,9 +24,9 @@ class WelcomeBody extends StatelessWidget {
               ),
             ),
             SizedBox(height: size.height * 0.05),
-            SvgPicture.asset("assets/icons/chat.svg",
-            height: size.height * 0.45,
-            ),
+            // SvgPicture.asset("assets/icons/chat.svg",
+            // height: size.height * 0.45,
+            // ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(
               text: "LOGIN",

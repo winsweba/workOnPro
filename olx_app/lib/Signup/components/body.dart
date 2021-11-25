@@ -19,13 +19,13 @@ import 'package:olx_app/otherScreens/global_avaribles.dart';
 import 'package:olx_app/otherScreens/home_screene.dart';
 import 'package:olx_app/otherScreens/uploadAddScreen.dart';
 import 'package:toast/toast.dart';
+
 class SignupBody extends StatefulWidget {
   @override
   _SignupBodyState createState() => _SignupBodyState();
 }
 
 class _SignupBodyState extends State<SignupBody> {
-
   String userPhotoUrl = "";
 
   File _image;
@@ -37,7 +37,6 @@ class _SignupBodyState extends State<SignupBody> {
   final TextEditingController _phoneController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   // chooseImage() async {
   //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -52,83 +51,79 @@ class _SignupBodyState extends State<SignupBody> {
     PickedFile image;
     File croppedFile;
 
+    //Get Image From Divce
+    image = await _picker.getImage(source: ImageSource.gallery);
 
-   
-    
-      //Get Image From Divce 
-    image =await _picker.getImage(source: ImageSource.gallery);
-    
-    
     //Upload to Firebase
-    if(image != null) {
+    if (image != null) {
       // _isUploading.sink.add(true);
       // Geting Image Properties
-      ImageProperties properties = await FlutterNativeImage.getImageProperties(image.path);
-
+      ImageProperties properties =
+          await FlutterNativeImage.getImageProperties(image.path);
 
       //CropImage
-      if(properties.height > properties.width){
-        var yoffset = (properties.height - properties.width)/2;
-        croppedFile = await FlutterNativeImage.cropImage(image.path, 0, yoffset.toInt(),properties.width, properties.width);
-      } else if (properties.width > properties.height){
-        var xoffset = (properties.width - properties.height)/2;
-        croppedFile = await FlutterNativeImage.cropImage(image.path, xoffset.toInt(), 0 , properties.height, properties.height);
+      if (properties.height > properties.width) {
+        var yoffset = (properties.height - properties.width) / 2;
+        croppedFile = await FlutterNativeImage.cropImage(
+            image.path, 0, yoffset.toInt(), properties.width, properties.width);
+      } else if (properties.width > properties.height) {
+        var xoffset = (properties.width - properties.height) / 2;
+        croppedFile = await FlutterNativeImage.cropImage(image.path,
+            xoffset.toInt(), 0, properties.height, properties.height);
       } else {
         croppedFile = File(image.path);
       }
 
-      File compressedFile = await FlutterNativeImage.compressImage(croppedFile.path, quality: 100, targetHeight: 600, targetWidth: 600);
+      File compressedFile = await FlutterNativeImage.compressImage(
+          croppedFile.path,
+          quality: 100,
+          targetHeight: 600,
+          targetWidth: 600);
 
       setState(() {
-      _image = compressedFile;
-    });
-      
-    }else{
+        _image = compressedFile;
+      });
+    } else {
       print('No Path Received');
     }
   }
 
-  upload() async{
+  upload() async {
     showDialog(
-      context: context,
-      builder: (_){
-        return LoadingAlertDialog();
-      }
-    );
+        context: context,
+        builder: (_) {
+          return LoadingAlertDialog();
+        });
 
-    String fileName = DateTime
-    .now()
-    .millisecondsSinceEpoch
-    .toString();
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
-    firebaseStorage.Reference reference = 
-      firebaseStorage.FirebaseStorage.instance.ref(fileName);
+    firebaseStorage.Reference reference =
+        firebaseStorage.FirebaseStorage.instance.ref(fileName);
     firebaseStorage.UploadTask uploadTask = reference.putFile(_image);
-    firebaseStorage.TaskSnapshot storageTaskSnapshot = await uploadTask.whenComplete(() {
-
-    } );
+    firebaseStorage.TaskSnapshot storageTaskSnapshot =
+        await uploadTask.whenComplete(() {});
 
     await storageTaskSnapshot.ref.getDownloadURL().then((url) {
       userPhotoUrl = url;
       print(userPhotoUrl);
       _register();
-    } );
+    });
 
     // await storageTaskSnapshot.ref.getDownloadURL().then((url) {
     //   userImageUrl = url;
     //   print(userImageUrl);
     //   _register();
     // } );
-
   }
 
   void _register() async {
     User currentUser;
 
-    await _auth.createUserWithEmailAndPassword(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim()
-    ).then((auth) {
+    await _auth
+        .createUserWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim())
+        .then((auth) {
       currentUser = auth.user;
       userId = currentUser.uid;
       userEmail = currentUser.email;
@@ -136,29 +131,40 @@ class _SignupBodyState extends State<SignupBody> {
       getPhone = _phoneController.text.trim();
 
       saveUserData();
-    }).catchError((error){
+    }).catchError((error) {
       Navigator.pop(context);
       showDialog(
-        context: context,
-        builder: (con){
-          return ErrorAlertDialog(
-            message: error.message.toString(),
-          );
-        }
-      );
+          context: context,
+          builder: (con) {
+            return ErrorAlertDialog(
+              message: error.message.toString(),
+            );
+          });
     });
 
-    if ( currentUser != null ) {
-      Route newRoute = MaterialPageRoute(
-              builder: (context) => HomeScreene()
-            );
-            Navigator.pushReplacement(context, newRoute);
+    if (currentUser != null) {
+      // Route newRoute = MaterialPageRoute(
+      //         builder: (context) => HomeScreene()
+      //       );
+      //       Navigator.pushReplacement(context, newRoute);
+
+      Navigator.of(context).pushAndRemoveUntil(
+        // the new route
+        MaterialPageRoute(
+          builder: (BuildContext context) => HomeScreene(),
+        ),
+
+        // this function should return true when we're done removing routes
+        // but because we want to remove all other screens, we make it
+        // always return false
+        (Route route) => false,
+      );
     }
   }
 
   void saveUserData() {
     Map<String, dynamic> userData = {
-      'userName' : _nameController.text.trim(),
+      'userName': _nameController.text.trim(),
       'uid': userId,
       'userNumber': _phoneController.text.trim(),
       'imgPro': userPhotoUrl,
@@ -172,10 +178,8 @@ class _SignupBodyState extends State<SignupBody> {
 
   @override
   Widget build(BuildContext context) {
-
     double _screenWidth = MediaQuery.of(context).size.width,
-    _screenHeight = MediaQuery.of(context).size.height;
-
+        _screenHeight = MediaQuery.of(context).size.height;
 
     return SignupBackground(
       child: SingleChildScrollView(
@@ -183,27 +187,26 @@ class _SignupBodyState extends State<SignupBody> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             InkWell(
-              onTap: (){
-                chooseImage();
-              },
-              child: CircleAvatar(
-                radius: _screenWidth * 0.20,
-                backgroundColor: Colors.deepPurple[100],
-                backgroundImage: _image==null?null:FileImage(_image),
-                child: _image == null
-                ? Icon(
-                  Icons.add_photo_alternate,
-                  size: _screenWidth * 0.20,
-                  color: Colors.white,
-                )
-                    : null,
-              )),
+                onTap: () {
+                  chooseImage();
+                },
+                child: CircleAvatar(
+                  radius: _screenWidth * 0.20,
+                  backgroundColor: Colors.deepPurple[100],
+                  backgroundImage: _image == null ? null : FileImage(_image),
+                  child: _image == null
+                      ? Icon(
+                          Icons.add_photo_alternate,
+                          size: _screenWidth * 0.20,
+                          color: Colors.white,
+                        )
+                      : null,
+                )),
             SizedBox(height: _screenHeight * 0.01),
             RoundedInputField(
               hintText: "Name",
               icon: Icons.person,
-              onChanged: (value)
-              {
+              onChanged: (value) {
                 _nameController.text = value;
               },
             ),
@@ -211,8 +214,7 @@ class _SignupBodyState extends State<SignupBody> {
               keyboardType: TextInputType.emailAddress,
               hintText: "Email",
               icon: Icons.person,
-              onChanged: (value)
-              {
+              onChanged: (value) {
                 _emailController.text = value;
               },
             ),
@@ -220,46 +222,38 @@ class _SignupBodyState extends State<SignupBody> {
               keyboardType: TextInputType.phone,
               hintText: "Phone",
               icon: Icons.phone_android,
-              onChanged: (value)
-              {
+              onChanged: (value) {
                 _phoneController.text = value;
               },
             ),
             RoundedPasswordField(
-              onChanged: (value)
-              {
+              onChanged: (value) {
                 _passwordController.text = value;
               },
             ),
             RoundedButton(
               text: "SIGNUP",
-              press: ()
-              {
-
-                if (_nameController.text.length < 3 )
-                  {
-                    showToast("Name must be at lest 3 characters.", context,duration: 2,gravity: Toast.CENTER);
-                  }
-
-                  else if (!_emailController.text.contains(regExpEmail) )
-                  {
-                    showToast("Email address is not Valid", context,duration: 2,gravity: Toast.CENTER);
-                  }
-                  else if (_passwordController.text.length < 6 )
-                  {
-                    showToast("Password must be at lest 6 characters.", context,duration: 2,gravity: Toast.CENTER);
-                  }
-                  else if (_phoneController.text.length < 9 )
-                  {
-                    showToast("Check phone number.", context,duration: 2,gravity: Toast.CENTER);
-                  }
-                  else{
-                    
-                upload();
-                  }
+              press: () {
+                if (_nameController.text.length < 3) {
+                  showToast("Name must be at lest 3 characters.", context,
+                      duration: 2, gravity: Toast.CENTER);
+                } else if (!_emailController.text.contains(regExpEmail)) {
+                  showToast("Email address is not Valid", context,
+                      duration: 2, gravity: Toast.CENTER);
+                } else if (_passwordController.text.length < 6) {
+                  showToast("Password must be at lest 6 characters.", context,
+                      duration: 2, gravity: Toast.CENTER);
+                } else if (_phoneController.text.length < 9) {
+                  showToast("Check phone number.", context,
+                      duration: 2, gravity: Toast.CENTER);
+                } else {
+                  upload();
+                }
               },
             ),
-            SizedBox(height: _screenHeight * 0.03,),
+            SizedBox(
+              height: _screenHeight * 0.03,
+            ),
             AlreadyHaveAnAccountCheck(
               login: false,
               press: () {
@@ -273,16 +267,12 @@ class _SignupBodyState extends State<SignupBody> {
                 );
               },
             ),
-
           ],
-
-
         ),
       ),
     );
   }
 }
 
-
-  final RegExp regExpEmail = RegExp(
+final RegExp regExpEmail = RegExp(
     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');

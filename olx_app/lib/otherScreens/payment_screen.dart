@@ -98,7 +98,7 @@ void _checkPayment() {
       PaystackPayManager(context: context)
         ..setSecretKey("sk_live_bf50b228e7e5144c4a8b5a185fbc2fd2556eda72")
         // ..setCompanyAssetImage(Image(image: NetworkImage("YOUR-IMAGE-URL")))
-        ..setAmount(20)
+        ..setAmount(200)
         ..setReference(DateTime.now().millisecondsSinceEpoch.toString())
         ..setCurrency("GHS")
         ..setEmail("winweb@outlook.com")

@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "462556815711",
+    "project_id": "asancoshoprite",
+    "storage_bucket": "asancoshoprite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462556815711:android:3e2c1f2dda4050bfbc16ea",
+        "android_client_info": {
+          "package_name": "winchester.winsweb.asancoshopriteadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462556815711-polv5d0rsrfqplm4dr0kckaujecqrrhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtkrjIyKP5ZeceCDL9nsIAJPrZhwqQoOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462556815711-polv5d0rsrfqplm4dr0kckaujecqrrhl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462556815711:android:cf18fb43e4cb769abc16ea",
+        "android_client_info": {
+          "package_name": "winchester.winsweb.asancoshopriteusers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462556815711-polv5d0rsrfqplm4dr0kckaujecqrrhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtkrjIyKP5ZeceCDL9nsIAJPrZhwqQoOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462556815711-polv5d0rsrfqplm4dr0kckaujecqrrhl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -35,6 +35,15 @@ dependencies:
   timeago: ^3.0.2
   image_slider: ^1.0.2
 
+
+  
+  flutter_launcher_icons: ^0.9.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/asanco_icon.jpg"
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

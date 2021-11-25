@@ -142,7 +142,7 @@ class PlaceOrderScreen extends StatelessWidget {
                           .build(),
                       decoration: InputDecoration(
                           hintText: commentText,
-                          label: Text(addressText),
+                          label: Text(commentText),
                           border: OutlineInputBorder()),
                     ),
                   ],

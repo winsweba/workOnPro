@@ -90,7 +90,7 @@ class _DetailsScreenState extends State<DetailsScreen> with SingleTickerProvider
     return Scaffold(
       appBar: AppBar(
         leading: _buildBackButton(),
-        title: Text(widget.title, style: TextStyle(letterSpacing: 2.0, fontFamily: "varela"),),
+        title: Text(widget.title, style: TextStyle(letterSpacing: 2.0,),),
       ),
 
       body: SingleChildScrollView(
