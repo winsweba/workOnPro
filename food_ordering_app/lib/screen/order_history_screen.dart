@@ -3,6 +3,7 @@ import 'package:food_ordering_app/models/order_models.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
 import 'package:food_ordering_app/view_model/order_history_vm/order_history_view_model%20_imp.dart';
+import 'package:food_ordering_app/widget/order_history/order_history_list_widget.dart';
 import 'package:get/get.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
@@ -26,9 +27,7 @@ class OrderHistoryScreen extends StatelessWidget {
               );
             else {
               var lst = snapshot.data as List<OrderModel>;
-              return Center(
-                child: Text('Your Order is ${lst.length}'),
-              );
+              return OrderHistoryListWidget(listOrder: lst);
             }
           },
         ),

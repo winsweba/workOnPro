@@ -1,14 +1,11 @@
-import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ordering_app/models/category_model.dart';
 import 'package:food_ordering_app/sate/category_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
-import 'package:food_ordering_app/strings/restaurant_home_string.dart';
 import 'package:food_ordering_app/view_model/category_vm/category_viewmodel_imp.dart';
 import 'package:food_ordering_app/widget/category/category_list_widget.dart';
 import 'package:food_ordering_app/widget/common/appbar_with_cart_widget.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CategoryScreen extends StatelessWidget {
 

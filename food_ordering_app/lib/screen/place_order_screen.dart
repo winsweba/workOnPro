@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/sate/place_order_state.dart';
+import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/cart_strings.dart';
 import 'package:food_ordering_app/strings/place_order_string.dart';
 import 'package:food_ordering_app/utils/const.dart';
@@ -174,10 +175,15 @@ class PlaceOrderScreen extends StatelessWidget {
                           middleText: result
                               ? orderSuccessMessageText
                               : orderFailMessageText,
-                          textCancel: cancelText,
                           textConfirm: confirmText,
+                          cancel: Container(),
+                          onCancel: (){},
                           confirmTextColor: Colors.yellow,
-                          onConfirm: () => print('Complite Order'),
+                          onConfirm: () {
+                            cartStateController.clearCart(mainStateController
+                                .selectedRestaurant.value.restaurantId);
+                                Get.offAll(() => RestaurantHome());
+                          },
                         );
                       }
                     },

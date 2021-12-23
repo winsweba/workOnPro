@@ -13,7 +13,6 @@ import 'package:food_ordering_app/widget/cart/cart_info_widget.dart';
 import 'package:food_ordering_app/widget/cart/cart_total_widget.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CartDetailScreen extends StatelessWidget {
   final box = GetStorage();
