@@ -4,8 +4,8 @@ import 'package:food_ordering_app/view_model/order_history_vm/order_history_view
 
 class OrderHistoryViewModelImp implements OrderHistoryViewModel{
   @override
-  Future<List<OrderModel>> getUserHistory(String restaurantId) {
-    return getUserOrdersByRestaurant(restaurantId);
+  Future<List<OrderModel>> getUserHistory(String restaurantId, String statusMode) {
+    return getUserOrdersByRestaurant(restaurantId, statusMode);
   }
 
 }
