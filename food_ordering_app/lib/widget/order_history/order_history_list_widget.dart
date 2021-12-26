@@ -4,13 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/models/order_models.dart';
+import 'package:food_ordering_app/sate/order_history_state.dart';
+import 'package:food_ordering_app/screen/order_view_details_screen.dart';
 import 'package:food_ordering_app/utils/utils.dart';
 import 'package:food_ordering_app/widget/common/common_widget.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OrderHistoryListWidget extends StatelessWidget {
+  final orderDetailsState = Get.put(OrderHistoryState());
   final List<OrderModel> listOrder;
-  const OrderHistoryListWidget({Key? key, required this.listOrder})
+   OrderHistoryListWidget({Key? key, required this.listOrder})
       : super(key: key);
 
   @override
@@ -26,7 +30,10 @@ class OrderHistoryListWidget extends StatelessWidget {
             itemCount: listOrder.length,
             itemBuilder: animationItemBuilder(
               (index) => InkWell(
-                onTap: () {},
+                onTap: () {
+                  orderDetailsState.selectedOrder.value = listOrder[index];
+                  Get.to(() => OrderViewDetailScreen());
+                },
                 child: Card(
                   semanticContainer: true,
                   clipBehavior: Clip.antiAliasWithSaveLayer,
