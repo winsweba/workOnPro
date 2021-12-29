@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/models/cart_model.dart';
 import 'package:food_ordering_app/models/food_model.dart';
 import 'package:food_ordering_app/strings/cart_strings.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
-import 'package:food_ordering_app/utils/const.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

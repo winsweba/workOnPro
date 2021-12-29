@@ -7,14 +7,14 @@ import 'package:food_ordering_app/models/populer_item_model.dart';
 Future<List<PopulerItemModel>> getMostPopulerByRestaurantId(String restaurantId) async{
 
   var list = List<PopulerItemModel>.empty(growable: true );
-  var source = await FirebaseDatabase.instance.reference()
+  var source = await FirebaseDatabase.instance.ref()
   .child(RESTAURENT_REF)
   .child(restaurantId)
   .child(MOST_POPULAR_REFF)
   .once();
-  Map<dynamic, dynamic> values = source.value;
-  values.forEach((key, value) {
-    list.add(PopulerItemModel.fromJson(jsonDecode(jsonEncode(value))));
+  var values = source.snapshot;
+  values.children.forEach((element) {
+    list.add(PopulerItemModel.fromJson(jsonDecode(jsonEncode(element.value))));
   });
 
 

@@ -5,14 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_auth_ui/flutter_auth_ui.dart';
+import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/screen/cart_screen.dart';
 import 'package:food_ordering_app/screen/category.dart';
+import 'package:food_ordering_app/screen/manager_resturant_screen.dart';
 import 'package:food_ordering_app/screen/order_history_screen.dart';
 import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
-import 'package:food_ordering_app/utils/const.dart';
 import 'package:food_ordering_app/view_model/menu_vm/menu_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -108,5 +109,10 @@ class MenuViewModelImp implements MenuViewModel {
   @override
   void viewOrderHistory(BuildContext context) {
     Get.to(() => OrderHistoryScreen());
+  }
+
+  @override
+  void managerResturant(BuildContext context) {
+    Get.to(() => ManagerResturantScreen());
   }
 }

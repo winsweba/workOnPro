@@ -111,14 +111,15 @@ class CartDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        secondaryActions: [
-                          IconSlideAction(
-                            caption: deleteText,
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                            label: deleteText,
                             icon: Icons.delete,
-                            color: Colors.red,
-                            onTap: () {
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            onPressed: (context) {
                               Get.defaultDialog(
                                   title: deleteCartConfirmTitleText,
                                   textCancel: cancelText,
@@ -135,7 +136,8 @@ class CartDetailScreen extends StatelessWidget {
                                   });
                             },
                           )
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

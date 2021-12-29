@@ -5,13 +5,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:food_ordering_app/const/const.dart';
 import 'package:food_ordering_app/models/cart_model.dart';
 import 'package:food_ordering_app/models/restaurant_model.dart';
 import 'package:food_ordering_app/sate/cart_state.dart';
 import 'package:food_ordering_app/sate/main_state.dart';
 import 'package:food_ordering_app/screen/restaurent_home.dart';
 import 'package:food_ordering_app/strings/main_strings.dart';
-import 'package:food_ordering_app/utils/const.dart';
 import 'package:food_ordering_app/view_model/main_vm/main_view_model_imp.dart';
 import 'package:food_ordering_app/widget/common/common_widget.dart';
 import 'package:food_ordering_app/widget/main/main_widget.dart';
@@ -128,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                       ),
-                    )),
+                    ),),
               ),
             );
           }
