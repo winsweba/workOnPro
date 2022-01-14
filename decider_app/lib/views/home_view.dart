@@ -1,7 +1,10 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:decider_app/extensions/string_extension.dart';
+import 'package:decider_app/models/question.dart';
 import 'package:decider_app/services/auth_service.dart';
+import 'package:decider_app/views/history_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,31 +16,33 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-
-  TextEditingController questionControlller = TextEditingController();
+  TextEditingController _questionControlller = TextEditingController();
 
   String _answer = "";
 
   bool _askBtnActive = false;
+  Question _question = Question();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Decider"),
+        title: const Text("Decider"),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {},
-              child: Icon(Icons.shopping_bag),
+              child: const Icon(Icons.shopping_bag),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: () {},
-              child: Icon(Icons.history),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HistoryView() ));
+              },
+              child: const Icon(Icons.history),
             ),
           ),
         ],
@@ -49,15 +54,17 @@ class _HomeViewState extends State<HomeView> {
             width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text("Decisions Left ##"),
                 ),
-                Spacer(),
+                const Spacer(),
                 _buildQuestionForm(),
-                Spacer(flex: 3,),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Spacer(
+                  flex: 3,
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text("Account Type: Free"),
                 ),
                 Text("${AuthService().currentUser?.uid}"),
@@ -75,16 +82,16 @@ class _HomeViewState extends State<HomeView> {
       Padding(
         padding: const EdgeInsets.only(bottom: 10.0, left: 30, right: 30),
         child: TextField(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             helperText: 'Enter A Qution',
           ),
           maxLines: null,
           keyboardType: TextInputType.multiline,
-          controller: questionControlller,
+          controller: _questionControlller,
           textInputAction: TextInputAction.done,
           onChanged: (value) {
             setState(() {
-              _askBtnActive = value.length >= 3 ? true: false;
+              _askBtnActive = value.length >= 3 ? true : false;
             });
           },
         ),
@@ -96,43 +103,56 @@ class _HomeViewState extends State<HomeView> {
       _questionAndAnswer()
     ]);
   }
-   String _getAnser() {
-     var anserOptions  = ['yes', 'no', 'definitely', 'not rigth now'];
 
-     return anserOptions[Random().nextInt(anserOptions.length)];
-   }
+  String _getAnser() {
+    var anserOptions = ['yes', 'no', 'definitely', 'not rigth now'];
 
-   Widget _questionAndAnswer() {
+    return anserOptions[Random().nextInt(anserOptions.length)];
+  }
 
-     if(_answer != "")
-     {return Column(
-       children: [
-         Padding(
-           padding: const EdgeInsets.only(top: 20.0),
-           child: Text('Should I ${questionControlller.text} ?'),
-         ),
-         Padding(
-           padding: const EdgeInsets.only(top: 10.0),
-           child: Text("Answer: ${_answer.capitalize()}", style: Theme.of(context).textTheme.headline6  ,),
-         ),
-       ],
-     );
+  Widget _questionAndAnswer() {
+    if (_answer != "") {
+      return Column( 
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Text('Should I ${_question.query}?'),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Text(
+              "Answer: ${_answer.capitalize()}",
+              style: Theme.of(context).textTheme.headline6,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
 
-     }
-     else
-     {
-       return Container();
-     }
-     
-   }
-
-   /* 
+  /* 
    preform loggical actions
     */
 
-    void _answerQuestion() {
-      setState(() {
-            _answer = _getAnser();
-          });
-    }
+  void _answerQuestion() async {
+    setState(
+      () {
+        _answer = _getAnser();
+      },
+    );
+
+    _question.query = _questionControlller.text;
+    _question.answer = _answer;
+    _question.created = DateTime.now();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(AuthService().currentUser?.uid)
+        .collection('questions')
+        .add(_question.toJson());
+
+        _questionControlller.text = '';
+  }
 }
